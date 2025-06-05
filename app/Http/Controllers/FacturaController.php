@@ -45,7 +45,7 @@ class FacturaController extends Controller
         DB::beginTransaction();
 
         try {
-            $factura = Facturacion::create([
+            $factura = Factura::create([
                 'estudiante_id' => $validated['estudiante_id'],
                 'pagado_por' => $validated['pagado_por'],
                 'tipo_documento_pagador' => $validated['tipo_documento_pagador'],

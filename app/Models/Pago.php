@@ -65,6 +65,6 @@ class Pago extends Model
 
     public function facturacion()
     {
-        return $this->belongsTo(Facturacion::class);
+        return $this->belongsTo(Factura::class);
     }
 }
