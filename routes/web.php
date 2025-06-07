@@ -12,10 +12,16 @@ use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 
-
 Route::get('/', function () {
-    return view('welcome');
-});
+    return file_get_contents(public_path('index.html'));
+})->where('any', '.*');
+
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+
 // Autenticación
 Route::post('/login', [LoginController::class, 'login']);
 Route::get('/user', [LoginController::class, 'user'])->middleware('auth:sanctum');
