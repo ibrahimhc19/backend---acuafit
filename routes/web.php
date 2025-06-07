@@ -13,13 +13,8 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
-    return file_get_contents(public_path('index.html'));
-})->where('any', '.*');
-
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+    return view('welcome');
+});
 
 
 // Autenticación
@@ -76,3 +71,8 @@ Route::delete('/acudiente/{id}', [RepresentanteController::class, 'destroy'])->m
 // Route::get('/factura/{id}', [FacturaController::class, 'show'])->middleware('auth:sanctum');
 // Route::patch('/factura/{id}', [FacturaController::class, 'update'])->middleware('auth:sanctum');
 // Route::delete('/factura/{id}', [FacturaController::class, 'destroy'])->middleware('auth:sanctum');
+
+
+Route::get('/{any}', function () {
+    return file_get_contents(public_path('index.html'));
+})->where('any', '.*');
