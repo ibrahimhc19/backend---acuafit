@@ -127,7 +127,7 @@ class EstudianteController extends Controller
     public function show(string $estudianteId)
     {
         try {
-            $estudiante = Estudiante::with(['representante', 'sede', 'horario'])->findOrFail($estudianteId);
+            $estudiante = Estudiante::with(['acudiente', 'sede', 'horario'])->findOrFail($estudianteId);
             return response()->json($estudiante);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Estudiante no encontrado.'], 404);
