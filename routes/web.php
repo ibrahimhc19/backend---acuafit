@@ -7,7 +7,7 @@ use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\SedeController;
 use App\Http\Controllers\HorarioController;
-use App\Http\Controllers\RepresentanteController;
+use App\Http\Controllers\AcudienteController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
@@ -59,11 +59,11 @@ Route::patch('/horario/{id}', [HorarioController::class, 'update'])->middleware(
 Route::delete('/horario/{id}', [HorarioController::class, 'destroy'])->middleware('auth:sanctum');
 
 // Acudientes
-Route::post('/acudiente', [RepresentanteController::class, 'store'])->middleware('auth:sanctum');
-Route::get('/acudientes', [RepresentanteController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/acudiente/{id}', [RepresentanteController::class, 'show'])->middleware('auth:sanctum');
-Route::patch('/acudiente/{id}', [RepresentanteController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/acudiente/{id}', [RepresentanteController::class, 'destroy'])->middleware('auth:sanctum');
+Route::post('/acudiente', [AcudienteController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/acudientes', [AcudienteController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/acudiente/{id}', [AcudienteController::class, 'show'])->middleware('auth:sanctum');
+Route::patch('/acudiente/{id}', [AcudienteController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/acudiente/{id}', [AcudienteController::class, 'destroy'])->middleware('auth:sanctum');
 
 // Facturas
 // Route::post('/factura', [FacturaController::class, 'store'])->middleware('auth:sanctum');
