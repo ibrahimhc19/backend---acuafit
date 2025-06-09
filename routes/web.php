@@ -24,53 +24,53 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:san
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('auth.google.callback');
 
-// // Inscripciones y otros
-// Route::get('/registrar', [EstudianteController::class, 'create'])->name('inscripciones.create');
-// Route::get('/exito', function () {
-//     return view('success');
-// });
+// Inscripciones y otros
+Route::get('/registrar', [EstudianteController::class, 'create'])->name('inscripciones.create');
+Route::get('/exito', function () {
+    return view('success');
+});
 
-// // Estudiantes
-// Route::post('/estudiante', [EstudianteController::class, 'store'])->middleware('auth:sanctum');
-// Route::get('/estudiantes', [EstudianteController::class, 'index'])->middleware('auth:sanctum');
-// Route::get('/estudiante/{id}', [EstudianteController::class, 'show'])->middleware('auth:sanctum');
-// Route::patch('/estudiante/{id}', [EstudianteController::class, 'update'])->middleware('auth:sanctum');
-// Route::delete('/estudiante/{id}', [EstudianteController::class, 'destroy'])->middleware('auth:sanctum');
+// Estudiantes
+Route::post('/estudiante', [EstudianteController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/api/estudiantes', [EstudianteController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/estudiante/{id}', [EstudianteController::class, 'show'])->middleware('auth:sanctum');
+Route::patch('/estudiante/{id}', [EstudianteController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/estudiante/{id}', [EstudianteController::class, 'destroy'])->middleware('auth:sanctum');
 
-// // Pagos
-// Route::post('/pago', [PagoController::class, 'store'])->middleware('auth:sanctum');
-// Route::get('/pagos', [PagoController::class, 'index'])->middleware('auth:sanctum');
-// Route::get('/pago/{id}', [PagoController::class, 'show'])->middleware('auth:sanctum');
-// Route::patch('/pago/{id}', [PagoController::class, 'update'])->middleware('auth:sanctum');
-// Route::delete('/pago/{id}', [PagoController::class, 'destroy'])->middleware('auth:sanctum');
+// Pagos
+Route::post('/pago', [PagoController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/pagos', [PagoController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/pago/{id}', [PagoController::class, 'show'])->middleware('auth:sanctum');
+Route::patch('/pago/{id}', [PagoController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/pago/{id}', [PagoController::class, 'destroy'])->middleware('auth:sanctum');
 
-// // Sedes
-// Route::post('/sede', [SedeController::class, 'store'])->middleware('auth:sanctum');
-// Route::get('/sedes', [SedeController::class, 'index'])->middleware('auth:sanctum');
-// Route::get('/sede/{id}', [SedeController::class, 'show'])->middleware('auth:sanctum');
-// Route::patch('/sede/{id}', [SedeController::class, 'update'])->middleware('auth:sanctum');
-// Route::delete('/sede/{id}', [SedeController::class, 'destroy'])->middleware('auth:sanctum');
+// Sedes
+Route::post('/sede', [SedeController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/sedes', [SedeController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/sede/{id}', [SedeController::class, 'show'])->middleware('auth:sanctum');
+Route::patch('/sede/{id}', [SedeController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/sede/{id}', [SedeController::class, 'destroy'])->middleware('auth:sanctum');
 
-// // Horarios
-// Route::post('/horario', [HorarioController::class, 'store'])->middleware('auth:sanctum');
-// Route::get('/horarios', [HorarioController::class, 'index'])->middleware('auth:sanctum');
-// Route::get('/horario/{id}', [HorarioController::class, 'show'])->middleware('auth:sanctum');
-// Route::patch('/horario/{id}', [HorarioController::class, 'update'])->middleware('auth:sanctum');
-// Route::delete('/horario/{id}', [HorarioController::class, 'destroy'])->middleware('auth:sanctum');
+// Horarios
+Route::post('/horario', [HorarioController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/horarios', [HorarioController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/horario/{id}', [HorarioController::class, 'show'])->middleware('auth:sanctum');
+Route::patch('/horario/{id}', [HorarioController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/horario/{id}', [HorarioController::class, 'destroy'])->middleware('auth:sanctum');
 
-// // Acudientes
-// Route::post('/acudiente', [AcudienteController::class, 'store'])->middleware('auth:sanctum');
-// Route::get('/acudientes', [AcudienteController::class, 'index'])->middleware('auth:sanctum');
-// Route::get('/acudiente/{id}', [AcudienteController::class, 'show'])->middleware('auth:sanctum');
-// Route::patch('/acudiente/{id}', [AcudienteController::class, 'update'])->middleware('auth:sanctum');
-// Route::delete('/acudiente/{id}', [AcudienteController::class, 'destroy'])->middleware('auth:sanctum');
+// Acudientes
+Route::post('/acudiente', [AcudienteController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/acudientes', [AcudienteController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/acudiente/{id}', [AcudienteController::class, 'show'])->middleware('auth:sanctum');
+Route::patch('/acudiente/{id}', [AcudienteController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/acudiente/{id}', [AcudienteController::class, 'destroy'])->middleware('auth:sanctum');
 
-// // Facturas
-// // Route::post('/factura', [FacturaController::class, 'store'])->middleware('auth:sanctum');
-// // Route::get('/facturas', [FacturaController::class, 'index'])->middleware('auth:sanctum');
-// // Route::get('/factura/{id}', [FacturaController::class, 'show'])->middleware('auth:sanctum');
-// // Route::patch('/factura/{id}', [FacturaController::class, 'update'])->middleware('auth:sanctum');
-// // Route::delete('/factura/{id}', [FacturaController::class, 'destroy'])->middleware('auth:sanctum');
+// Facturas
+// Route::post('/factura', [FacturaController::class, 'store'])->middleware('auth:sanctum');
+// Route::get('/facturas', [FacturaController::class, 'index'])->middleware('auth:sanctum');
+// Route::get('/factura/{id}', [FacturaController::class, 'show'])->middleware('auth:sanctum');
+// Route::patch('/factura/{id}', [FacturaController::class, 'update'])->middleware('auth:sanctum');
+// Route::delete('/factura/{id}', [FacturaController::class, 'destroy'])->middleware('auth:sanctum');
 
 
 Route::get('/{any}', function () {
