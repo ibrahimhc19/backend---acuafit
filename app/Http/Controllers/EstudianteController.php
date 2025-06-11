@@ -23,7 +23,7 @@ class EstudianteController extends Controller
      */
     public function index()
     {
-        $estudiantes = Estudiante::with(['acudiente', 'sede', 'horario'])->orderBy('nombres', 'asc')->paginate(15);
+        $estudiantes = Estudiante::with(['acudiente', 'sede', 'horario'])->orderBy('nombres', 'asc')->paginate(10);
         return response()->json($estudiantes);
     }
 
