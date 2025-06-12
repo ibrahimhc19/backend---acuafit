@@ -21,11 +21,17 @@ class EstudianteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $estudiantes = Estudiante::with(['acudiente', 'sede', 'horario'])->orderBy('nombres', 'asc')->paginate(10);
+        $perPage = $request->input('per_page', 10);
+        $estudiantes = Estudiante::with(['acudiente', 'sede', 'horario'])->orderBy('nombres', 'asc')->paginate($perPage);
         return response()->json($estudiantes);
     }
+    // public function index()
+    // {
+    //     $estudiantes = Estudiante::with(['acudiente', 'sede', 'horario'])->orderBy('nombres', 'asc')->paginate(10);
+    //     return response()->json($estudiantes);
+    // }
 
     /**
      * Store a newly created resource in storage.
