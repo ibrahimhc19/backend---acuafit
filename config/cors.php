@@ -16,10 +16,10 @@ return [
     */
 
     // 'paths' => ['api/*', 'sanctum/csrf-cookie'],
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout', 'user'],
+    // 'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout', 'user'],
 
-    // 'paths' => ['api/*'],
-    'allowed_origins' => ['http://localhost:5173'],
+    'paths' => ['api/*'],
+    // 'allowed_origins' => ['http://localhost:5173'],
 
     // 'allowed_methods' => ['*'],
 
@@ -41,7 +41,7 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => true,
-    // 'supports_credentials' => false,
+    // 'supports_credentials' => true,
+    'supports_credentials' => false,
 
 ];
