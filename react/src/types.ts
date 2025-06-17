@@ -7,9 +7,9 @@ export interface Estudiante {
   nombres: string;
   apellidos: string;
   tipo_documento: string;
-  edad: number;
   documento_identidad: string;
-  representante_id: number;
+  edad: number;
+  representante_id?: number;
   sede_id: number;
   horario_id: number;
   fecha_inscripcion: string;
