@@ -19,7 +19,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": {
+      "representante": {
         "id": 2,
         "nombres": "Lucía",
         "apellidos": "Salazar",
@@ -61,7 +61,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": {
+      "representante": {
         "id": 4,
         "nombres": "Carlos",
         "apellidos": "Mendoza",
@@ -103,7 +103,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": {
+      "representante": {
         "id": 2,
         "nombres": "Lucía",
         "apellidos": "Salazar",
@@ -145,7 +145,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 2,
         "nombre": "Sede Sur",
@@ -178,7 +178,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": "Primera vez en natación",
-      "acudiente": {
+      "representante": {
         "id": 3,
         "nombres": "Andrés",
         "apellidos": "Quintero",
@@ -220,7 +220,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 3,
         "nombre": "Sede Centro",
@@ -253,7 +253,7 @@
       "autoriza_uso_imagen": false,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 4,
         "nombre": "Sede Castilla",
@@ -286,7 +286,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 4,
         "nombre": "Sede Castilla",
@@ -319,7 +319,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": {
+      "representante": {
         "id": 3,
         "nombres": "Andrés",
         "apellidos": "Quintero",
@@ -361,7 +361,7 @@
       "autoriza_uso_imagen": false,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 2,
         "nombre": "Sede Sur",
@@ -394,7 +394,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": "Pago completo.",
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 3,
         "nombre": "Sede Centro",
@@ -427,7 +427,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": {
+      "representante": {
         "id": 4,
         "nombres": "Carlos",
         "apellidos": "Mendoza",
@@ -469,7 +469,7 @@
       "autoriza_uso_imagen": true,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 2,
         "nombre": "Sede Sur",
@@ -502,7 +502,7 @@
       "autoriza_uso_imagen": false,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 3,
         "nombre": "Sede Centro",
@@ -535,7 +535,7 @@
       "autoriza_uso_imagen": false,
       "acepta_reglamento": true,
       "observaciones": null,
-      "acudiente": null,
+      "representante": null,
       "sede": {
         "id": 2,
         "nombre": "Sede Sur",

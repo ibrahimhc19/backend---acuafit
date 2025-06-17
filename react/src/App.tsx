@@ -15,14 +15,13 @@ import Home from "./pages/Home.tsx";
 import Parents from "./pages/Parents.tsx";
 import Payments from "./pages/Payments.tsx";
 import Login from "./components/login-form.tsx";
-import Registration from "./pages/Registration";
+import Registration from "./pages/Registration.tsx";
 
 export default function App() {
   return (
     <div className="app">
       <Router>
         <Routes>
-          {/* <Route element={<DashboardLayout />}> */}
           <Route element={<Layout />}>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/estudiantes" element={<Students />} />
@@ -35,7 +34,6 @@ export default function App() {
             <Route path="/tabla" element={<Students />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
-          {/* <Route path="login" element={<Login />} /> */}
           <Route path="login" element={<Login />} />
           <Route path="registro" element={<Registration />} />
         </Routes>

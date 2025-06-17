@@ -60,8 +60,8 @@ const func = (page:string) =>{
 
 useEffect(() => {
      axios
-      // .get("/mock/data.json")
-      .get(url)
+      .get("/mock/data.json")
+    //   .get(url)
       .then((response) => {
         const apiResponse = response.data;
         if (
@@ -93,8 +93,8 @@ useEffect(() => {
 
   return (
     <div className="container mx-auto sm:px-6 py-4 lg:px-8 min-h-[75vh]">
-      <DataTable 
-      columns={columns(Number(indice))} 
+      <DataTable<unknown, Estudiante>
+      columns={columns(Number(indice))}
       data={tableData}
       nextPage={nextPage}
       previousPage={previousPage}

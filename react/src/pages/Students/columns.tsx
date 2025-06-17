@@ -1,82 +1,60 @@
-"use client"
-import { Estudiante } from "@/types"
-import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
+import { Estudiante } from "@/types";
+import { ColumnDef } from "@tanstack/react-table";
+import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 export const columns = (indice: number): ColumnDef<Estudiante>[] => [
     {
-    accessorKey: "id",
-    header: "#",
-    cell: () => {
-      return indice++;
-    }
-  },
-  {
-    id: "nombresCompletos",
-    accessorFn: (row) => {
-      return `${row.nombres} ${row.apellidos}`;
+        accessorKey: "id",
+        header: "#",
+        cell: ({ row }) => {
+            return indice + row.index;
+        },
     },
-    header: "Nombres completos",
-  },
-  {
-    accessorKey: "edad",
-    header: "Edad",
-    
-  },
-  {
-    accessorKey: "correo",
-    header: "Correo electrónico",
-  },
-  {
-    accessorKey: "telefono",
-    header: "Teléfono",
-  },
-  {
-    accessorKey: "sede.nombre",
-    header: "Sede",
+    {
+        id: "acudiente",
+        cell: ({ row }) => {
+            const representanteId = row.original.representante_id;
 
-  },
-  {
-    id: "horario",
-    header: "Horario",
-    accessorFn: (row) => {
-      return `${row.horario.dia_semana}`;
-    }
-  },
-  { header: "Acciones",
-    id: "actions",
-    cell: ({ row }) => {
-      const payment = row.original
- 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-6 w-6 p-0"> {/* alto celdas */}
-              <span className="sr-only">Abrir menú</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.nombres.toString())}
-            >
-              Ver estudiante
-            </DropdownMenuItem>
-            <DropdownMenuItem >Editar estudiante</DropdownMenuItem>
-            <DropdownMenuItem>Eliminar estudiante</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+            return representanteId ? (
+                <Badge
+                    className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums"
+                    variant="secondary"
+                    asChild
+                >
+                    <Link to="/">A</Link>
+                </Badge>
+            ) : null;
+        },
     },
-  },
-]
+    {
+        id: "nombresCompletos",
+        accessorFn: (row) => {
+            return `${row.nombres} ${row.apellidos}`;
+        },
+        header: "Nombres completos",
+    },
+    {
+        accessorKey: "edad",
+        header: "Edad",
+    },
+    {
+        accessorKey: "correo",
+        header: "Correo electrónico",
+    },
+    {
+        accessorKey: "telefono",
+        header: "Teléfono",
+    },
+    {
+        accessorKey: "sede.nombre",
+        header: "Sede",
+    },
+    {
+        id: "horario",
+        header: "Horario",
+        accessorFn: (row) => {
+            return `${row.horario.dia_semana}`;
+        },
+    },
+];
