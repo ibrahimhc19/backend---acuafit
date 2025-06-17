@@ -24,12 +24,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:san
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('auth.google.callback');
 
-// Inscripciones y otros
-Route::get('/registrar', [EstudianteController::class, 'create'])->name('inscripciones.create');
-Route::get('/exito', function () {
-    return view('success');
-});
-
 // Estudiantes
 Route::post('/estudiante', [EstudianteController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/api/estudiantes', [EstudianteController::class, 'index'])->middleware('auth:sanctum');
