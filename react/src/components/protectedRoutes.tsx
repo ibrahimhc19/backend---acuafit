@@ -1,41 +1,30 @@
+// src/components/ProtectedRoute.tsx
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
-// import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ProtectedRouteProps } from "@/types";
 
 
-export const ProtectedRoute = ({
-    redirectPath = "/login",
-}: ProtectedRouteProps) => {
 
-    // const [loading, setLoading] = useState(true);
-    const { user, loading } = useAuthContext();
+export const ProtectedRoute = ({ redirectPath = "/login" }: ProtectedRouteProps) => {
+  const { user, loading } = useAuthContext();
 
-    // useEffect(() => {
-    //     const fetchUser = async () => {
-    //         if (!user) {
-    //             try {
-    //                 await getUser();
-    //             } catch (error) {
-    //                 console.error(
-    //                     "Error al obtener el usuario en ProtectedRoute:",
-    //                     error
-    //                 );
-    //             }
-    //         }
-    //         setLoading(false);
-    //     };
+  // Monitorear cuándo ProtectedRoute evalúa el estado
+  useEffect(() => {
+    console.log(`ProtectedRoute: Renderizando. User: ${user ? 'presente' : 'nulo'}, Loading: ${loading}`);
+  }, [user, loading]);
 
-    //     fetchUser();
-    // }, [user, getUser]);
 
-    if (loading) {
-        console.log("Cargando");
-    }
+  if (loading) {
+    console.log("ProtectedRoute: Todavía cargando, mostrando spinner.");
+    return <div>Cargando autenticación...</div>;
+  }
 
-    if (!user) {
-        return <Navigate to={redirectPath} replace />;
-    }
+  if (!user) {
+    console.log("ProtectedRoute: Carga finalizada, usuario nulo. Redirigiendo a:", redirectPath);
+    return <Navigate to={redirectPath} replace />;
+  }
 
-    return <Outlet />;
+  console.log("ProtectedRoute: Carga finalizada, usuario presente. Mostrando rutas anidadas.");
+  return <Outlet />;
 };
