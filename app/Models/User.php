@@ -22,8 +22,17 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        // 'google_id',
-        // avatar,
+        "nombres",
+        "apellidos",
+        'tipo_documento',
+        'documento_identidad',
+        'correo',
+        'telefono',
+        'rut',
+        'avatar_url',
+        "avatar_initials",
+        "roles",
+        'google_id',
     ];
 
     /**
@@ -44,6 +53,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'id' => 'integer',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
