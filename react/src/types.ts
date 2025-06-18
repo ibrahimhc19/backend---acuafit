@@ -1,7 +1,8 @@
 import {
     ColumnDef,
 } from "@tanstack/react-table"
-import { ReactNode } from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { PropsWithChildren, ReactNode } from "react";
 
 export interface IFormInput {
     email: string;
@@ -106,8 +107,15 @@ getUser: () => Promise<void>;
 // export interface User {
 //     email: string
 //     nombre: string
+//     apellido: string
+//     role: string
 // }
 
 export interface ProtectedRouteProps {
     redirectPath?: string;
 }
+
+// export type ProtectedRouteProps = PropsWithChildren & {
+//     redirectPath?: string;
+//     allowedRoles?: User["role"][];
+// }

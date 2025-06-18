@@ -23,7 +23,7 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registration />} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/estudiantes" element={<Students />} />
