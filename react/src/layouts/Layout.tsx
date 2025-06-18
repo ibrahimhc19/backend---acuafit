@@ -15,20 +15,13 @@ const links = [
 
 export default function DashboardLayout() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const auth = useAuthContext();
-    if (!auth) {
-        console.error("useAuthContext must be used within an AuthProvider");
-        return <div>Error: No se encontró el contexto de autenticación.</div>;
-    }
-    const { logout, apiError, setApiError } = auth;
+    const { logout, apiError, setApiError } = useAuthContext();
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-        // Deuda
         if (apiError) {
             const timer = setTimeout(() => {
                 setApiError(null);

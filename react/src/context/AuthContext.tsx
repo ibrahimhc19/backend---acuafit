@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export default function AuthProvider ({ children }: AuthProviderProps) {
     const [user, setUser] = useState(null);
     const [apiError, setApiError] = useState<string | null>(null)
     const csrf = () => axios.get("/sanctum/csrf-cookie");
@@ -75,5 +75,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuthContext() {
-    return useContext(AuthContext);
+    const context = useContext(AuthContext);
+    if(context === undefined){
+        throw new Error("useAuthContext debe ser usado dentro del AuthProvider");
+    }
+    return context;
 }
