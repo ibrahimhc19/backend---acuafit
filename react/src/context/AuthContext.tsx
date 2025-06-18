@@ -32,6 +32,7 @@ export default function AuthProvider ({ children }: AuthProviderProps) {
     }, []);
 
     const login = async (data: IFormInput) => {
+        setApiError(null);
         try {
             await csrf();
             await axios.post("/login", data, {
