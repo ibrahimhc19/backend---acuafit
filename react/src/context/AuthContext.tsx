@@ -1,4 +1,3 @@
-// src/context/AuthContext.tsx
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "@/api/axios";
 import { useNavigate } from "react-router-dom";
@@ -19,36 +18,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         console.log("getUser: Iniciando intento de obtención de usuario.");
         try {
             const { data } = await axios.get("/user");
-            console.log("getUser: Datos de usuario recibidos:", data);
             setUser(data);
-            console.log("getUser: Usuario establecido en el estado.");
         } catch (error) {
             console.error("getUser: Error al obtener el usuario:", error);
-            setUser(null); // Asegúrate de que el usuario es null si falla
-            // Opcional: setApiError("Error al revalidar sesión.");
+            setUser(null);
         } finally {
-            setLoading(false); // Siempre termina la carga
-            console.log("getUser: Carga finalizada (loading: false).");
+            setLoading(false);
         }
     };
 
-    // Este useEffect se ejecuta una vez al montar el AuthProvider
     useEffect(() => {
-        console.log("AuthProvider: Montado. Llamando a getUser().");
         getUser();
     }, []);
 
-    // Monitorear cambios en el estado 'user'
-    useEffect(() => {
-        console.log("AuthContext: Estado 'user' actualizado a:", user);
-    }, [user]);
 
-    // Monitorear cambios en el estado 'loading'
-    useEffect(() => {
-        console.log("AuthContext: Estado 'loading' actualizado a:", loading);
-    }, [loading]);
-
-    // ... (rest of your login and logout functions unchanged) ...
     const login = async (data: IFormInput) => {
         setApiError(null);
         try {
@@ -58,7 +41,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                     Accept: "application/json",
                 },
             });
-            await getUser(); // Obtén la info del usuario después del login
+            await getUser();
             navigate("/dashboard", { replace: true });
         } catch (error: unknown) {
             let specificErrorMessage =
@@ -108,6 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuthContext() {
     const context = useContext(AuthContext);
     if (context === undefined) {
