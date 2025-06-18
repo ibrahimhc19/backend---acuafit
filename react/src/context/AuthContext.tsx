@@ -8,7 +8,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState(null);
-    const [apiError, setApiError] = useState("");
+    const [apiError, setApiError] = useState<string | null>(null)
     const csrf = () => axios.get("/sanctum/csrf-cookie");
     const navigate = useNavigate();
 
@@ -41,9 +41,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             console.error("Error de login:", error);
         }
     };
-    const logout = async (data: IFormInput) => {
+    const logout = async () => {
         try {
-            await axios.post("/logout", data, {
+            await axios.post("/logout", {
                 headers: {
                     Accept: "application/json",
                 },
@@ -60,13 +60,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             }
             setApiError(specificErrorMessage);
 
-            console.error("Error de login:", error);
+            console.error("Error de logout:", error);
         }
     };
 
     return (
         <AuthContext.Provider
-            value={{ user, login, logout, apiError, getUser }}
+            value={{ user, login, logout, apiError, getUser, setApiError }}
         >
             {children}
         </AuthContext.Provider>
