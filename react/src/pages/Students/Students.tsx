@@ -60,8 +60,8 @@ const func = (page:string) =>{
 
 useEffect(() => {
      axios
-      .get("/mock/data.json")
-    //   .get(url)
+    //   .get("/mock/data.json")
+      .get(url)
       .then((response) => {
         const apiResponse = response.data;
         if (
