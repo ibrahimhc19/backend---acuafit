@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+// src/context/AuthContext.tsx
+import { createContext, useContext, useState, useEffect } from "react";
 import axios from "@/api/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContextType, AuthProviderProps, IFormInput } from "@/types";
@@ -6,7 +7,7 @@ import { AxiosError } from "axios";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export default function AuthProvider ({ children }: AuthProviderProps) {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState(null);
     const [apiError, setApiError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -15,22 +16,39 @@ export default function AuthProvider ({ children }: AuthProviderProps) {
     const navigate = useNavigate();
 
     const getUser = async () => {
+        console.log("getUser: Iniciando intento de obtención de usuario.");
         try {
             const { data } = await axios.get("/user");
+            console.log("getUser: Datos de usuario recibidos:", data);
             setUser(data);
-            setLoading(false);
-        } catch (error: unknown) {
-            console.error("Error al obtener el usuario: ", error);
-            setUser(null);
-            setLoading(false);
-            setApiError("Error al revalidar sesión.");
+            console.log("getUser: Usuario establecido en el estado.");
+        } catch (error) {
+            console.error("getUser: Error al obtener el usuario:", error);
+            setUser(null); // Asegúrate de que el usuario es null si falla
+            // Opcional: setApiError("Error al revalidar sesión.");
+        } finally {
+            setLoading(false); // Siempre termina la carga
+            console.log("getUser: Carga finalizada (loading: false).");
         }
     };
 
+    // Este useEffect se ejecuta una vez al montar el AuthProvider
     useEffect(() => {
+        console.log("AuthProvider: Montado. Llamando a getUser().");
         getUser();
     }, []);
 
+    // Monitorear cambios en el estado 'user'
+    useEffect(() => {
+        console.log("AuthContext: Estado 'user' actualizado a:", user);
+    }, [user]);
+
+    // Monitorear cambios en el estado 'loading'
+    useEffect(() => {
+        console.log("AuthContext: Estado 'loading' actualizado a:", loading);
+    }, [loading]);
+
+    // ... (rest of your login and logout functions unchanged) ...
     const login = async (data: IFormInput) => {
         setApiError(null);
         try {
@@ -40,7 +58,7 @@ export default function AuthProvider ({ children }: AuthProviderProps) {
                     Accept: "application/json",
                 },
             });
-            await getUser();
+            await getUser(); // Obtén la info del usuario después del login
             navigate("/dashboard", { replace: true });
         } catch (error: unknown) {
             let specificErrorMessage =
@@ -52,14 +70,14 @@ export default function AuthProvider ({ children }: AuthProviderProps) {
                     `Error ${error.response.status}: ${error.response.statusText}`;
             }
             setApiError(specificErrorMessage);
-
             console.error("Error de login:", error);
         }
     };
+
     const logout = async () => {
         setApiError(null);
         try {
-            await axios.post("/logout", {
+            await axios.post("/logout", null, {
                 headers: {
                     Accept: "application/json",
                 },
@@ -76,10 +94,10 @@ export default function AuthProvider ({ children }: AuthProviderProps) {
                     `Error ${error.response.status}: ${error.response.statusText}`;
             }
             setApiError(specificErrorMessage);
-
             console.error("Error de logout:", error);
         }
     };
+
 
     return (
         <AuthContext.Provider
@@ -90,11 +108,10 @@ export default function AuthProvider ({ children }: AuthProviderProps) {
     );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useAuthContext() {
     const context = useContext(AuthContext);
-    if(context === undefined){
-        throw new Error("useAuthContext debe ser usado dentro del AuthProvider");
+    if (context === undefined) {
+        throw new Error("useAuthContext must be used within an AuthProvider");
     }
     return context;
 }
