@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "@/api/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContextType, AuthProviderProps, IFormInput } from "@/types";
@@ -8,14 +8,28 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export default function AuthProvider ({ children }: AuthProviderProps) {
     const [user, setUser] = useState(null);
-    const [apiError, setApiError] = useState<string | null>(null)
+    const [apiError, setApiError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+
     const csrf = () => axios.get("/sanctum/csrf-cookie");
     const navigate = useNavigate();
 
     const getUser = async () => {
-        const { data } = await axios.get("/user");
-        setUser(data);
+        try {
+            const { data } = await axios.get("/user");
+            setUser(data);
+            setLoading(false);
+        } catch (error: unknown) {
+            console.error("Error al obtener el usuario: ", error);
+            setUser(null);
+            setLoading(false);
+            setApiError("Error al revalidar sesión.");
+        }
     };
+
+    useEffect(() => {
+        getUser();
+    }, []);
 
     const login = async (data: IFormInput) => {
         try {
@@ -42,13 +56,15 @@ export default function AuthProvider ({ children }: AuthProviderProps) {
         }
     };
     const logout = async () => {
+        setApiError(null);
         try {
             await axios.post("/logout", {
                 headers: {
                     Accept: "application/json",
                 },
             });
-            navigate("/", { replace: true });
+            setUser(null);
+            navigate("/login", { replace: true });
         } catch (error: unknown) {
             let specificErrorMessage =
                 "Error al cerrar sesión. Inténtalo de nuevo.";
@@ -66,7 +82,7 @@ export default function AuthProvider ({ children }: AuthProviderProps) {
 
     return (
         <AuthContext.Provider
-            value={{ user, login, logout, apiError, getUser, setApiError }}
+            value={{ user, login, logout, apiError, getUser, setApiError, loading }}
         >
             {children}
         </AuthContext.Provider>
