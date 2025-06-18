@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const links = [
     { name: "Estudiantes", href: "/estudiantes" },
@@ -26,7 +27,8 @@ export default function DashboardLayout() {
     };
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => { // Deuda
+    useEffect(() => {
+        // Deuda
         if (apiError) {
             const timer = setTimeout(() => {
                 setApiError(null);
@@ -92,8 +94,15 @@ export default function DashboardLayout() {
                         </div>
                         <div className="flex items-center">
                             {/* User Avatar */}
-                            <div className="bg-primary text-white p-2 rounded-full w-12 h-12 flex items-center justify-center">
-                                FH
+                            {/* Deuda */}
+                            <div className="rounded-full w-12 h-12 p-2 flex items-center justify-center">
+                                <Avatar>
+                                    <AvatarImage
+                                        src="https://github.com/ibrahimhc19/portfolio/blob/master/public/favicon.png?raw=tru"
+                                        alt="Ibrahim Calzadilla"
+                                    />
+                                    <AvatarFallback>IC</AvatarFallback>
+                                </Avatar>
                             </div>
                         </div>
                     </div>
@@ -133,9 +142,9 @@ export default function DashboardLayout() {
                                 {apiError && (
                                     <Alert
                                         variant="destructive"
-                                        className="flex gap-0"
+                                        className="flex gap-0 bg-red-50 border-red-200 mt-4"
                                     >
-                                        <AlertDescription>
+                                        <AlertDescription className="text-xs">
                                             {apiError}
                                         </AlertDescription>
                                     </Alert>
