@@ -33,6 +33,34 @@ class EstudianteController extends Controller
     //     return response()->json($estudiantes);
     // }
 
+    public function search(Request $request)
+{
+    $query = $request->input('q');
+    $perPage = $request->input('per_page', 10);
+
+    $estudiantes = Estudiante::with(['acudiente', 'sede', 'horario'])
+        ->when($query, function ($qBuilder) use ($query) {
+            $qBuilder->where(function ($sub) use ($query) {
+                $sub->where('nombres', 'like', "%{$query}%")
+                    ->orWhere('apellidos', 'like', "%{$query}%")
+                    ->orWhere('documento_identidad', 'like', "%{$query}%")
+                    ->orWhere('telefono', 'like', "%{$query}%");
+            })
+            ->orWhereHas('acudiente', function ($qAcudiente) use ($query) {
+                $qAcudiente->where('nombres', 'like', "%{$query}%")
+                    ->orWhere('apellidos', 'like', "%{$query}%")
+                    ->orWhere('documento_identidad', 'like', "%{$query}%")
+                    ->orWhere('telefono', 'like', "%{$query}%");
+            });
+        })
+        ->orderBy('nombres', 'asc')
+        ->paginate($perPage);
+
+    return response()->json($estudiantes);
+}
+
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -41,20 +69,20 @@ class EstudianteController extends Controller
         $validator = Validator::make($request->all(), [
             'nombres' => 'required|string|max:100',
             'apellidos' => 'required|string|max:100',
-            'tipo_documento' => ['required','string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
+            'tipo_documento' => ['required', 'string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
             'edad' => 'required|integer|min:1',
             'documento_identidad' => 'required|string|unique:estudiantes,documento_identidad|max:50',
             'representante_id' => 'nullable|integer|exists:representantes,id',
             'sede_id' => 'required|integer|exists:sedes,id',
             'horario_id' => 'required|integer|exists:horarios,id',
-            'fecha_inscripcion'=> 'required|date_format:d/m/Y',
+            'fecha_inscripcion' => 'required|date_format:d/m/Y',
             'correo' => 'nullable|string|email|unique:estudiantes,correo|max:100',
             'direccion' => 'nullable|string|max:255',
             'telefono' => 'nullable|string|max:20',
             'rut' => 'nullable|string|max:100',
             'autoriza_uso_imagen' => 'required|boolean',
             'acepta_reglamento' => 'required|boolean',
-            'observaciones'=> 'nullable|string'
+            'observaciones' => 'nullable|string'
         ], [
             'nombres.required' => 'El campo nombres es obligatorio.',
             'nombres.string' => 'El campo nombres debe ser una cadena de texto.',
@@ -104,7 +132,7 @@ class EstudianteController extends Controller
             'observaciones.string' => 'Las observaciones deben ser una cadena de texto.',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'message' => 'Errores de validación',
                 'errors' => $validator->errors()
@@ -119,7 +147,7 @@ class EstudianteController extends Controller
                 'message' => 'Estudiante registrado exitosamente',
                 'data' => $estudiante
             ], 201);
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             Log::error('Error al registrar el estudiante' . $e->getMessage() . ' StackTrace: ' . $e->getTraceAsString());
             return response()->json([
                 'message' => 'Hubo un error en el servidor al procesar la solicitud. Por favor inténtalo más tarde'
@@ -145,9 +173,9 @@ class EstudianteController extends Controller
      */
     public function update(Request $request, string $estudianteId)
     {
-        try{
+        try {
             $estudiante = Estudiante::findOrFail($estudianteId);
-        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException){
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
             return response()->json([
                 'message' => 'Estudiante no encontrado'
             ], 404);
@@ -156,23 +184,23 @@ class EstudianteController extends Controller
         $validator = Validator::make($request->all(), [
             'nombres' => 'sometimes|required|string|max:100',
             'apellidos' => 'sometimes|required|string|max:100',
-            'tipo_documento' => ['sometimes','required','string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
+            'tipo_documento' => ['sometimes', 'required', 'string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
             'edad' => 'sometimes|required|integer|min:1',
-            'documento_identidad' => ['sometimes','required', 'string',Rule::unique('estudiantes', 'documento_identidad')->ignore($estudiante->id)],
+            'documento_identidad' => ['sometimes', 'required', 'string', Rule::unique('estudiantes', 'documento_identidad')->ignore($estudiante->id)],
             'representante_id' => 'nullable|integer|exists:representantes,id',
             'sede_id' => 'sometimes|required|integer|exists:sedes,id',
             'horario_id' => 'sometimes|required|integer|exists:horarios,id',
-            'fecha_inscripcion'=> 'sometimes|required|date_format:d/m/Y',
+            'fecha_inscripcion' => 'sometimes|required|date_format:d/m/Y',
             'correo' => ['nullable', 'string', 'email', 'max:100', Rule::unique('estudiantes', 'correo')->ignore($estudiante->id)],
             'direccion' => 'nullable|string|max:255',
             'telefono' => 'nullable|string|max:20',
             'rut' => 'nullable|string|max:100',
             'autoriza_uso_imagen' => 'sometimes|required|boolean',
             'acepta_reglamento' => 'sometimes|required|boolean',
-            'observaciones'=> 'nullable|string'
+            'observaciones' => 'nullable|string'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'message' => 'Errores de validación',
                 'errors' => $validator->errors()
@@ -188,7 +216,7 @@ class EstudianteController extends Controller
                 'data' => $estudiante
             ], 200);
 
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             Log::error('Error al actualizar el estudiante: ' . $e->getMessage() . ' StackTrace: ' . $e->getTraceAsString());
             return response()->json([
                 'message' => 'Hubo un error al actualizar el estudiante.'
@@ -203,20 +231,20 @@ class EstudianteController extends Controller
     {
         try {
             $estudiante = Estudiante::findOrfail($estudianteId);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException){
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
             return response()->json([
                 'message' => 'Estudiante no encontrado'
             ], 404);
         }
 
-        try{
+        try {
 
             $estudiante->delete();
             return response()->json([
                 'message' => 'Estudiante eliminado exitosamente'
             ], 200);
 
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             Log::error('Error al eliminar el estudiante: ' . $e->getMessage() . ' StackTrace: ' . $e->getTraceAsString());
             return response()->json([
                 'message' => 'Hubo un error al eliminar al estudiante'

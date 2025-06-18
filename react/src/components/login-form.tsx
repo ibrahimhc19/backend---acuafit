@@ -14,10 +14,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 import { AlertCircle } from "lucide-react"
- 
+
 import {
   Alert,
   AlertDescription,
@@ -49,16 +49,16 @@ export default function LoginPage({
       const apiUrl = import.meta.env.VITE_APP_API_URL ?? "";
 
       await axios.get(`${apiUrl}sanctum/csrf-cookie`, {
-        // withCredentials: true, 
-        withXSRFToken: true
+        // withCredentials: true,
+        // withXSRFToken: true
       });
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const response = await axios.post(`${apiUrl}login`, data, {
         headers: {
           Accept: "application/json",
-          // withCredentials: true,
-          // withXSRFToken: true
+        //   withCredentials: true,
+        //   withXSRFToken: true
         },
       });
 
