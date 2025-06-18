@@ -96,12 +96,13 @@ export interface AuthProviderProps {
 
 
 export interface AuthContextType {
-user: unknown;
-login: (data: IFormInput) => Promise<void>;
-logout: () => Promise<void>;
-apiError: string | null;
-setApiError: (error:string | null) => void;
-getUser: () => Promise<void>;
+    user: unknown;
+    login: (data: IFormInput) => Promise<void>;
+    logout: () => Promise<void>;
+    apiError: string | null;
+    setApiError: (error: string | null) => void;
+    getUser: () => Promise<void>;
+    loading: boolean;
 }
 
 // export interface User {
