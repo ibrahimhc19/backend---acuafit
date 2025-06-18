@@ -9,13 +9,8 @@ export const ProtectedRoute = ({
 }: ProtectedRouteProps) => {
 
     const [loading, setLoading] = useState(true);
-    const auth = useAuthContext();
-    if (!auth) {
-        return "Contexto de autenticación no encontrado";
-    }
-    const { user, getUser } = auth;
-    // Deuda
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { user, getUser } = useAuthContext();
+
     useEffect(() => {
         const fetchUser = async () => {
             if (!user) {
