@@ -33,6 +33,7 @@ Route::get('/exito', function () {
 // Estudiantes
 Route::post('/estudiante', [EstudianteController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/api/estudiantes', [EstudianteController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/api/buscar', [EstudianteController::class, 'search']);
 Route::get('/estudiante/{id}', [EstudianteController::class, 'show'])->middleware('auth:sanctum');
 Route::patch('/estudiante/{id}', [EstudianteController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/estudiante/{id}', [EstudianteController::class, 'destroy'])->middleware('auth:sanctum');
