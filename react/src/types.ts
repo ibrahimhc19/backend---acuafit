@@ -107,3 +107,7 @@ getUser: () => Promise<void>;
 //     email: string
 //     nombre: string
 // }
+
+export interface ProtectedRouteProps {
+    redirectPath?: string;
+}
