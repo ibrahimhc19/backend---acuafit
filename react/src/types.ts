@@ -57,12 +57,12 @@ export interface Horario {
 }
 
 export interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
-    handlePageChange: (type: 'first' | 'previous' | 'next' | 'last') => void
-    nextPage: string | null
-    previousPage: string | null
-    currentPage: number
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
+    handlePageChange: (type: 'first' | 'previous' | 'next' | 'last') => void;
+    nextPage: string | null;
+    previousPage: string | null;
+    currentPage: number;
 }
 
 export interface FormData {
@@ -97,8 +97,9 @@ export interface AuthProviderProps {
 export interface AuthContextType {
 user: unknown;
 login: (data: IFormInput) => Promise<void>;
-logout: (data: IFormInput) => Promise<void>;
-apiError: string;
+logout: () => Promise<void>;
+apiError: string | null;
+setApiError: (error:string | null) => void;
 getUser: () => Promise<void>;
 }
 
