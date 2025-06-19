@@ -3,18 +3,19 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { lazy } from "react";
 
+const Login = lazy(() => import("./components/login-form.tsx"));
 import Layout from "./layouts/Layout";
-import Locations from "./pages/Locations.tsx";
-import Accounting from "./pages/Accounting/Accounting.tsx";
-import Students from "./pages/Students/Students.tsx";
-import Schedules from "./pages/Schedules.tsx";
-import NotFoundPage from "./pages/NotFoundPage";
 import Home from "./pages/Home.tsx";
-import Parents from "./pages/Parents.tsx";
-import Payments from "./pages/Payments.tsx";
-import Login from "./components/login-form.tsx";
-import Registration from "./pages/Registration.tsx";
+const Students = lazy(() => import("./pages/Students/Students.tsx"));
+const Parents = lazy(() => import("./pages/Parents.tsx"));
+const Locations = lazy(() => import("./pages/Locations.tsx"));
+const Schedules = lazy(() => import("./pages/Schedules.tsx"));
+const Payments = lazy(() => import("./pages/Payments.tsx"));
+const Accounting = lazy(() => import("./pages/Accounting/Accounting.tsx"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage.tsx"));
+const Registration = lazy(() => import("./pages/Registration.tsx"));
 import { ProtectedRoute } from "./components/protectedRoutes.tsx";
 
 export default function App() {
