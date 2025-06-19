@@ -48,10 +48,12 @@ export interface Sede {
     id: number;
     nombre: string;
     direccion: string;
+    horarios: Horario[];
 }
 
 export interface Horario {
     id: number;
+    tipo_grupo: string;
     dia_semana: string;
     hora_inicio: string;
     hora_fin: string;

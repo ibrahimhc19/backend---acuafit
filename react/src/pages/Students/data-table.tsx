@@ -32,7 +32,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { SelectRows } from "./select";
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 
 export function DataTable<TValue, TData extends Estudiante>({
     columns,
@@ -456,6 +463,19 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 </div>
                             </div>
                         </form>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button variant="outline">Cancelar</Button>
+                            </DialogClose>
+                            <Button type="submit">Editar</Button>
+                            <Button
+                                variant="destructive"
+                                type="submit"
+                                disabled
+                            >
+                                Eliminar
+                            </Button>
+                        </DialogFooter>
                     </DialogContent>
                 </Dialog>
             )}
