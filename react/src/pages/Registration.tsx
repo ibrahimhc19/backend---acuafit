@@ -681,7 +681,7 @@ export default function RegistrationPage() {
                                             <Select
                                                 onValueChange={(value) => {
                                                     field.onChange(value);
-                                                    setGrupos(sedes[value].horarios || []);
+                                                    setGrupos(sedes[parseInt(value)].horarios || []);
                                                 }}
                                                 defaultValue={field.value}
                                             >
@@ -691,10 +691,10 @@ export default function RegistrationPage() {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    {sedes.map((g) => (
+                                                    {sedes.map((g, index) => (
                                                         <SelectItem
-                                                            key={g.id}
-                                                            value={g.id.toString()}
+                                                            key={index}
+                                                            value={index.toString()}
                                                         >
                                                             {g.nombre}
                                                         </SelectItem>
@@ -723,20 +723,20 @@ export default function RegistrationPage() {
                                                     defaultValue={field.value}
                                                     className="flex flex-col space-y-1"
                                                 >
-                                                    {grupos.map((grupo) => (
+                                                    {grupos && grupos.map((grupo, index) => (
                                                         <FormItem
-                                                            key={grupo}
+                                                            key={index}
                                                             className="flex items-center gap-3"
                                                         >
                                                             <FormControl>
                                                                 <RadioGroupItem
                                                                     value={
-                                                                        grupo
+                                                                        grupo.id.toString()
                                                                     }
                                                                 />
                                                             </FormControl>
                                                             <FormLabel className="font-normal">
-                                                                {grupo}
+                                                                {grupo.tipo_grupo}, {grupo.dia_semana} de {grupo.hora_inicio} a {grupo.hora_fin}
                                                             </FormLabel>
                                                         </FormItem>
                                                     ))}
