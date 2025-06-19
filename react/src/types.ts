@@ -61,9 +61,8 @@ export interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     handlePageChange: (type: 'first' | 'previous' | 'next' | 'last') => void;
-    nextPage: string | null;
-    previousPage: string | null;
-    currentPage: number;
+    pageLinks: PageLinks;
+    pageNumRefs: PageNumRefs;
 }
 
 export interface FormData {
@@ -89,6 +88,21 @@ export interface FormErrors {
     [key: string]: string;
 }
 
+export interface PageNumRefs {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    from: number;
+    to: number;
+    total: number;
+    next_page: number | null;
+}
+export interface PageLinks {
+    first_page_url: string;
+    last_page_url: string;
+    next_page_url: string | null;
+    prev_page_url: string | null;
+}
 
 export interface AuthProviderProps {
     children: ReactNode;
@@ -96,21 +110,34 @@ export interface AuthProviderProps {
 
 
 export interface AuthContextType {
-    user: unknown;
+    user: User | null;
     login: (data: IFormInput) => Promise<void>;
     logout: () => Promise<void>;
     apiError: string | null;
     setApiError: (error: string | null) => void;
     getUser: () => Promise<void>;
     loading: boolean;
+    hasRole: (role: string) => boolean;
+    hasPermission: (perm: string) => boolean;
 }
 
-// export interface User {
-//     email: string
-//     nombre: string
-//     apellido: string
-//     role: string
-// }
+export interface User {
+    id: number;
+    name: string;
+    email: string
+    password: string;
+    nombres: string
+    apellidos: string
+    role: string
+    tipo_documento: string;
+    documento_identidad: string;
+    telefono: string;
+    avatar_url: string;
+    avatar_initials: string;
+    roles: string[];
+    permissions: string[];
+    google_id: string;
+}
 
 export interface ProtectedRouteProps {
     redirectPath?: string;
@@ -118,5 +145,5 @@ export interface ProtectedRouteProps {
 
 // export type ProtectedRouteProps = PropsWithChildren & {
 //     redirectPath?: string;
-//     allowedRoles?: User["role"][];
+//     allowedRoles?: User["roles"][];
 // }
