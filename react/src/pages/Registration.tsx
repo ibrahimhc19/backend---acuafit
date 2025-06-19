@@ -23,8 +23,10 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
+import { Horario, Sede } from "@/types";
+import axios from "axios";
 
 const formSchema = z
     .object({
@@ -227,22 +229,46 @@ export default function RegistrationPage() {
         "Cédula de ciudadanía",
         "Documento extranjero",
     ];
-    const sedes = ["Poblado", "Castilla", "La Estrella"];
-    const grupos = [
-        "Adultos sábados, de 8 a.m a 9 a.m",
-        "Adultos sábados, de 9 a.m a 10 a.m",
-        "Niños sábados, de 10 a.m a 11 a.m",
-        "Adultos domingos, de 8 a.m a 9 a.m",
-        "Adultos domingos, de 9 a.m a 10 a.m",
-        "Niños domingos, de 10 a.m a 11 a.m",
-        "Niños domingos, de 11 a.m a 12 m.",
-    ];
+    // const sedes = ["Aranjuez", "Castilla", "La 33", "La Estrella", "San Lucas"];
+    // const grupos = [
+    //     "Adultos sábados, de 8 a.m a 9 a.m",
+    //     "Adultos sábados, de 9 a.m a 10 a.m",
+    //     "Niños sábados, de 10 a.m a 11 a.m",
+    //     "Adultos domingos, de 8 a.m a 9 a.m",
+    //     "Adultos domingos, de 9 a.m a 10 a.m",
+    //     "Niños domingos, de 10 a.m a 11 a.m",
+    //     "Niños domingos, de 11 a.m a 12 m.",
+    // ];
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
+    const [sedes, setSedes] = useState<Sede[]>([]);
+    const [grupos, setGrupos] = useState<Horario[]>();
+
+    useEffect(() => {
+        axios
+            // .get(url)
+            .get("/mock/grupos.json")
+            .then((response) => {
+                const apiResponse = response.data;
+                if (apiResponse) {
+                    setSedes(apiResponse);
+                } else {
+                    console.error(
+                        "La respuesta de la API no tiene el formato esperado:",
+                        apiResponse
+                    );
+                    setSedes([]);
+                }
+            })
+            .catch((error: unknown) => {
+                console.error("Error al obtener los datos:", error);
+                setSedes([]);
+            });
+    }, []);
     return (
         <div className="bg-gray-50 min-h-screen py-10">
             <div className="container mx-auto max-w-2xl px-4">
                 <div className="bg-white rounded-lg shadow-lg">
-                    <div className="bg-[url(./assets/piscina.jpg)] w-full h-40 rounded-t-2xl bg-center bg-cover"></div>
+                    <div className="bg-[url(./assets/piscina.jpg)] w-full h-40 rounded-t-lg bg-center bg-cover"></div>
                     <div className="p-6 md:p-8">
                         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2">
                             Formulario de Inscripción Acuafit{" "}
@@ -653,7 +679,10 @@ export default function RegistrationPage() {
                                                 Sede de preferencia
                                             </FormLabel>
                                             <Select
-                                                onValueChange={field.onChange}
+                                                onValueChange={(value) => {
+                                                    field.onChange(value);
+                                                    setGrupos(sedes[value].horarios || []);
+                                                }}
                                                 defaultValue={field.value}
                                             >
                                                 <FormControl>
@@ -662,12 +691,12 @@ export default function RegistrationPage() {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    {sedes.map((sede) => (
+                                                    {sedes.map((g) => (
                                                         <SelectItem
-                                                            key={sede}
-                                                            value={sede}
+                                                            key={g.id}
+                                                            value={g.id.toString()}
                                                         >
-                                                            {sede}
+                                                            {g.nombre}
                                                         </SelectItem>
                                                     ))}
                                                 </SelectContent>

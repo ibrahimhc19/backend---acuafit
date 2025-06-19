@@ -78,8 +78,8 @@ export default function StudentsPage() {
 
     useEffect(() => {
         axios
-            .get(url)
-            // .get("/mock/data.json")
+            // .get(url)
+            .get("/mock/data.json")
             .then((response) => {
                 const apiResponse = response.data;
                 if (

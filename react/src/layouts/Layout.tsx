@@ -79,7 +79,7 @@ export default function DashboardLayout() {
                                 href="#"
                                 className="text-xl font-bold flex items-center lg:ml-2.5"
                             >
-                                <span className="self-center whitespace-nowrap ml-2 text-primary hidden sm:bl">
+                                <span className="self-center whitespace-nowrap ml-2 text-primary hidden sm:block">
                                     {" "}
                                     Acuafit
                                 </span>
