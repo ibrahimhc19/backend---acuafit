@@ -1,13 +1,13 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "@/api/axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContextType, AuthProviderProps, IFormInput } from "@/types";
+import { AuthContextType, AuthProviderProps, IFormInput, User } from "@/types";
 import { AxiosError } from "axios";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
     const [apiError, setApiError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const navigate = useNavigate();
 
     const getUser = async () => {
-        console.log("getUser: Iniciando intento de obtención de usuario.");
         try {
             const { data } = await axios.get("/user");
             setUser(data);
@@ -30,7 +29,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     useEffect(() => {
         getUser();
     }, []);
-
 
     const login = async (data: IFormInput) => {
         setApiError(null);
@@ -81,10 +79,42 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
     };
 
+    const hasRole = (roles: string[] | string): boolean => {
+        if (!user) return false;
+
+        if (typeof roles === "string") {
+            return user.roles.includes(roles);
+        }
+
+        return roles.some((role) => user.roles.includes(role));
+    };
+
+    const hasPermission = (perm: string) =>
+        user?.permissions.includes(perm) ?? false;
+
+    // const hasPermission = (perms: string[] | string): boolean => {
+    //     if (!user) return false;
+
+    //     if (typeof perms === "string") {
+    //         return user.permissions.includes(perms);
+    //     }
+
+    //     return perms.some((perm) => user.permissions.includes(perm));
+    // };
 
     return (
         <AuthContext.Provider
-            value={{ user, login, logout, apiError, getUser, setApiError, loading }}
+            value={{
+                user,
+                login,
+                logout,
+                apiError,
+                getUser,
+                setApiError,
+                loading,
+                hasRole,
+                hasPermission,
+            }}
         >
             {children}
         </AuthContext.Provider>

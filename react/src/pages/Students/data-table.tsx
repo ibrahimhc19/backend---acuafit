@@ -4,12 +4,7 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
+
 import {
     Table,
     TableBody,
@@ -35,14 +30,15 @@ import {
     PaginationLink,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
+import { SelectRows } from "./select";
 import { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export function DataTable<TValue, TData extends Estudiante>({
     columns,
     data,
-    previousPage,
-    nextPage,
-    currentPage,
+    pageNumRefs,
+    pageLinks,
     handlePageChange,
 }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
@@ -51,25 +47,71 @@ export function DataTable<TValue, TData extends Estudiante>({
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
     });
-
     const [selectedRow, setSelectedRow] = useState<Estudiante | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [nombres, setNombres] = useState("");
+    const paginas = [
+        { label: "10", value: 10 },
+        { label: "15", value: 15 },
+        { label: "20", value: 20 },
+        { label: "30", value: 30 },
+    ];
 
     useEffect(() => {
         if (selectedRow) {
             setNombres(`${selectedRow.nombres} ${selectedRow.apellidos}`);
         }
     }, [selectedRow]);
+
+    const [query, setQuery] = useState("");
+    const [results, setResults] = useState<string[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    const handleSearch = async () => {
+        if (!query.trim()) return;
+
+        setLoading(true);
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_APP_API_URL}api/buscar?q=${query}`
+            );
+            const data = await response.json();
+            setResults(data);
+            console.log(results);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <>
             <h1 className="scroll-m-20 flex-wrap text-3xl font-semibold text-primary">
                 Listado de Estudiantes
             </h1>
             <div className="flex w-full max-w-sm  my-4 gap-2">
-                <Input type="search" placeholder="Buscar" />
-                <Button type="submit" variant="outline">
-                    Buscar
+                <Input
+                    type="search"
+                    placeholder="Buscar"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+                <Button
+                    type="submit"
+                    variant="outline"
+                    onClick={handleSearch}
+                    disabled={loading}
+                    className="hover:bg-primary hover:text-white"
+                >
+                    {loading ? "Buscando..." : "Buscar"}
+                </Button>
+                <Button
+                    type="submit"
+                    variant="outline"
+                    className="hover:bg-primary hover:text-white"
+                >
+                    Limpiar
                 </Button>
             </div>
             {isModalOpen && selectedRow && (
@@ -417,7 +459,6 @@ export function DataTable<TValue, TData extends Estudiante>({
                     </DialogContent>
                 </Dialog>
             )}
-
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -477,13 +518,21 @@ export function DataTable<TValue, TData extends Estudiante>({
                 </Table>
             </div>
             <div className="flex flex-row justify-end items-center mb-4 sm:mb-0">
-                <div className="flex items-center justify-end py-4">
+                <div className="flex items-center justify-end py-4 space-x-1">
+                    {/* Deuda */}
+                    <SelectRows
+                        value={paginas[0].value}
+                        onValueChange={() => {}}
+                        options={paginas}
+                    />
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handlePageChange("first")}
-                        disabled={previousPage === null ? true : false}
-                        className="hover:bg-primary hover:text-white"
+                        disabled={
+                            pageLinks.prev_page_url === null ? true : false
+                        }
+                        className="hover:bg-primary hover:text-white mx-2 hidden sm:block"
                     >
                         <ChevronsLeft />
                     </Button>
@@ -491,15 +540,19 @@ export function DataTable<TValue, TData extends Estudiante>({
                         variant="outline"
                         size="sm"
                         onClick={() => handlePageChange("previous")}
-                        disabled={previousPage === null ? true : false}
-                        className="hover:bg-primary hover:text-white mx-2"
+                        disabled={
+                            pageLinks.prev_page_url === null ? true : false
+                        }
+                        className="hover:bg-primary hover:text-white"
                     >
                         <ChevronLeft />
                     </Button>
-                    <Pagination>
+                    <Pagination className="hidden sm:flex mr-1">
                         <PaginationContent>
                             <PaginationItem>
-                                <PaginationLink>{currentPage}</PaginationLink>
+                                <PaginationLink>
+                                    {pageNumRefs.current_page}
+                                </PaginationLink>
                             </PaginationItem>
                         </PaginationContent>
                     </Pagination>
@@ -507,7 +560,9 @@ export function DataTable<TValue, TData extends Estudiante>({
                         variant="outline"
                         size="sm"
                         onClick={() => handlePageChange("next")}
-                        disabled={nextPage === null ? true : false}
+                        disabled={
+                            pageLinks.next_page_url === null ? true : false
+                        }
                         className="hover:bg-primary hover:text-white mx-2"
                     >
                         <ChevronRight />
@@ -516,8 +571,10 @@ export function DataTable<TValue, TData extends Estudiante>({
                         variant="outline"
                         size="sm"
                         onClick={() => handlePageChange("last")}
-                        disabled={nextPage === null ? true : false}
-                        className="hover:bg-primary hover:text-white"
+                        disabled={
+                            pageLinks.next_page_url === null ? true : false
+                        }
+                        className="hover:bg-primary hover:text-white hidden sm:block"
                     >
                         <ChevronsRight />
                     </Button>
