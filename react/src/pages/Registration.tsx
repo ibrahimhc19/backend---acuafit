@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import toCapital from "@/helpers/toCapital";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -229,16 +230,7 @@ export default function RegistrationPage() {
         "Cédula de ciudadanía",
         "Documento extranjero",
     ];
-    // const sedes = ["Aranjuez", "Castilla", "La 33", "La Estrella", "San Lucas"];
-    // const grupos = [
-    //     "Adultos sábados, de 8 a.m a 9 a.m",
-    //     "Adultos sábados, de 9 a.m a 10 a.m",
-    //     "Niños sábados, de 10 a.m a 11 a.m",
-    //     "Adultos domingos, de 8 a.m a 9 a.m",
-    //     "Adultos domingos, de 9 a.m a 10 a.m",
-    //     "Niños domingos, de 10 a.m a 11 a.m",
-    //     "Niños domingos, de 11 a.m a 12 m.",
-    // ];
+
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
     const [sedes, setSedes] = useState<Sede[]>([]);
     const [grupos, setGrupos] = useState<Horario[]>();
@@ -736,7 +728,7 @@ export default function RegistrationPage() {
                                                                 />
                                                             </FormControl>
                                                             <FormLabel className="font-normal">
-                                                                {grupo.tipo_grupo}, {grupo.dia_semana} de {grupo.hora_inicio} a {grupo.hora_fin}
+                                                                {grupo.tipo_grupo}, {toCapital(grupo.dia_semana)} de {grupo.hora_inicio} a {grupo.hora_fin}
                                                             </FormLabel>
                                                         </FormItem>
                                                     ))}

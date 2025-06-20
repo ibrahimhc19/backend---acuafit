@@ -1,387 +1,387 @@
 [
-    {
+  {
+    "id": 1,
+    "nombre": "Aranjuez",
+    "direccion": "",
+    "horarios": [
+      {
         "id": 1,
-        "nombre": "Aranjuez",
-        "direccion": "",
-        "horarios": [
-            {
-                "id": 1,
-                "dia_semana": "Miércoles",
-                "hora_inicio": "06:00",
-                "hora_fin": "07:00",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 2,
-                "dia_semana": "Miércoles",
-                "hora_inicio": "07:00",
-                "hora_fin": "08:00",
-                "tipo_grupo": "Adultos"
-            }
-        ]
-    },
-    {
+        "dia_semana": "Miércoles",
+        "hora_inicio": "06:00 PM",
+        "hora_fin": "07:00 PM",
+        "tipo_grupo": "Niños"
+      },
+      {
         "id": 2,
-        "nombre": "Castilla",
-        "direccion": "",
-        "horarios": [
-            {
-                "id": 8,
-                "dia_semana": "Sábados",
-                "hora_inicio": "07:00",
-                "hora_fin": "08:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 9,
-                "dia_semana": "Sábados",
-                "hora_inicio": "08:00",
-                "hora_fin": "09:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 7,
-                "dia_semana": "Sábados",
-                "hora_inicio": "09:00",
-                "hora_fin": "10:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 10,
-                "dia_semana": "Sábados",
-                "hora_inicio": "09:00",
-                "hora_fin": "10:00",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 11,
-                "dia_semana": "Domingos",
-                "hora_inicio": "07:00",
-                "hora_fin": "08:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 12,
-                "dia_semana": "Domingos",
-                "hora_inicio": "08:00",
-                "hora_fin": "09:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 15,
-                "dia_semana": "Domingos",
-                "hora_inicio": "09:00",
-                "hora_fin": "10:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 13,
-                "dia_semana": "Domingos",
-                "hora_inicio": "10:00",
-                "hora_fin": "11:00",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 14,
-                "dia_semana": "Domingos",
-                "hora_inicio": "11:00",
-                "hora_fin": "12:00",
-                "tipo_grupo": "Niños"
-            }
-        ]
-    },
-    {
-        "id": 3,
-        "nombre": "La 33",
-        "direccion": "",
-        "horarios": [
-            {
-                "id": 22,
-                "dia_semana": "sábado",
-                "hora_inicio": "08:30",
-                "hora_fin": "09:30",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 23,
-                "dia_semana": "sábado",
-                "hora_inicio": "09:30",
-                "hora_fin": "10:30",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 24,
-                "dia_semana": "sábado",
-                "hora_inicio": "10:30",
-                "hora_fin": "11:30",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 25,
-                "dia_semana": "sábado",
-                "hora_inicio": "11:30",
-                "hora_fin": "12:30",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 26,
-                "dia_semana": "sábado",
-                "hora_inicio": "12:30",
-                "hora_fin": "13:30",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 27,
-                "dia_semana": "domingo",
-                "hora_inicio": "08:30",
-                "hora_fin": "09:30",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 28,
-                "dia_semana": "domingo",
-                "hora_inicio": "09:30",
-                "hora_fin": "10:30",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 29,
-                "dia_semana": "domingo",
-                "hora_inicio": "10:30",
-                "hora_fin": "11:30",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 30,
-                "dia_semana": "domingo",
-                "hora_inicio": "11:30",
-                "hora_fin": "12:30",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 31,
-                "dia_semana": "domingo",
-                "hora_inicio": "12:30",
-                "hora_fin": "13:30",
-                "tipo_grupo": "Apnea"
-            },
-            {
-                "id": 32,
-                "dia_semana": "domingo",
-                "hora_inicio": "12:30",
-                "hora_fin": "13:30",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 33,
-                "dia_semana": "martes",
-                "hora_inicio": "19:00",
-                "hora_fin": "20:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 34,
-                "dia_semana": "jueves",
-                "hora_inicio": "19:00",
-                "hora_fin": "20:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 35,
-                "dia_semana": "martes-jueves",
-                "hora_inicio": "19:00",
-                "hora_fin": "20:00",
-                "tipo_grupo": "Adultos"
-            }
-        ]
-    },
-    {
-        "id": 4,
-        "nombre": "La Estrella",
-        "direccion": "",
-        "horarios": [
-            {
-                "id": 29,
-                "dia_semana": "miércoles",
-                "hora_inicio": "19:00",
-                "hora_fin": "20:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 30,
-                "dia_semana": "sábado",
-                "hora_inicio": "07:00",
-                "hora_fin": "08:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 31,
-                "dia_semana": "sábado",
-                "hora_inicio": "08:00",
-                "hora_fin": "09:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 32,
-                "dia_semana": "sábado",
-                "hora_inicio": "09:00",
-                "hora_fin": "10:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 33,
-                "dia_semana": "sábado",
-                "hora_inicio": "10:00",
-                "hora_fin": "11:00",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 34,
-                "dia_semana": "sábado",
-                "hora_inicio": "11:00",
-                "hora_fin": "12:00",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 35,
-                "dia_semana": "domingo",
-                "hora_inicio": "07:00",
-                "hora_fin": "08:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 36,
-                "dia_semana": "domingo",
-                "hora_inicio": "08:00",
-                "hora_fin": "09:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 37,
-                "dia_semana": "domingo",
-                "hora_inicio": "09:00",
-                "hora_fin": "10:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 38,
-                "dia_semana": "domingo",
-                "hora_inicio": "10:00",
-                "hora_fin": "11:00",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 39,
-                "dia_semana": "domingo",
-                "hora_inicio": "11:00",
-                "hora_fin": "12:00",
-                "tipo_grupo": "Niños"
-            }
-        ]
-    },
-    {
-        "id": 5,
-        "nombre": "San Lucas",
-        "direccion": "",
-        "horarios": [
-            {
-                "id": 36,
-                "dia_semana": "sábado",
-                "hora_inicio": "07:00",
-                "hora_fin": "08:00",
-                "tipo_grupo": "Hidroaeróbicos"
-            },
-            {
-                "id": 37,
-                "dia_semana": "sábado",
-                "hora_inicio": "08:00",
-                "hora_fin": "09:00",
-                "tipo_grupo": "Niños 5-10 años"
-            },
-            {
-                "id": 38,
-                "dia_semana": "sábado",
-                "hora_inicio": "09:00",
-                "hora_fin": "10:00",
-                "tipo_grupo": "Niños 2-4 años"
-            },
-            {
-                "id": 39,
-                "dia_semana": "sábado",
-                "hora_inicio": "10:00",
-                "hora_fin": "11:00",
-                "tipo_grupo": "Bebés 10-23 meses"
-            },
-            {
-                "id": 40,
-                "dia_semana": "sábado",
-                "hora_inicio": "12:00",
-                "hora_fin": "13:00",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 41,
-                "dia_semana": "domingo",
-                "hora_inicio": "08:00",
-                "hora_fin": "09:00",
-                "tipo_grupo": "Niños 5-10 años"
-            },
-            {
-                "id": 42,
-                "dia_semana": "domingo",
-                "hora_inicio": "09:00",
-                "hora_fin": "10:00",
-                "tipo_grupo": "Niños 2-4 años"
-            },
-            {
-                "id": 43,
-                "dia_semana": "domingo",
-                "hora_inicio": "10:00",
-                "hora_fin": "11:00",
-                "tipo_grupo": "Bebés 10-23 meses"
-            },
-            {
-                "id": 44,
-                "dia_semana": "domingo",
-                "hora_inicio": "11:00",
-                "hora_fin": "12:00",
-                "tipo_grupo": "Niños"
-            }
-        ]
-    },
-    {
-        "id": 6,
-        "nombre": "La Floresta",
-        "direccion": "",
-        "horarios": [
-            {
-                "id": 45,
-                "dia_semana": "domingo",
-                "hora_inicio": "08:00",
-                "hora_fin": "09:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 46,
-                "dia_semana": "domingo",
-                "hora_inicio": "09:00",
-                "hora_fin": "10:00",
-                "tipo_grupo": "Adultos"
-            },
-            {
-                "id": 47,
-                "dia_semana": "domingo",
-                "hora_inicio": "10:00",
-                "hora_fin": "11:00",
-                "tipo_grupo": "Niños"
-            },
-            {
-                "id": 48,
-                "dia_semana": "domingo",
-                "hora_inicio": "11:00",
-                "hora_fin": "12:00",
-                "tipo_grupo": "Niños"
-            }
-        ]
-    }
+        "dia_semana": "Miércoles",
+        "hora_inicio": "07:00 PM",
+        "hora_fin": "08:00 PM",
+        "tipo_grupo": "Adultos"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Castilla",
+    "direccion": "",
+    "horarios": [
+      {
+        "id": 8,
+        "dia_semana": "Sábado",
+        "hora_inicio": "07:00 AM",
+        "hora_fin": "08:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 9,
+        "dia_semana": "Sábado",
+        "hora_inicio": "08:00 AM",
+        "hora_fin": "09:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 7,
+        "dia_semana": "Sábado",
+        "hora_inicio": "09:00 AM",
+        "hora_fin": "10:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 10,
+        "dia_semana": "Sábado",
+        "hora_inicio": "09:00 AM",
+        "hora_fin": "10:00 AM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 11,
+        "dia_semana": "Domingo",
+        "hora_inicio": "07:00 AM",
+        "hora_fin": "08:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 12,
+        "dia_semana": "Domingo",
+        "hora_inicio": "08:00 AM",
+        "hora_fin": "09:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 15,
+        "dia_semana": "Domingo",
+        "hora_inicio": "09:00 AM",
+        "hora_fin": "10:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 13,
+        "dia_semana": "Domingo",
+        "hora_inicio": "10:00 AM",
+        "hora_fin": "11:00 AM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 14,
+        "dia_semana": "Domingo",
+        "hora_inicio": "11:00 AM",
+        "hora_fin": "12:00 PM",
+        "tipo_grupo": "Niños"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "nombre": "La 33",
+    "direccion": "",
+    "horarios": [
+      {
+        "id": 22,
+        "dia_semana": "sábado",
+        "hora_inicio": "08:30 AM",
+        "hora_fin": "09:30 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 23,
+        "dia_semana": "sábado",
+        "hora_inicio": "09:30 AM",
+        "hora_fin": "10:30 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 24,
+        "dia_semana": "sábado",
+        "hora_inicio": "10:30 AM",
+        "hora_fin": "11:30 AM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 25,
+        "dia_semana": "sábado",
+        "hora_inicio": "11:30 AM",
+        "hora_fin": "12:30 PM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 26,
+        "dia_semana": "sábado",
+        "hora_inicio": "12:30 PM",
+        "hora_fin": "01:30 PM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 27,
+        "dia_semana": "domingo",
+        "hora_inicio": "08:30 AM",
+        "hora_fin": "09:30 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 28,
+        "dia_semana": "domingo",
+        "hora_inicio": "09:30 AM",
+        "hora_fin": "10:30 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 29,
+        "dia_semana": "domingo",
+        "hora_inicio": "10:30 AM",
+        "hora_fin": "11:30 AM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 30,
+        "dia_semana": "domingo",
+        "hora_inicio": "11:30 AM",
+        "hora_fin": "12:30 PM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 31,
+        "dia_semana": "domingo",
+        "hora_inicio": "12:30 PM",
+        "hora_fin": "01:30 PM",
+        "tipo_grupo": "Apnea"
+      },
+      {
+        "id": 32,
+        "dia_semana": "domingo",
+        "hora_inicio": "12:30 PM",
+        "hora_fin": "01:30 PM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 33,
+        "dia_semana": "martes",
+        "hora_inicio": "07:00 PM",
+        "hora_fin": "08:00 PM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 34,
+        "dia_semana": "jueves",
+        "hora_inicio": "07:00 PM",
+        "hora_fin": "08:00 PM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 35,
+        "dia_semana": "Martes-Jueves",
+        "hora_inicio": "07:00 PM",
+        "hora_fin": "08:00 PM",
+        "tipo_grupo": "Adultos"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "nombre": "La Estrella",
+    "direccion": "",
+    "horarios": [
+      {
+        "id": 29,
+        "dia_semana": "miércoles",
+        "hora_inicio": "07:00 PM",
+        "hora_fin": "08:00 PM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 30,
+        "dia_semana": "sábado",
+        "hora_inicio": "07:00 AM",
+        "hora_fin": "08:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 31,
+        "dia_semana": "sábado",
+        "hora_inicio": "08:00 AM",
+        "hora_fin": "09:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 32,
+        "dia_semana": "sábado",
+        "hora_inicio": "09:00 AM",
+        "hora_fin": "10:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 33,
+        "dia_semana": "sábado",
+        "hora_inicio": "10:00 AM",
+        "hora_fin": "11:00 AM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 34,
+        "dia_semana": "sábado",
+        "hora_inicio": "11:00 AM",
+        "hora_fin": "12:00 PM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 35,
+        "dia_semana": "domingo",
+        "hora_inicio": "07:00 AM",
+        "hora_fin": "08:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 36,
+        "dia_semana": "domingo",
+        "hora_inicio": "08:00 AM",
+        "hora_fin": "09:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 37,
+        "dia_semana": "domingo",
+        "hora_inicio": "09:00 AM",
+        "hora_fin": "10:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 38,
+        "dia_semana": "domingo",
+        "hora_inicio": "10:00 AM",
+        "hora_fin": "11:00 AM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 39,
+        "dia_semana": "domingo",
+        "hora_inicio": "11:00 AM",
+        "hora_fin": "12:00 PM",
+        "tipo_grupo": "Niños"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "nombre": "San Lucas",
+    "direccion": "",
+    "horarios": [
+      {
+        "id": 36,
+        "dia_semana": "sábado",
+        "hora_inicio": "07:00 AM",
+        "hora_fin": "08:00 AM",
+        "tipo_grupo": "Hidroaeróbicos"
+      },
+      {
+        "id": 37,
+        "dia_semana": "sábado",
+        "hora_inicio": "08:00 AM",
+        "hora_fin": "09:00 AM",
+        "tipo_grupo": "Niños 5-10 años"
+      },
+      {
+        "id": 38,
+        "dia_semana": "sábado",
+        "hora_inicio": "09:00 AM",
+        "hora_fin": "10:00 AM",
+        "tipo_grupo": "Niños 2-4 años"
+      },
+      {
+        "id": 39,
+        "dia_semana": "sábado",
+        "hora_inicio": "10:00 AM",
+        "hora_fin": "11:00 AM",
+        "tipo_grupo": "Bebés 10-23 meses"
+      },
+      {
+        "id": 40,
+        "dia_semana": "sábado",
+        "hora_inicio": "12:00 PM",
+        "hora_fin": "01:00 PM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 41,
+        "dia_semana": "domingo",
+        "hora_inicio": "08:00 AM",
+        "hora_fin": "09:00 AM",
+        "tipo_grupo": "Niños 5-10 años"
+      },
+      {
+        "id": 42,
+        "dia_semana": "domingo",
+        "hora_inicio": "09:00 AM",
+        "hora_fin": "10:00 AM",
+        "tipo_grupo": "Niños 2-4 años"
+      },
+      {
+        "id": 43,
+        "dia_semana": "domingo",
+        "hora_inicio": "10:00 AM",
+        "hora_fin": "11:00 AM",
+        "tipo_grupo": "Bebés 10-23 meses"
+      },
+      {
+        "id": 44,
+        "dia_semana": "domingo",
+        "hora_inicio": "11:00 AM",
+        "hora_fin": "12:00 PM",
+        "tipo_grupo": "Niños"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "nombre": "La Floresta",
+    "direccion": "",
+    "horarios": [
+      {
+        "id": 45,
+        "dia_semana": "domingo",
+        "hora_inicio": "08:00 AM",
+        "hora_fin": "09:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 46,
+        "dia_semana": "domingo",
+        "hora_inicio": "09:00 AM",
+        "hora_fin": "10:00 AM",
+        "tipo_grupo": "Adultos"
+      },
+      {
+        "id": 47,
+        "dia_semana": "domingo",
+        "hora_inicio": "10:00 AM",
+        "hora_fin": "11:00 AM",
+        "tipo_grupo": "Niños"
+      },
+      {
+        "id": 48,
+        "dia_semana": "domingo",
+        "hora_inicio": "11:00 AM",
+        "hora_fin": "12:00 PM",
+        "tipo_grupo": "Niños"
+      }
+    ]
+  }
 ]
