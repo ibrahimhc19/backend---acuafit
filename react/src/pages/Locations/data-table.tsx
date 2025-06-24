@@ -56,7 +56,7 @@ export function DataTable<TValue, TData extends Sede>({
         manualPagination: true,
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { selectedSede, selectSede, deleteSede } =
+    const { selectedSede, selectSede, createSede, updateSede, deleteSede } =
         useSedesStore();
 
     const [formData, setFormData] = useState({
@@ -87,9 +87,9 @@ export function DataTable<TValue, TData extends Sede>({
 
         if (selectedSede?.id) {
             console.log("Actualizo");
-            // updateSede(selectedSede.id, formData);
+            updateSede(selectedSede.id, formData);
         } else {
-            // createSede(formData);
+            createSede(formData);
             console.log("Registro");
         }
     };
@@ -154,7 +154,7 @@ export function DataTable<TValue, TData extends Sede>({
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </form>
+
                             <DialogFooter>
                                 <DialogClose asChild>
                                     <Button variant="outline">Cancelar</Button>
@@ -216,6 +216,7 @@ export function DataTable<TValue, TData extends Sede>({
                                     </AlertDialogContent>
                                 </AlertDialog>
                             </DialogFooter>
+                            </form>
                         </DialogContent>
                     </Dialog>
                 )}
