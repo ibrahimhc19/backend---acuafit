@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useSedesStore } from "@/services/useSedesStore";
 import { Sede } from "@/types";
 import { Button } from "@/components/ui/button";
