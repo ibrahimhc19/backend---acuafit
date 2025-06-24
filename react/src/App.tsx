@@ -10,12 +10,13 @@ import Layout from "./layouts/Layout";
 import Home from "./pages/Home.tsx";
 const Students = lazy(() => import("./pages/Students/Students.tsx"));
 const Parents = lazy(() => import("./pages/Parents.tsx"));
-const Locations = lazy(() => import("./pages/Locations.tsx"));
-const Schedules = lazy(() => import("./pages/Schedules.tsx"));
+const Locations = lazy(() => import("./pages/Locations/Locations.tsx"));
+const Schedules = lazy(() => import("./pages/Schedules/Schedules.tsx"));
 const Payments = lazy(() => import("./pages/Payments.tsx"));
 const Accounting = lazy(() => import("./pages/Accounting/Accounting.tsx"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage.tsx"));
 const Registration = lazy(() => import("./pages/Registration.tsx"));
+const Register = lazy(() => import("./pages/Register.tsx"));
 import { ProtectedRoute } from "./components/protectedRoutes.tsx";
 
 export default function App() {
@@ -23,7 +24,7 @@ export default function App() {
     <div className="app">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<Registration />} />
+          <Route path="/inscripcion" element={<Registration />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
@@ -34,6 +35,7 @@ export default function App() {
               <Route path="/pagos" element={<Payments />} />
               <Route path="/facturacion" element={<Accounting />} />
               <Route path="/dashboard" element={<Home />} />
+              <Route path="/registro" element={<Register />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFoundPage />} />

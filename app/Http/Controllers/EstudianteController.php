@@ -13,10 +13,10 @@ class EstudianteController extends Controller
     /**
      * Returns a form for student registration.
      */
-    public function create()
-    {
-        return view('registrar');
-    }
+    // public function create()
+    // {
+    //     return view('registrar');
+    // }
 
     /**
      * Display a listing of the resource.

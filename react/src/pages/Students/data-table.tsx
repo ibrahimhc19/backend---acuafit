@@ -552,7 +552,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                         disabled={
                             pageLinks.prev_page_url === null ? true : false
                         }
-                        className="hover:bg-primary hover:text-white mx-2 hidden sm:block"
+                        className="hover:bg-primary hover:text-white hidden sm:block"
                     >
                         <ChevronsLeft />
                     </Button>
@@ -583,7 +583,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                         disabled={
                             pageLinks.next_page_url === null ? true : false
                         }
-                        className="hover:bg-primary hover:text-white mx-2"
+                        className="hover:bg-primary hover:text-white"
                     >
                         <ChevronRight />
                     </Button>

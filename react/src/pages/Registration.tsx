@@ -257,7 +257,7 @@ export default function RegistrationPage() {
             });
     }, []);
     return (
-        <div className="bg-gray-50 min-h-screen py-10">
+        <div className="min-h-screen py-10">
             <div className="container mx-auto max-w-2xl px-4">
                 <div className="bg-white rounded-lg shadow-lg">
                     <div className="bg-[url(./assets/piscina.jpg)] w-full h-40 rounded-t-lg bg-center bg-cover"></div>
