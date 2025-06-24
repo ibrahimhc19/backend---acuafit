@@ -16,9 +16,10 @@ import {
 import { Horario } from "@/types";
 import { useState } from "react";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ScheduleForm } from "./form";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -52,7 +53,8 @@ export function DataTable<TValue, TData extends Horario>({
                             <DialogHeader>
                                 <DialogTitle>Editar Sede</DialogTitle>
                             </DialogHeader>
-                            <form className="space-y-4 max-h-[500px]">
+                            <ScheduleForm/>
+                            {/* <form className="space-y-4 max-h-[500px]">
                                 <div>
                                     <Label
                                         htmlFor="nombre"
@@ -79,7 +81,7 @@ export function DataTable<TValue, TData extends Horario>({
                                         value={selectedRow?.sede.nombre ?? "N/A"}
                                     />
                                 </div>
-                            </form>
+                            </form> */}
                             <DialogFooter>
                                 <DialogClose asChild>
                                     <Button variant="outline">Cancelar</Button>
