@@ -2,9 +2,8 @@
 import { useSedesStore } from "@/services/useSedesStore";
 import { Sede } from "@/types";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
+import { useState } from "react";
+
 import { Plus } from "lucide-react";
 import {
     ColumnDef,
@@ -12,17 +11,7 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import {
     Table,
     TableBody,
@@ -33,13 +22,10 @@ import {
 } from "@/components/ui/table";
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { toast } from "sonner";
 import { LocationForm } from "./form";
 
 interface DataTableProps<TData, TValue> {
@@ -58,58 +44,10 @@ export function DataTable<TValue, TData extends Sede>({
         manualPagination: true,
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { selectedSede, selectSede, createSede, updateSede, deleteSede } =
-        useSedesStore();
+    const { selectedSede, selectSede } = useSedesStore();
 
-    const [formData, setFormData] = useState({
-        nombre: "",
-        direccion: "",
-    });
-
-    useEffect(() => {
-        if (selectedSede) {
-            setFormData({
-                nombre: selectedSede.nombre || "",
-                direccion: selectedSede.direccion || "",
-            });
-        } else {
-            setFormData({
-                nombre: "",
-                direccion: "",
-            });
-        }
-    }, [selectedSede]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value } = e.target;
-        setFormData((prev) => ({ ...prev, [id]: value }));
-    };
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (selectedSede?.id) {
-            try {
-                await updateSede(selectedSede.id, formData);
-                console.log("Actualizo");
-                toast.success("La sede fue actualizada correctamente.");
-                selectSede(null);
-                setIsModalOpen(false);
-            } catch (e) {
-                toast.error("No se pudo actualizar la sede. Intenta de nuevo.");
-                console.error("Error al actualizar", e);
-            }
-        } else {
-            try {
-                await createSede(formData);
-                console.log("Registro");
-                toast.success("La sede fue registrada correctamente.");
-                selectSede(null);
-                setIsModalOpen(false);
-            } catch (e) {
-                toast.error("No se pudo registrar la sede. Intenta de nuevo.");
-                console.error("Error al registrar", e);
-            }
-        }
+    const datos = {
+        setIsModalOpen,
     };
     return (
         <>
@@ -140,108 +78,7 @@ export function DataTable<TValue, TData extends Sede>({
                                         : "Agregar Sede"}
                                 </DialogTitle>
                             </DialogHeader>
-                            <LocationForm {...selectedSede}/>
-                            {/* <form
-                                onSubmit={handleSubmit}
-                                className="space-y-4 max-h-[500px]"
-                            >
-                                <div>
-                                    <Label
-                                        htmlFor="nombre"
-                                        className="block font-semibold"
-                                    >
-                                        Nombre
-                                    </Label>
-                                    <Input
-                                        id="nombre"
-                                        type="text"
-                                        value={formData.nombre}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <div>
-                                    <Label
-                                        htmlFor="direccion"
-                                        className="block font-semibold"
-                                    >
-                                        Dirección
-                                    </Label>
-                                    <Input
-                                        id="direccion"
-                                        type="text"
-                                        value={formData.direccion}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button variant="outline">
-                                            Cancelar
-                                        </Button>
-                                    </DialogClose>
-                                    <Button type="submit">
-                                        {" "}
-                                        {selectedSede
-                                            ? "Actualizar"
-                                            : "Agregar"}
-                                    </Button>
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button variant="destructive">
-                                                Eliminar
-                                            </Button>
-                                        </AlertDialogTrigger>
-
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    ¿Estás seguro?
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    Esta acción eliminará
-                                                    permanentemente la sede
-                                                    seleccionada.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>
-                                                    Cancelar
-                                                </AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    onClick={async () => {
-                                                        if (!selectedSede?.id)
-                                                            return;
-
-                                                        try {
-                                                            await deleteSede(
-                                                                selectedSede.id
-                                                            );
-                                                            toast.success(
-                                                                "La sede fue eliminada correctamente."
-                                                            );
-                                                            selectSede(null);
-                                                            setIsModalOpen(
-                                                                false
-                                                            );
-                                                        } catch (e) {
-                                                            toast.error(
-                                                                "No se pudo eliminar la sede. Intenta de nuevo."
-                                                            );
-                                                            console.error(
-                                                                "Error al eliminar",
-                                                                e
-                                                            );
-                                                        }
-                                                    }}
-                                                >
-                                                    Confirmar
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </DialogFooter>
-                            </form> */}
+                            <LocationForm {...datos} />
                         </DialogContent>
                     </Dialog>
                 )}
