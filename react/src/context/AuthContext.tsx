@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const getUser = async () => {
         try {
-            const { data } = await axios.get("/user");
+            const { data } = await axios.get("auth/user");
             setUser(data);
         } catch (error) {
             console.error("getUser: Error al obtener el usuario:", error);
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setApiError(null);
         try {
             await csrf();
-            await axios.post("/login", data, {
+            await axios.post("auth/login", data, {
                 headers: {
                     Accept: "application/json",
                 },
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const logout = async () => {
         setApiError(null);
         try {
-            await axios.post("/logout", null, {
+            await axios.post("auth/logout", null, {
                 headers: {
                     Accept: "application/json",
                 },
