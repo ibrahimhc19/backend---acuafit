@@ -1,0 +1,1 @@
+import{j as t}from"./index-BKcJy05t.js";import r from"./Registration-DVWGD87f.js";import"./form-Dvq5A19A.js";import"./index.esm-BE52ohF4.js";import"./select-DM5sZjib.js";import"./index-CnEzmvKp.js";import"./createLucideIcon-C5bnr6OH.js";const n=()=>t.jsx("div",{className:"container mx-auto p-2 sm:p-4 min-h-[75vh]",children:t.jsx(r,{})});export{n as default};
