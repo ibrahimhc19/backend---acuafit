@@ -12,17 +12,22 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import { ModalState } from "@/types";
+import { toast } from "sonner";
+import { useHorariosStore } from "@/services/horarios/useHorariosStore";
 
 const formSchema = z.object({
     nombre: z.string().min(2, {
-        message: "El nombre de la sede es obligatorio",
+        message: "El nombre de la horario es obligatorio",
     }),
     direccion: z.string().min(2, {
-        message: "La dirección de la sede es obligatoria",
+        message: "La dirección de la horario es obligatoria",
     }),
 });
 
-export function ScheduleForm() {
+export function ScheduleForm({setIsModalOpen}:ModalState) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { selectHorario, selectedHorario, createHorario, updateHorario, deleteHorario } = useHorariosStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -31,9 +36,29 @@ export function ScheduleForm() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-    }
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        if (selectedHorario?.id) {
+            try {
+                await updateHorario(selectedHorario.id, values);
+                toast.success("La horario fue actualizada correctamente.");
+                selectHorario(null);
+                setIsModalOpen(false);
+            } catch (e) {
+                toast.error("No se pudo actualizar la horario. Intenta de nuevo.");
+                console.error("Error al actualizar", e);
+            }
+        } else {
+            try {
+                await createHorario(values);
+                toast.success("La horario fue registrada correctamente.");
+                selectHorario(null);
+                setIsModalOpen(false);
+            } catch (e) {
+                toast.error("No se pudo registrar la horario. Intenta de nuevo.");
+                console.error("Error al registrar", e);
+            }
+        }
+    };
 
     return (
         <Form {...form}>

@@ -1,4 +1,4 @@
-import { useSedesStore } from "@/services/useSedesStore";
+import { useSedesStore } from "@/services/sedes/useSedesStore";
 import { Sede } from "@/types";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";

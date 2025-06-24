@@ -132,7 +132,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                 <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle className="text-2xl">{nombres}</DialogTitle>
+                            <DialogTitle className="text-2xl text-left">{nombres}</DialogTitle>
                         </DialogHeader>
                         <Accordion type="single" collapsible className="w-full">
                             <AccordionItem value="item-1">
@@ -148,7 +148,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                                     </p>
                                     <p>
                                         <b>Documento:</b>{" "}
-                                        {selectedRow.documento_identidad}{" "}
+                                        {selectedRow.tipo_documento}{" "}
                                         {selectedRow.documento_identidad}
                                     </p>
                                     <p>

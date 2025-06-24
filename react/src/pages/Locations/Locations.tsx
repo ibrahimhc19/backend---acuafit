@@ -3,7 +3,7 @@ import { DataTable } from "./data-table";
 import axios from "axios";
 import { useEffect } from "react";
 import { columns } from "./columns";
-import { useSedesStore } from "@/services/useSedesStore";
+import { useSedesStore } from "@/services/sedes/useSedesStore";
 // Local
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;

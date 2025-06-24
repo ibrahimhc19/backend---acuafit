@@ -13,7 +13,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import { useSedesStore } from "@/services/useSedesStore";
+import { useSedesStore } from "@/services/sedes/useSedesStore";
 import {
     AlertDialogHeader,
     AlertDialogFooter,
@@ -28,6 +28,7 @@ import {
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { DialogFooter } from "@/components/ui/dialog";
+import { ModalState } from "@/types";
 
 const formSchema = z.object({
     nombre: z.string().min(2, {
@@ -35,9 +36,7 @@ const formSchema = z.object({
     }),
     direccion: z.string(),
 });
-interface ModalState {
-    setIsModalOpen: (value: React.SetStateAction<boolean>) => void;
-}
+
 
 export function LocationForm({setIsModalOpen}:ModalState) {
     const { selectSede, selectedSede, createSede, updateSede, deleteSede } = useSedesStore();

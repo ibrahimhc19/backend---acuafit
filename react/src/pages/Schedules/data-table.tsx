@@ -17,37 +17,19 @@ import { Horario } from "@/types";
 import { useState } from "react";
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogFooter,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-// import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
 
-const formSchema = z.object({
-    nombre: z.string().min(2, {
-        message: "El nombre de la sede es obligatorio",
-    }),
-    direccion: z.string().min(2, {
-        message: "La dirección de la sede es obligatoria",
-    }),
-});
+import { useHorariosStore } from "@/services/horarios/useHorariosStore";
+import { Plus } from "lucide-react";
+import { ScheduleForm } from "./form";
+
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
@@ -63,81 +45,47 @@ export function DataTable<TValue, TData extends Horario>({
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
     });
-    const [selectedRow, setSelectedRow] = useState<Horario | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { selectedHorario, selectHorario } = useHorariosStore();
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            nombre: "",
-            direccion: "-",
-        },
-    });
-
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-    }
-
+    const datos = {
+        setIsModalOpen,
+    };
     return (
         <>
             <h1 className="scroll-m-20 flex-wrap text-3xl font-semibold text-primary mb-8">
                 Listado de Horarios
             </h1>
 
+            <Button
+                variant="outline"
+                size="sm"
+                className="hover:bg-primary hover:text-white flex justify-self-end mb-4 cursor-pointer"
+                onClick={() => {
+                    selectHorario(null);
+                    setIsModalOpen(true);
+                }}
+            >
+                <Plus />
+            </Button>
+
             <div className="rounded-md border">
-                {isModalOpen && selectedRow && (
+                {isModalOpen && (
                     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>Editar Sede</DialogTitle>
+                                <DialogTitle>
+                                    {selectedHorario
+                                        ? "Editar Sede"
+                                        : "Agregar Sede"}
+                                </DialogTitle>
+                                <DialogDescription>
+                                    {selectedHorario
+                                        ? "Modifica los datos de la sede y haz clic en 'Actualizar' para guardar los cambios."
+                                        : "Completa la información para registrar una nueva sede en el sistema."}
+                                </DialogDescription>
                             </DialogHeader>
-                            <Form {...form}>
-                                <form
-                                    onSubmit={form.handleSubmit(onSubmit)}
-                                    className="space-y-8"
-                                >
-                                    <FormField
-                                        control={form.control}
-                                        name="nombre"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Nombre</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="direccion"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Dirección</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <Button type="submit">Submit</Button>
-                                </form>
-                            </Form>
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">Cancelar</Button>
-                                </DialogClose>
-                                <Button type="submit">Guardar</Button>
-                                <Button
-                                    variant="destructive"
-                                    type="submit"
-                                    disabled
-                                >
-                                    Eliminar
-                                </Button>
-                            </DialogFooter>
+                            <ScheduleForm {...datos} />
                         </DialogContent>
                     </Dialog>
                 )}
@@ -167,7 +115,7 @@ export function DataTable<TValue, TData extends Horario>({
                                 <TableRow
                                     key={row.id}
                                     onClick={() => {
-                                        setSelectedRow(row.original);
+                                        selectHorario(row.original);
                                         setIsModalOpen(true);
                                     }}
                                     className="hover:text-muted hover:bg-primary cursor-pointer"

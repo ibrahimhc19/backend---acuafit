@@ -156,3 +156,8 @@ export interface LaravelValidationError {
     message: string;
     errors?: Record<string, string[]>;
 };
+
+
+export interface ModalState {
+    setIsModalOpen: (value: React.SetStateAction<boolean>) => void;
+}

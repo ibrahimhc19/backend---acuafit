@@ -1,7 +1,6 @@
-// src/stores/useSedesStore.ts
 import { create } from "zustand";
 import { Sede } from "@/types";
-import * as sedesService from "@/services/sedesService";
+import * as sedesService from "@/services/sedes/sedesService";
 
 interface SedesStore {
     sedes: Sede[];
