@@ -82,15 +82,31 @@ export function DataTable<TValue, TData extends Sede>({
         const { id, value } = e.target;
         setFormData((prev) => ({ ...prev, [id]: value }));
     };
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (selectedSede?.id) {
-            console.log("Actualizo");
-            updateSede(selectedSede.id, formData);
+            try {
+                await updateSede(selectedSede.id, formData);
+                console.log("Actualizo");
+                toast.success("La sede fue actualizada correctamente.");
+                selectSede(null);
+                setIsModalOpen(false);
+            } catch (e) {
+                toast.error("No se pudo actualizar la sede. Intenta de nuevo.");
+                console.error("Error al actualizar", e);
+            }
         } else {
-            createSede(formData);
-            console.log("Registro");
+            try {
+                await createSede(formData);
+                console.log("Registro");
+                toast.success("La sede fue registrada correctamente.");
+                selectSede(null);
+                setIsModalOpen(false);
+            } catch (e) {
+                toast.error("No se pudo registrar la sede. Intenta de nuevo.");
+                console.error("Error al registrar", e);
+            }
         }
     };
     return (
@@ -155,67 +171,73 @@ export function DataTable<TValue, TData extends Sede>({
                                     />
                                 </div>
 
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">Cancelar</Button>
-                                </DialogClose>
-                                <Button type="submit">
-                                    {" "}
-                                    {selectedSede ? "Actualizar" : "Agregar"}
-                                </Button>
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button variant="destructive">
-                                            Eliminar
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button variant="outline">
+                                            Cancelar
                                         </Button>
-                                    </AlertDialogTrigger>
+                                    </DialogClose>
+                                    <Button type="submit">
+                                        {" "}
+                                        {selectedSede
+                                            ? "Actualizar"
+                                            : "Agregar"}
+                                    </Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="destructive">
+                                                Eliminar
+                                            </Button>
+                                        </AlertDialogTrigger>
 
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>
-                                                ¿Estás seguro?
-                                            </AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                Esta acción eliminará
-                                                permanentemente la sede
-                                                seleccionada.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>
-                                                Cancelar
-                                            </AlertDialogCancel>
-                                            <AlertDialogAction
-                                                onClick={async () => {
-                                                    if (!selectedSede?.id)
-                                                        return;
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    ¿Estás seguro?
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Esta acción eliminará
+                                                    permanentemente la sede
+                                                    seleccionada.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>
+                                                    Cancelar
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    onClick={async () => {
+                                                        if (!selectedSede?.id)
+                                                            return;
 
-                                                    try {
-                                                        await deleteSede(
-                                                            selectedSede.id
-                                                        );
-                                                        toast.success(
-                                                            "La sede fue eliminada correctamente."
-                                                        );
-                                                        selectSede(null);
-                                                        setIsModalOpen(false);
-                                                    } catch (e) {
-                                                        toast.error(
-                                                            "No se pudo eliminar la sede. Intenta de nuevo."
-                                                        );
-                                                        console.error(
-                                                            "Error al eliminar",
-                                                            e
-                                                        );
-                                                    }
-                                                }}
-                                            >
-                                                Confirmar
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            </DialogFooter>
+                                                        try {
+                                                            await deleteSede(
+                                                                selectedSede.id
+                                                            );
+                                                            toast.success(
+                                                                "La sede fue eliminada correctamente."
+                                                            );
+                                                            selectSede(null);
+                                                            setIsModalOpen(
+                                                                false
+                                                            );
+                                                        } catch (e) {
+                                                            toast.error(
+                                                                "No se pudo eliminar la sede. Intenta de nuevo."
+                                                            );
+                                                            console.error(
+                                                                "Error al eliminar",
+                                                                e
+                                                            );
+                                                        }
+                                                    }}
+                                                >
+                                                    Confirmar
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </DialogFooter>
                             </form>
                         </DialogContent>
                     </Dialog>
