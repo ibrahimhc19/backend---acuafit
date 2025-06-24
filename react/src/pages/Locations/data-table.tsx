@@ -22,6 +22,7 @@ import {
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
@@ -76,6 +77,11 @@ export function DataTable<TValue, TData extends Sede>({
                                         ? "Editar Sede"
                                         : "Agregar Sede"}
                                 </DialogTitle>
+                                <DialogDescription>
+                                    {selectedSede
+                                        ? "Modifica los datos de la sede y haz clic en 'Actualizar' para guardar los cambios."
+                                        : "Completa la información para registrar una nueva sede en el sistema."}
+                                </DialogDescription>
                             </DialogHeader>
                             <LocationForm {...datos} />
                         </DialogContent>

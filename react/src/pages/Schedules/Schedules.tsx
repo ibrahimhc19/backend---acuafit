@@ -11,7 +11,7 @@ axios.defaults.withXSRFToken = true;
 export default function SchedulesPage() {
     const [tableData, setTableData] = useState<Horario[]>([]);
 
-    const url = `${import.meta.env.VITE_APP_API_URL}horarios`;
+    const url = `${import.meta.env.VITE_APP_API_URL}client/horarios`;
 
     useEffect(() => {
         axios
@@ -41,7 +41,7 @@ export default function SchedulesPage() {
     return (
         <div className="container mx-auto px-6 py-4 lg:px-8 min-h-[68vh]">
             <DataTable<unknown, Horario>
-            data={tableData} 
+            data={tableData}
             columns={columns} />
         </div>
     );
