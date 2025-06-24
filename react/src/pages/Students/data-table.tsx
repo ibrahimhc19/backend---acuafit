@@ -40,6 +40,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import {
+    Accordion,
+    AccordionItem,
+    AccordionTrigger,
+    AccordionContent,
+} from "@/components/ui/accordion";
+import timeFormatter from "@/helpers/timeFormatter";
 
 export function DataTable<TValue, TData extends Estudiante>({
     columns,
@@ -125,344 +132,130 @@ export function DataTable<TValue, TData extends Estudiante>({
                 <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Detalles del Estudiante</DialogTitle>
+                            <DialogTitle className="text-2xl">{nombres}</DialogTitle>
                         </DialogHeader>
-                        <form className="space-y-4 overflow-auto max-h-[500px]">
-                            <div>
-                                <label
-                                    htmlFor="nombres"
-                                    className="block font-semibold"
-                                >
-                                    Nombres completos
-                                </label>
-                                <input
-                                    id="nombres"
-                                    type="text"
-                                    value={nombres}
-                                    onChange={(e) => setNombres(e.target.value)}
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="edad"
-                                    className="block font-semibold"
-                                >
-                                    Edad
-                                </label>
-                                <input
-                                    id="edad"
-                                    type="text"
-                                    value={selectedRow?.edad ?? "N/A"}
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="documento"
-                                    className="block font-semibold"
-                                >
-                                    Documento
-                                </label>
-                                <input
-                                    id="documento"
-                                    type="text"
-                                    value={`${selectedRow?.tipo_documento} ${selectedRow?.documento_identidad}`}
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="correo"
-                                    className="block font-semibold"
-                                >
-                                    Correo
-                                </label>
-                                <input
-                                    id="correo"
-                                    type="email"
-                                    value={selectedRow?.correo}
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="telefono"
-                                    className="block font-semibold"
-                                >
-                                    Teléfono
-                                </label>
-                                <input
-                                    id="telefono"
-                                    type="tel"
-                                    value={selectedRow?.telefono}
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="direccion"
-                                    className="block font-semibold"
-                                >
-                                    Dirección
-                                </label>
-                                <input
-                                    id="direccion"
-                                    type="text"
-                                    value={selectedRow?.direccion ?? "N/A"}
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="rut"
-                                    className="block font-semibold"
-                                >
-                                    RUT
-                                </label>
-                                <input
-                                    id="rut"
-                                    type="text"
-                                    value={selectedRow?.rut}
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="acepta_reglamento"
-                                    className="block font-semibold"
-                                >
-                                    Acepta reglamento
-                                </label>
-                                <input
-                                    id="acepta_reglamento"
-                                    type="text"
-                                    value={
-                                        selectedRow?.acepta_reglamento
+                        <Accordion type="single" collapsible className="w-full">
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger className="font-bold text-[16px]">
+                                    Detalles del Estudiante
+                                </AccordionTrigger>
+                                <AccordionContent className="flex flex-col gap-4 text-balance">
+                                    <p>
+                                        <b>Nombres:</b> {nombres}
+                                    </p>
+                                    <p>
+                                        <b>Edad:</b> {selectedRow.edad}
+                                    </p>
+                                    <p>
+                                        <b>Documento:</b>{" "}
+                                        {selectedRow.documento_identidad}{" "}
+                                        {selectedRow.documento_identidad}
+                                    </p>
+                                    <p>
+                                        <b>Correo:</b> {selectedRow.correo}
+                                    </p>
+                                    <p>
+                                        <b>Teléfono:</b> {selectedRow.telefono}
+                                    </p>
+                                    <p>
+                                        <b>Dirección:</b>{" "}
+                                        {selectedRow.direccion}
+                                    </p>
+                                    <p>
+                                        <b>RUT:</b> {selectedRow.rut ?? "N/A"}
+                                    </p>
+                                    <p>
+                                        <b>Acepta el reglamento:</b>{" "}
+                                        {selectedRow.acepta_reglamento
                                             ? "Sí"
-                                            : "No"
-                                    }
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="autoriza_uso_imagen"
-                                    className="block font-semibold"
-                                >
-                                    Autoriza uso de imagen
-                                </label>
-                                <input
-                                    id="autoriza_uso_imagen"
-                                    type="text"
-                                    value={
-                                        selectedRow?.autoriza_uso_imagen
+                                            : "No"}
+                                    </p>
+                                    <p>
+                                        <b>Autoriza uso de imagen:</b>{" "}
+                                        {selectedRow.autoriza_uso_imagen
                                             ? "Sí"
-                                            : "No"
-                                    }
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            <div>
-                                <label
-                                    htmlFor="observaciones"
-                                    className="block font-semibold"
-                                >
-                                    Observaciones
-                                </label>
-                                <textarea
-                                    id="observaciones"
-                                    value={selectedRow?.observaciones ?? "N/A"}
-                                    disabled
-                                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                />
-                            </div>
-
-                            {/* Información del Representante */}
-                            {selectedRow?.representante && (
-                                <div>
-                                    <h3 className="text-xl font-semibold mt-4">
-                                        Representante
-                                    </h3>
-                                    <div>
-                                        <label
-                                            htmlFor="representante_nombres"
-                                            className="block font-semibold"
-                                        >
-                                            Nombres completos
-                                        </label>
-                                        <input
-                                            id="representante_nombres"
-                                            type="text"
-                                            value={`${selectedRow?.representante.nombres} ${selectedRow?.representante.apellidos}`}
-                                            disabled
-                                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label
-                                            htmlFor="representante_documento"
-                                            className="block font-semibold"
-                                        >
-                                            Documento
-                                        </label>
-                                        <input
-                                            id="representante_documento"
-                                            type="text"
-                                            value={`${selectedRow?.representante.tipo_documento} ${selectedRow?.representante.documento_identidad}`}
-                                            disabled
-                                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label
-                                            htmlFor="representante_telefono"
-                                            className="block font-semibold"
-                                        >
-                                            Teléfono
-                                        </label>
-                                        <input
-                                            id="representante_telefono"
-                                            type="tel"
-                                            value={
+                                            : "No"}
+                                    </p>
+                                    <p>
+                                        <b>Observaciones:</b>{" "}
+                                        {selectedRow.observaciones}
+                                    </p>
+                                </AccordionContent>
+                            </AccordionItem>
+                            {selectedRow.representante && (
+                                <AccordionItem value="item-2">
+                                    <AccordionTrigger className="font-bold text-[16px]">
+                                        Detalle del Acudiente
+                                    </AccordionTrigger>
+                                    <AccordionContent className="flex flex-col gap-4 text-balance">
+                                        <p>
+                                            <b>Nombres:</b>{" "}
+                                            {selectedRow?.representante.nombres}{" "}
+                                            {
+                                                selectedRow?.representante
+                                                    .apellidos
+                                            }
+                                        </p>
+                                        <p>
+                                            <b>Documento:</b>{" "}
+                                            {
+                                                selectedRow?.representante
+                                                    .tipo_documento
+                                            }{" "}
+                                            {
+                                                selectedRow?.representante
+                                                    .documento_identidad
+                                            }
+                                        </p>
+                                        <p>
+                                            <b>Teléfono:</b>{" "}
+                                            {
                                                 selectedRow?.representante
                                                     .telefono
                                             }
-                                            disabled
-                                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label
-                                            htmlFor="representante_email"
-                                            className="block font-semibold"
-                                        >
-                                            Correo
-                                        </label>
-                                        <input
-                                            id="representante_email"
-                                            type="email"
-                                            value={
-                                                selectedRow?.representante.email
-                                            }
-                                            disabled
-                                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                        />
-                                    </div>
-                                </div>
+                                        </p>
+                                        <p>
+                                            <b>Correo:</b>{" "}
+                                            {selectedRow?.representante.email}
+                                        </p>
+                                    </AccordionContent>
+                                </AccordionItem>
                             )}
-
-                            {/* Información de la Sede */}
-                            <div>
-                                <h3 className="text-xl font-semibold mt-4">
-                                    Sede
-                                </h3>
-                                <div>
-                                    <label
-                                        htmlFor="sede_nombre"
-                                        className="block font-semibold"
-                                    >
-                                        Nombre de Sede
-                                    </label>
-                                    <input
-                                        id="sede_nombre"
-                                        type="text"
-                                        value={selectedRow?.sede.nombre}
-                                        disabled
-                                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="sede_direccion"
-                                        className="block font-semibold"
-                                    >
-                                        Dirección de Sede
-                                    </label>
-                                    <input
-                                        id="sede_direccion"
-                                        type="text"
-                                        value={selectedRow?.sede.direccion}
-                                        disabled
-                                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Información del Horario */}
-                            <div>
-                                <h3 className="text-xl font-semibold mt-4">
-                                    Horario
-                                </h3>
-                                <div>
-                                    <label
-                                        htmlFor="horario_dia"
-                                        className="block font-semibold"
-                                    >
-                                        Día de la semana
-                                    </label>
-                                    <input
-                                        id="horario_dia"
-                                        type="text"
-                                        value={selectedRow?.horario.dia_semana}
-                                        disabled
-                                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label
-                                        htmlFor="horario_hora_inicio"
-                                        className="block font-semibold"
-                                    >
-                                        Hora de inicio
-                                    </label>
-                                    <input
-                                        id="horario_hora_inicio"
-                                        type="text"
-                                        value={selectedRow?.horario.hora_inicio}
-                                        disabled
-                                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label
-                                        htmlFor="horario_hora_fin"
-                                        className="block font-semibold"
-                                    >
-                                        Hora de fin
-                                    </label>
-                                    <input
-                                        id="horario_hora_fin"
-                                        type="text"
-                                        value={selectedRow?.horario.hora_fin}
-                                        disabled
-                                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                                    />
-                                </div>
-                            </div>
-                        </form>
+                            <AccordionItem value="item-3">
+                                <AccordionTrigger className="font-bold text-[16px]">
+                                    Detalles de la Sede
+                                </AccordionTrigger>
+                                <AccordionContent className="flex flex-col gap-4 text-balance">
+                                    <p>
+                                        <b>Nombre:</b>{" "}
+                                        {selectedRow?.sede.nombre}
+                                    </p>
+                                    <p>
+                                        <b>Dirección:</b>{" "}
+                                        {selectedRow?.sede.direccion}
+                                    </p>
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="item-4">
+                                <AccordionTrigger className="font-bold text-[16px]">
+                                    Detalles del Horario
+                                </AccordionTrigger>
+                                <AccordionContent className="flex flex-col gap-4 text-balance">
+                                    <p>
+                                        <b>Día de la semana:</b>{" "}
+                                        {selectedRow?.horario.dia_semana}
+                                    </p>
+                                    <p>
+                                        <b>Hora de inicio:</b>{" "}
+                                        {timeFormatter(selectedRow?.horario.hora_inicio)}
+                                    </p>
+                                    <p>
+                                        <b>Hora de fin:</b>{" "}
+                                        {timeFormatter(selectedRow?.horario.hora_fin)}
+                                    </p>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                         <DialogFooter>
                             <DialogClose asChild>
                                 <Button variant="outline">Cancelar</Button>
