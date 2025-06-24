@@ -22,7 +22,7 @@ export const columns = (indice: number): ColumnDef<Estudiante>[] => [
                     variant="secondary"
                     asChild
                 >
-                    <Link to="/">A</Link>
+                    <Link to="#">A</Link>
                 </Badge>
             ) : null;
         },

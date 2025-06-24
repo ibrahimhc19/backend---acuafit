@@ -15,7 +15,7 @@ class SedeController extends Controller
      */
     public function index()
     {
-        $sedes = Sede::query()->paginate(15);
+        $sedes = Sede::query()->orderBy('nombre', 'asc')->paginate(15);
         return response()->json($sedes);
     }
 

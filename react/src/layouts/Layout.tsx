@@ -4,9 +4,11 @@ import { Link, Outlet } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Toaster } from "sonner";
 
 const links = [
     { name: "Estudiantes", href: "/estudiantes" },
+    { name: "Registro", href: "/registro" },
     { name: "Sedes", href: "/sedes" },
     { name: "Horarios", href: "/horarios" },
     { name: "Pagos", href: "/pagos" },
@@ -33,6 +35,7 @@ export default function DashboardLayout() {
 
     return (
         <>
+        <Toaster position="top-center" richColors/>
             <nav className="bg-white border-b border-gray-200 fixed z-30 w-full">
                 <div className="px-3 py-3 lg:px-5 lg:pl-3">
                     <div className="flex items-center justify-between">
@@ -119,7 +122,7 @@ export default function DashboardLayout() {
                                         <li key={link.href}>
                                             <Link
                                                 to={link.href}
-                                                className={`text-base capitalize text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-primary hover:text-muted group ${
+                                                className={`text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-primary hover:text-muted group ${
                                                     isSidebarOpen
                                                         ? "justify-center"
                                                         : ""

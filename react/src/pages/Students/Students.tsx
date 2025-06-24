@@ -3,6 +3,8 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import axios from "axios";
 import { useEffect, useState } from "react";
+axios.defaults.withCredentials= true;
+axios.defaults.withXSRFToken= true;
 
 export default function StudentsPage() {
     const [tableData, setTableData] = useState<Estudiante[]>([]);
@@ -26,48 +28,21 @@ export default function StudentsPage() {
         `${import.meta.env.VITE_APP_API_URL}api/estudiantes`
     );
 
-    // const handlePageChange = (type: "first" | "previous" | "next" | "last") => {
-    //     let nextUrl: string | null = null;
-
-    //     switch (type) {
-    //         case "first":
-    //             nextUrl = pageLinks.first_page_url;
-    //             break;
-    //         case "previous":
-    //             nextUrl = pageLinks.prev_page_url;
-    //             break;
-    //         case "next":
-    //             nextUrl = pageLinks.next_page_url;
-    //             break;
-    //         case "last":
-    //             nextUrl = pageLinks.last_page_url;
-    //             break;
-    //     }
-
-    //     if (nextUrl !== null) {
-    //         setUrl(nextUrl);
-    //     }
-    // };
-
-    const func = (page: string) => {
-        return `https:${page.split(":")[1]}`;
-    };
-
     const handlePageChange = (type: "first" | "previous" | "next" | "last") => {
         let nextUrl: string | null = null;
 
         switch (type) {
             case "first":
-                nextUrl = func(pageLinks.first_page_url);
+                nextUrl = pageLinks.first_page_url;
                 break;
             case "previous":
-                nextUrl = func(pageLinks.prev_page_url ?? "");
+                nextUrl = pageLinks.prev_page_url;
                 break;
             case "next":
-                nextUrl = func(pageLinks.next_page_url ?? "");
+                nextUrl = pageLinks.next_page_url;
                 break;
             case "last":
-                nextUrl = func(pageLinks.last_page_url);
+                nextUrl = pageLinks.last_page_url;
                 break;
         }
 
@@ -76,10 +51,37 @@ export default function StudentsPage() {
         }
     };
 
+    // const func = (page: string) => {
+    //     return `https:${page.split(":")[1]}`;
+    // };
+
+    // const handlePageChange = (type: "first" | "previous" | "next" | "last") => {
+    //     let nextUrl: string | null = null;
+
+    //     switch (type) {
+    //         case "first":
+    //             nextUrl = func(pageLinks.first_page_url);
+    //             break;
+    //         case "previous":
+    //             nextUrl = func(pageLinks.prev_page_url ?? "");
+    //             break;
+    //         case "next":
+    //             nextUrl = func(pageLinks.next_page_url ?? "");
+    //             break;
+    //         case "last":
+    //             nextUrl = func(pageLinks.last_page_url);
+    //             break;
+    //     }
+
+    //     if (nextUrl !== null) {
+    //         setUrl(nextUrl);
+    //     }
+    // };
+
     useEffect(() => {
         axios
-            // .get(url)
-            .get("/mock/data.json")
+            .get(url)
+            // .get("/mock/data.json")
             .then((response) => {
                 const apiResponse = response.data;
                 if (
