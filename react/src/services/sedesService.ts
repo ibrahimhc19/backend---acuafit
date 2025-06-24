@@ -1,12 +1,6 @@
 import axios from "@/api/axios";
-import { Sede } from "@/types";
+import { LaravelValidationError, Sede } from "@/types";
 import { AxiosError } from "axios";
-
-type LaravelValidationError = {
-    message: string;
-    errors?: Record<string, string[]>;
-};
-
 
 export const getAll = async () => {
     try {
