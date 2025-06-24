@@ -25,7 +25,7 @@ export default function StudentsPage() {
     });
 
     const [url, setUrl] = useState(
-        `${import.meta.env.VITE_APP_API_URL}api/estudiantes`
+        `${import.meta.env.VITE_APP_API_URL}client/estudiantes`
     );
 
     const handlePageChange = (type: "first" | "previous" | "next" | "last") => {

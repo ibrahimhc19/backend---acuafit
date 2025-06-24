@@ -80,7 +80,7 @@ export function DataTable<TValue, TData extends Estudiante>({
         setLoading(true);
         try {
             const response = await fetch(
-                `${import.meta.env.VITE_APP_API_URL}api/buscar?q=${query}`
+                `${import.meta.env.VITE_APP_API_URL}client/buscar?q=${query}`
             );
             const data = await response.json();
             setResults(data);

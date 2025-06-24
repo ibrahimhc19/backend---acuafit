@@ -107,7 +107,7 @@ export function LocationForm({setIsModalOpen}:ModalState) {
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive">Eliminar</Button>
+                            <Button variant="destructive" disabled={!selectedSede}>Eliminar</Button>
                         </AlertDialogTrigger>
 
                         <AlertDialogContent>
