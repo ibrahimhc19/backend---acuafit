@@ -21,11 +21,15 @@ const formSchema = z.object({
         message: "La dirección de la sede es obligatorio",
     }),
 });
-
-export function LocationForm() {
+interface Data {
+    id?: number;
+    nombre?: string;
+    direccion?: string;
+}
+export function LocationForm({...datos}:Data) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
+        defaultValues: datos || {
             nombre: "",
             direccion: "-",
         },

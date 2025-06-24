@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useSedesStore } from "@/services/useSedesStore";
 import { Sede } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -11,17 +12,6 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -50,19 +40,12 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { LocationForm } from "./form";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
 }
-const formSchema = z.object({
-    nombre: z.string().min(2, {
-        message: "El nombre de la sede es obligatorio",
-    }),
-    direccion: z.string().min(2, {
-        message: "La dirección de la sede es obligatorio",
-    }),
-});
 
 export function DataTable<TValue, TData extends Sede>({
     columns,
@@ -78,49 +61,56 @@ export function DataTable<TValue, TData extends Sede>({
     const { selectedSede, selectSede, createSede, updateSede, deleteSede } =
         useSedesStore();
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            nombre: `${selectedSede?.nombre || ""}`,
-            direccion: `${selectedSede?.direccion || ""}`,
-        },
+    const [formData, setFormData] = useState({
+        nombre: "",
+        direccion: "",
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-    }
+    useEffect(() => {
+        if (selectedSede) {
+            setFormData({
+                nombre: selectedSede.nombre || "",
+                direccion: selectedSede.direccion || "",
+            });
+        } else {
+            setFormData({
+                nombre: "",
+                direccion: "",
+            });
+        }
+    }, [selectedSede]);
 
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { id, value } = e.target;
-    //     setFormData((prev) => ({ ...prev, [id]: value }));
-    // };
-    // const handleSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault();
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData((prev) => ({ ...prev, [id]: value }));
+    };
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-    //     if (selectedSede?.id) {
-    //         try {
-    //             await updateSede(selectedSede.id, formData);
-    //             console.log("Actualizo");
-    //             toast.success("La sede fue actualizada correctamente.");
-    //             selectSede(null);
-    //             setIsModalOpen(false);
-    //         } catch (e) {
-    //             toast.error("No se pudo actualizar la sede. Intenta de nuevo.");
-    //             console.error("Error al actualizar", e);
-    //         }
-    //     } else {
-    //         try {
-    //             await createSede(formData);
-    //             console.log("Registro");
-    //             toast.success("La sede fue registrada correctamente.");
-    //             selectSede(null);
-    //             setIsModalOpen(false);
-    //         } catch (e) {
-    //             toast.error("No se pudo registrar la sede. Intenta de nuevo.");
-    //             console.error("Error al registrar", e);
-    //         }
-    //     }
-    // };
+        if (selectedSede?.id) {
+            try {
+                await updateSede(selectedSede.id, formData);
+                console.log("Actualizo");
+                toast.success("La sede fue actualizada correctamente.");
+                selectSede(null);
+                setIsModalOpen(false);
+            } catch (e) {
+                toast.error("No se pudo actualizar la sede. Intenta de nuevo.");
+                console.error("Error al actualizar", e);
+            }
+        } else {
+            try {
+                await createSede(formData);
+                console.log("Registro");
+                toast.success("La sede fue registrada correctamente.");
+                selectSede(null);
+                setIsModalOpen(false);
+            } catch (e) {
+                toast.error("No se pudo registrar la sede. Intenta de nuevo.");
+                console.error("Error al registrar", e);
+            }
+        }
+    };
     return (
         <>
             <h1 className="scroll-m-20 flex-wrap text-3xl font-semibold text-primary mb-8">
@@ -150,39 +140,40 @@ export function DataTable<TValue, TData extends Sede>({
                                         : "Agregar Sede"}
                                 </DialogTitle>
                             </DialogHeader>
-                            <Form {...form}>
-                                <form
-                                    onSubmit={form.handleSubmit(onSubmit)}
-                                    className="space-y-8"
-                                >
-                                    <FormField
-                                        control={form.control}
-                                        name="nombre"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Nombre</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
+                            <LocationForm {...selectedSede}/>
+                            {/* <form
+                                onSubmit={handleSubmit}
+                                className="space-y-4 max-h-[500px]"
+                            >
+                                <div>
+                                    <Label
+                                        htmlFor="nombre"
+                                        className="block font-semibold"
+                                    >
+                                        Nombre
+                                    </Label>
+                                    <Input
+                                        id="nombre"
+                                        type="text"
+                                        value={formData.nombre}
+                                        onChange={handleChange}
                                     />
-                                    <FormField
-                                        control={form.control}
-                                        name="direccion"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Dirección</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
+                                </div>
+                                <div>
+                                    <Label
+                                        htmlFor="direccion"
+                                        className="block font-semibold"
+                                    >
+                                        Dirección
+                                    </Label>
+                                    <Input
+                                        id="direccion"
+                                        type="text"
+                                        value={formData.direccion}
+                                        onChange={handleChange}
                                     />
-                                    <Button type="submit">Submit</Button>
-                                </form>
+                                </div>
+
                                 <DialogFooter>
                                     <DialogClose asChild>
                                         <Button variant="outline">
@@ -250,7 +241,7 @@ export function DataTable<TValue, TData extends Sede>({
                                         </AlertDialogContent>
                                     </AlertDialog>
                                 </DialogFooter>
-                            </Form>
+                            </form> */}
                         </DialogContent>
                     </Dialog>
                 )}
