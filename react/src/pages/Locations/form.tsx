@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { toast } from "sonner";
 import { useSedesStore } from "@/services/useSedesStore";
-// import { Sede } from "@/types";
 import {
     AlertDialogHeader,
     AlertDialogFooter,
@@ -35,16 +33,13 @@ const formSchema = z.object({
     nombre: z.string().min(2, {
         message: "El nombre de la sede es obligatorio",
     }),
-    direccion: z.string().min(2, {
-        message: "La dirección de la sede es obligatorio",
-    }),
+    direccion: z.string(),
 });
-interface Modal {
-    // selectedSede: Sede | null;
+interface ModalState {
     setIsModalOpen: (value: React.SetStateAction<boolean>) => void;
 }
 
-export function LocationForm({setIsModalOpen}:Modal) {
+export function LocationForm({setIsModalOpen}:ModalState) {
     const { selectSede, selectedSede, createSede, updateSede, deleteSede } = useSedesStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -54,11 +49,9 @@ export function LocationForm({setIsModalOpen}:Modal) {
         },
     });
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        // console.log(values);
         if (selectedSede?.id) {
             try {
-                // await updateSede(datos.id, values);
-                console.log("Actualizo con datos: ", values);
+                await updateSede(selectedSede.id, values);
                 toast.success("La sede fue actualizada correctamente.");
                 selectSede(null);
                 setIsModalOpen(false);
@@ -68,8 +61,7 @@ export function LocationForm({setIsModalOpen}:Modal) {
             }
         } else {
             try {
-                // await createSede(values);
-                console.log("Registro con datos: ", values);
+                await createSede(values);
                 toast.success("La sede fue registrada correctamente.");
                 selectSede(null);
                 setIsModalOpen(false);
