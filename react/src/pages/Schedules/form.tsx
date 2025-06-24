@@ -18,7 +18,7 @@ const formSchema = z.object({
         message: "El nombre de la sede es obligatorio",
     }),
     direccion: z.string().min(2, {
-        message: "La dirección de la sede es obligatorio",
+        message: "La dirección de la sede es obligatoria",
     }),
 });
 
