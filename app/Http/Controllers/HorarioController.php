@@ -26,7 +26,7 @@ class HorarioController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'tipo_grupo' => ['required', 'string', Rule::in(['Adultos', 'Niños'])],
+            'tipo_grupo' => ['required', 'string', Rule::in(TipoGrupo::values())],
             'sede_id' => 'required|integer|exists:sedes,id',
             'dia_semana' => ['required', 'string', Rule::in(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'])],
             'hora_inicio' => 'required|date_format:H:i:s',
