@@ -22,7 +22,6 @@ import {
 import { ModalState } from "@/types";
 import { toast } from "sonner";
 import { useHorariosStore } from "@/services/horarios/useHorariosStore";
-import { Link } from "react-router-dom";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -35,27 +34,44 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import { DIAS_SEMANA, TIPOS_GRUPO } from "@/config/constants";
+import { useSedesStore } from "@/services/sedes/useSedesStore";
+import { useEffect } from "react";
 
-const formSchema = z.object({
-    tipo_grupo: z.string().min(2, {
-        message: "El grupo es obligatorio",
-    }),
-    dia_semana: z.string().min(2, {
-        message: "La dirección de la horario es obligatoria",
-    }),
-    hora_inicio: z.string().min(2, {
-        message: "La dirección de la horario es obligatoria",
-    }),
-    hora_fin: z.string().min(2, {
-        message: "La dirección de la horario es obligatoria",
-    }),
-    sede_id: z.string().min(2, {
-        message: "La dirección de la horario es obligatoria",
-    }),
-});
+const formSchema = z
+    .object({
+        tipo_grupo: z.enum(
+            TIPOS_GRUPO as [(typeof TIPOS_GRUPO)[number], ...string[]]
+        ),
+        dia_semana: z.enum(
+            DIAS_SEMANA as [(typeof DIAS_SEMANA)[number], ...string[]]
+        ),
+        hora_inicio: z
+            .string()
+            .min(1, { message: "La hora de inicio es obligatoria" }),
+        hora_fin: z
+            .string()
+            .min(1, { message: "La hora de fin es obligatoria" }),
+        sede_id: z.string().min(1, {
+            message: "La dirección de la horario es obligatoria",
+        }),
+    })
+    .refine(
+        (data) => {
+            const [h1, m1] = data.hora_inicio.split(":").map(Number);
+            const [h2, m2] = data.hora_fin.split(":").map(Number);
+            const inicioMinutos = h1 * 60 + m1;
+            const finMinutos = h2 * 60 + m2;
+            return finMinutos > inicioMinutos;
+        },
+        {
+            message: "La hora de fin debe ser posterior a la hora de inicio",
+            path: ["hora_fin"],
+        }
+    );
 
 export function ScheduleForm({ setIsModalOpen }: ModalState) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { sedes, fetchSedes } = useSedesStore();
     const {
         selectHorario,
         selectedHorario,
@@ -63,14 +79,28 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
         updateHorario,
         deleteHorario,
     } = useHorariosStore();
+
+    useEffect(() => {
+        if (sedes.length === 0) {
+            fetchSedes();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        // defaultValues: selectedHorario || {
+        //     tipo_grupo: "",
+        //     dia_semana: "",
+        //     hora_inicio: "07:00:00",
+        //     hora_fin: "08:00:00",
+        //     sede_id: "",
+        // },
         defaultValues: {
-            tipo_grupo: "",
-            dia_semana: "",
-            hora_inicio: "",
-            hora_fin: "",
-            sede_id: "",
+            tipo_grupo: `${selectedHorario?.tipo_grupo ?? ""}`,
+            dia_semana: `${selectedHorario?.dia_semana ?? ""}`,
+            hora_inicio: `${selectedHorario?.hora_inicio ?? "07:00:00"}`,
+            hora_fin: `${selectedHorario?.hora_fin ?? "08:00:00"}`,
+            sede_id: `${selectedHorario?.sede_id ?? ""}`,
         },
     });
 
@@ -102,6 +132,8 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
         }
     };
 
+    console.log(selectedHorario);
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -118,25 +150,50 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                             >
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select a verified email to display" />
+                                        <SelectValue placeholder="Tipos de grupo" />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="m@example.com">
-                                        m@example.com
-                                    </SelectItem>
-                                    <SelectItem value="m@google.com">
-                                        m@google.com
-                                    </SelectItem>
-                                    <SelectItem value="m@support.com">
-                                        m@support.com
-                                    </SelectItem>
+                                    {TIPOS_GRUPO.map((tipo) => (
+                                        <SelectItem value={tipo}>
+                                            {tipo}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                             <FormDescription>
-                                You can manage email addresses in your{" "}
-                                <Link to="/examples/forms">email settings</Link>
-                                .
+                                Puedes seleccionar el tipo de grupo.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="dia_semana"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Día</FormLabel>
+
+                            <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                            >
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Opciones de días" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {DIAS_SEMANA.map((dia) => (
+                                        <SelectItem value={dia}>
+                                            {dia}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <FormDescription>
+                                Puedes seleccionar el día.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -154,25 +211,22 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                             >
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select a verified email to display" />
+                                        <SelectValue placeholder="Opciones de sedes" />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="m@example.com">
-                                        m@example.com
-                                    </SelectItem>
-                                    <SelectItem value="m@google.com">
-                                        m@google.com
-                                    </SelectItem>
-                                    <SelectItem value="m@support.com">
-                                        m@support.com
-                                    </SelectItem>
+                                    {sedes.map((s) => (
+                                        <SelectItem
+                                            key={s.id}
+                                            value={s.id.toString()}
+                                        >
+                                            {s.nombre}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                             <FormDescription>
-                                You can manage email addresses in your{" "}
-                                <Link to="/examples/forms">email settings</Link>
-                                .
+                                Puedes seleccionar la sede.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -185,8 +239,16 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                         <FormItem>
                             <FormLabel>Hora de inicio</FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                                <Input
+                                    {...field}
+                                    type="time"
+                                    id="time-picker"
+                                    step="1"
+                                />
                             </FormControl>
+                            <FormDescription>
+                                Selecciona la hora de inicio.
+                            </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -198,8 +260,16 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                         <FormItem>
                             <FormLabel>Hora de fin</FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                                <Input
+                                    {...field}
+                                    type="time"
+                                    id="time-picker"
+                                    step="1"
+                                />
                             </FormControl>
+                            <FormDescription>
+                                Selecciona la hora de inicio.
+                            </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -213,12 +283,9 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button
-                                variant="destructive"
-                                disabled={!selectedHorario}
-                            >
-                                Eliminar
-                            </Button>
+                            {selectedHorario && (
+                                <Button variant="destructive">Eliminar</Button>
+                            )}
                         </AlertDialogTrigger>
 
                         <AlertDialogContent>

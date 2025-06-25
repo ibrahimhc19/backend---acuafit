@@ -10,7 +10,7 @@ export const columns: ColumnDef<Horario>[] = [
         cell: ({ row }) => {
             return row.index+1;
         },
-    },    
+    },
         {
         accessorKey: "tipo_grupo",
         header: "Grupo",
@@ -22,7 +22,11 @@ export const columns: ColumnDef<Horario>[] = [
         accessorKey: "sede.nombre",
         header: "Sede",
     },
-   
+    {
+        accessorKey: "dia_semana",
+        header: "Día",
+    },
+
     {
         accessorKey: "hora_inicio",
         header: "Hora de inicio",
@@ -37,5 +41,5 @@ export const columns: ColumnDef<Horario>[] = [
             return `${timeFormatter(row.hora_fin)}`
         }
     },
-    
+
 ];

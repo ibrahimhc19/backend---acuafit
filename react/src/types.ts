@@ -58,7 +58,6 @@ export interface Horario {
     hora_inicio: string;
     hora_fin: string;
     sede_id: string;
-    sede: Sede;
 }
 
 export interface DataTableProps<TData, TValue> {

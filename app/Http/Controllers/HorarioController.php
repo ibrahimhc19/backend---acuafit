@@ -16,7 +16,7 @@ class HorarioController extends Controller
      */
     public function index()
     {
-        $horarios = Horario::with(['sede'])->orderBy('tipo_grupo', 'asc')->paginate(15);
+        $horarios = Horario::orderBy('tipo_grupo', 'asc')->paginate(15);
         return response()->json($horarios);
     }
 
