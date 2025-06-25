@@ -16,7 +16,7 @@ return [
     */
 
     // 'paths' => ['api/*', 'sanctum/csrf-cookie'],
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout', 'user', 'sedes', 'horarios', 'sede/*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'auth/*', 'client/*'],
 
     // 'paths' => ['api/*'],
     'allowed_origins' => ['http://localhost:5173'],

@@ -24,8 +24,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-
-
 import { useHorariosStore } from "@/services/horarios/useHorariosStore";
 import { Plus } from "lucide-react";
 import { ScheduleForm } from "./form";
@@ -76,13 +74,13 @@ export function DataTable<TValue, TData extends Horario>({
                             <DialogHeader>
                                 <DialogTitle>
                                     {selectedHorario
-                                        ? "Editar Sede"
-                                        : "Agregar Sede"}
+                                        ? "Editar Horario"
+                                        : "Agregar Horario"}
                                 </DialogTitle>
                                 <DialogDescription>
                                     {selectedHorario
-                                        ? "Modifica los datos de la sede y haz clic en 'Actualizar' para guardar los cambios."
-                                        : "Completa la información para registrar una nueva sede en el sistema."}
+                                        ? "Modifica los datos del horario y haz clic en 'Actualizar' para guardar los cambios."
+                                        : "Completa la información para registrar un nuevo horario en el sistema."}
                                 </DialogDescription>
                             </DialogHeader>
                             <ScheduleForm {...datos} />

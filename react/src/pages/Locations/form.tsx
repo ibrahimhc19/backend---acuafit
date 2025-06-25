@@ -27,7 +27,7 @@ import {
     AlertDialogCancel,
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { DialogFooter } from "@/components/ui/dialog";
+import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { ModalState } from "@/types";
 
 const formSchema = z.object({
@@ -37,9 +37,9 @@ const formSchema = z.object({
     direccion: z.string(),
 });
 
-
-export function LocationForm({setIsModalOpen}:ModalState) {
-    const { selectSede, selectedSede, createSede, updateSede, deleteSede } = useSedesStore();
+export function LocationForm({ setIsModalOpen }: ModalState) {
+    const { selectSede, selectedSede, createSede, updateSede, deleteSede } =
+        useSedesStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: selectedSede || {
@@ -101,12 +101,20 @@ export function LocationForm({setIsModalOpen}:ModalState) {
                     )}
                 />
                 <DialogFooter>
+                    <DialogClose asChild>
+                        <Button variant="outline">Cancelar</Button>
+                    </DialogClose>
                     <Button type="submit">
                         {selectedSede ? "Actualizar" : "Agregar"}
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive" disabled={!selectedSede}>Eliminar</Button>
+                            <Button
+                                variant="destructive"
+                                disabled={!selectedSede}
+                            >
+                                Eliminar
+                            </Button>
                         </AlertDialogTrigger>
 
                         <AlertDialogContent>
@@ -126,9 +134,7 @@ export function LocationForm({setIsModalOpen}:ModalState) {
                                         if (!selectedSede?.id) return;
 
                                         try {
-                                            await deleteSede(
-                                                selectedSede.id
-                                            );
+                                            await deleteSede(selectedSede.id);
                                             toast.success(
                                                 "La sede fue eliminada correctamente."
                                             );
