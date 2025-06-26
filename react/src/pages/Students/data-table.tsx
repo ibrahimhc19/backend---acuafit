@@ -47,6 +47,7 @@ import {
     AccordionContent,
 } from "@/components/ui/accordion";
 import timeFormatter from "@/helpers/timeFormatter";
+import { FILAS } from "@/config/constants";
 
 export function DataTable<TValue, TData extends Estudiante>({
     columns,
@@ -64,12 +65,7 @@ export function DataTable<TValue, TData extends Estudiante>({
     const [selectedRow, setSelectedRow] = useState<Estudiante | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [nombres, setNombres] = useState("");
-    const paginas = [
-        { label: "10", value: 10 },
-        { label: "15", value: 15 },
-        { label: "20", value: 20 },
-        { label: "30", value: 30 },
-    ];
+
 
     useEffect(() => {
         if (selectedRow) {
@@ -334,9 +330,9 @@ export function DataTable<TValue, TData extends Estudiante>({
                 <div className="flex items-center justify-end py-4 space-x-1">
                     {/* Deuda */}
                     <SelectRows
-                        value={paginas[0].value}
+                        value={FILAS[0].value}
                         onValueChange={() => {}}
-                        options={paginas}
+                        options={FILAS}
                     />
                     <Button
                         variant="outline"
