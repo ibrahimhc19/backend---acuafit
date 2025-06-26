@@ -31,9 +31,9 @@ class AcudienteController extends Controller
             'nombres' => 'required|string|max:100',
             'apellidos' => 'required|string|max:100',
             'tipo_documento' => ['required','string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
-            'documento_identidad' => 'required|string|unique:representantes,documento_identidad|max:50',
+            'documento_identidad' => 'required|string|unique:acudientes,documento_identidad|max:50',
             'telefono' => 'nullable|string|max:20',
-            'email' => 'nullable|string|email|unique:representantes,email|max:100',
+            'email' => 'nullable|string|email|unique:acudientes,email|max:100',
             'rut' => 'nullable|string|max:100',
         ], [
             'nombres.required' => 'El campo nombres es obligatorio.',
@@ -111,7 +111,7 @@ class AcudienteController extends Controller
             'tipo_documento' => ['sometimes','required','string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
             'documento_identidad' => ['sometimes','required','string','max:50', Rule::unique('acudientes', 'documento_identidad')->ignore($acudiente->id)],
             'telefono' => 'sometimes|nullable|string|max:20',
-            'email' => ['sometimes','nullable','string','email','max:100', Rule::unique('representantes', 'email')->ignore($representante->id)],
+            'email' => ['sometimes','nullable','string','email','max:100', Rule::unique('acudientes', 'email')->ignore($acudiente->id)],
             'rut' => 'sometimes|nullable|string|max:100'
         ], [
             'nombres.required' => 'El campo nombres es obligatorio.',

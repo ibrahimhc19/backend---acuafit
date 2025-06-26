@@ -23,7 +23,7 @@ class FacturaController extends Controller
     {
         $validated = $request->validate([
             'estudiante_id' => 'required|exists:estudiantes,id',
-            'pagado_por' => 'required|in:Estudiante,Representante',
+            'pagado_por' => 'required|in:Estudiante,acudiente',
             'tipo_documento_pagador' => 'required|in:CC,TI,CE,Pasaporte',
             'documento_pagador' => 'required|string|max:50',
             'correo_pagador' => 'nullable|email',

@@ -16,7 +16,7 @@ export interface Estudiante {
     tipo_documento: string;
     documento_identidad: string;
     edad: number;
-    representante_id?: number;
+    acudiente_id?: number;
     sede_id: number;
     horario_id: number;
     fecha_inscripcion: string;
@@ -27,12 +27,12 @@ export interface Estudiante {
     autoriza_uso_imagen: boolean;
     acepta_reglamento: boolean;
     observaciones: string;
-    representante: Representante;
+    acudiente: acudiente;
     sede: Sede;
     horario: Horario;
 }
 
-export interface Representante {
+export interface acudiente {
     id: number;
     nombres: string;
     apellidos: string;
@@ -58,6 +58,7 @@ export interface Horario {
     hora_inicio: string;
     hora_fin: string;
     sede_id: string;
+    sede: Sede;
 }
 
 export interface DataTableProps<TData, TValue> {

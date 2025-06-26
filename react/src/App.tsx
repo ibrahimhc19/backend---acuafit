@@ -29,7 +29,7 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/estudiantes" element={<Students />} />
-              <Route path="/representantes" element={<Parents />} />
+              <Route path="/acudientes" element={<Parents />} />
               <Route path="/sedes" element={<Locations />} />
               <Route path="/horarios" element={<Schedules />} />
               <Route path="/pagos" element={<Payments />} />
