@@ -36,7 +36,6 @@ import {
     PaginationLink,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
-import { SelectRows } from "./select";
 import { useState } from "react";
 import {
     Dialog,
@@ -55,6 +54,15 @@ import {
 import timeFormatter from "@/helpers/timeFormatter";
 import { FILAS } from "@/config/constants";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export function DataTable<TValue, TData extends Estudiante>({
     columns,
@@ -349,11 +357,21 @@ export function DataTable<TValue, TData extends Estudiante>({
             <div className="flex flex-row justify-end items-center mb-4 sm:mb-0">
                 <div className="flex items-center justify-end py-4 space-x-1">
                     {/* Deuda */}
-                    <SelectRows
-                        value={FILAS[0].value}
-                        onValueChange={() => {}}
-                        options={FILAS}
-                    />
+                    <Select onValueChange={(e)=> console.log("cambio", e)}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Cantidad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Filas</SelectLabel>
+                                {FILAS.map((fila, index) => (
+                                    <SelectItem key={index} value={fila.value.toString()}>
+                                        {fila.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Button
