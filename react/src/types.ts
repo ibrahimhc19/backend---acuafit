@@ -1,6 +1,7 @@
 import {
     ColumnDef,
 } from "@tanstack/react-table"
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { PropsWithChildren, ReactNode } from "react";
 
@@ -60,6 +61,39 @@ export interface Horario {
     sede_id: string;
     sede: Sede;
 }
+
+export interface Pago {
+    id: number;
+    facturacion_id: number;
+    estudiante_id: number;
+    monto: number;
+    fecha_pago: string;
+    metodo_pago: string;
+    numero_referencia_pago: string;
+    soporte_pago: string;
+    estudiante: Estudiante;
+    factura: Factura;
+}
+export interface Factura {
+    id: number;
+    estudiante_id: number;
+    estudiante: Estudiante;
+    pagado_por: string;
+    tipo_documento_pagador: string;
+    documento_pagador: string;
+    correo_pagador: string;
+    direccion_pagador: string;
+    celular_pagador: string;
+    concepto: string;
+    categoria_pago: string;
+    valor_curso: number;
+    valor_matricula: number;
+    sede_id: number;
+    sede: Sede;
+    fecha_limite_exoneracion: string;
+    created_at: string
+}
+
 
 export interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
