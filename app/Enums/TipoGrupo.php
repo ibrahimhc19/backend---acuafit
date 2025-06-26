@@ -1,4 +1,5 @@
 <?php
+namespace App\Enums;
 enum TipoGrupo: string {
     case Adultos = 'Adultos';
     case Niños = 'Niños';
