@@ -26,10 +26,9 @@ class SedeController extends Controller
     {
         $validator =Validator::make($request->all(), [
             'nombre' => 'required|string|max:100',
-            'direccion' => 'required|string|max:100',
+            'direccion' => 'nullable|string|max:100',
         ], [
             'nombre.required' => 'El nombre de la sede es obligatorio',
-            'direccion.required' => 'La dirección de la sede es obligatoria'
         ]);
 
         if($validator->fails()){
@@ -82,7 +81,7 @@ class SedeController extends Controller
 
         $validator =Validator::make($request->all(), [
             'nombre' => 'sometimes|required|string|max:100',
-            'direccion' => 'sometimes|required|string|max:100',
+            'direccion' => 'sometimes|nullable|string|max:100',
         ], [
             'nombre.required' => 'El nombre de la sede es obligatorio',
             'direccion.required' => 'La dirección de la sede es obligatoria'

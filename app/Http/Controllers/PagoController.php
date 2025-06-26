@@ -31,6 +31,7 @@ class PagoController extends Controller
             'estudiante_id' => 'required|integer|exists:estudiantes,id',
             'monto' => ['required', 'numeric', 'regex:/^\d{1,8}(\.\d{1,2})?$/', 'min:0.01'],
             'fecha_pago' => 'required|date_format:d/m/Y',
+            // Deuda
             'metodo_pago' => ['required', 'string', Rule::in(['Efectivo', 'Transferencia'])],
             'soporte_pago' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'
 
@@ -113,6 +114,7 @@ class PagoController extends Controller
             'estudiante_id' => 'sometimes|required|integer|exists:estudiantes,id',
             'monto'         => ['sometimes', 'required', 'numeric', 'regex:/^\d{1,8}(\.\d{1,2})?$/', 'min:0.01'],
             'fecha_pago'    => 'sometimes|required|date_format:d/m/Y',
+            // Deuda
             'metodo_pago'   => ['sometimes', 'required', 'string', Rule::in(['Efectivo', 'Transferencia', 'Tarjeta'])],
             'soporte_pago'  => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ], [
