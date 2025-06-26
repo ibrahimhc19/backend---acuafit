@@ -98,9 +98,9 @@ export interface Factura {
 export interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    handlePageChange: (type: 'first' | 'previous' | 'next' | 'last') => void;
-    pageLinks: PageLinks;
-    pageNumRefs: PageNumRefs;
+    // handlePageChange: (type: 'first' | 'previous' | 'next' | 'last') => void;
+    // pageLinks: PageLinks;
+    // pageNumRefs: PageNumRefs;
 }
 
 export interface FormData {

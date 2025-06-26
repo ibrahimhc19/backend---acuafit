@@ -2,11 +2,16 @@ import axios from "@/api/axios";
 import { LaravelValidationError, Estudiante } from "@/types";
 import { AxiosError } from "axios";
 
-export const getAll = async () => {
+export const getAll = async (page?: string, query?: string) => {
     try {
-        const res = await axios.get("client/estudiantes");
-        const response = res.data;
-        return response.data;
+        if (query && query?.trim() !== "") {
+            const res = await axios.get(`client/buscar?q=${query}`);
+            return res.data
+        } else {
+            const res = await axios.get(`client/estudiantes${"?" + page}`);
+            return res.data
+        }
+
     } catch (error) {
         const axiosError = error as AxiosError<LaravelValidationError>
         const message = axiosError.response?.data?.message ?? "Error inesperado";
@@ -14,18 +19,18 @@ export const getAll = async () => {
         throw { message, validationErrors };
     }
 };
-export const searchAll = async (query:string) => {
-    try {
-        const res = await axios.get(`client/buscar?q=${query}`);
-        const response = res.data;
-        return response.data;
-    } catch (error) {
-        const axiosError = error as AxiosError<LaravelValidationError>
-        const message = axiosError.response?.data?.message ?? "Error inesperado";
-        const validationErrors = axiosError.response?.data?.errors;
-        throw { message, validationErrors };
-    }
-};
+// export const searchAll = async (query: string) => {
+//     try {
+//         const res = await axios.get(`client/buscar?q=${query}`);
+//         const response = res.data;
+//         return response.data;
+//     } catch (error) {
+//         const axiosError = error as AxiosError<LaravelValidationError>
+//         const message = axiosError.response?.data?.message ?? "Error inesperado";
+//         const validationErrors = axiosError.response?.data?.errors;
+//         throw { message, validationErrors };
+//     }
+// };
 
 export const create = async (data: Partial<Estudiante>) => {
     try {

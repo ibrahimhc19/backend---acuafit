@@ -1,51 +1,122 @@
 import { create } from "zustand";
-import { Estudiante } from "@/types";
+import { Estudiante, PageLinks, PageNumRefs } from "@/types";
 import * as estudiantesService from "@/services/estudiantes/estudiantesService";
 
 interface EstudiantesStore {
+    query: string;
+    loading: boolean;
+    pagination: string;
+    error: string | null;
+    pageLinks: PageLinks,
+    pageNumRefs: PageNumRefs,
     estudiantes: Estudiante[];
     selectedEstudiante: Estudiante | null;
-    loading: boolean;
-    error: string | null;
-
-    fetchEstudiantes: () => Promise<void>;
-    searchEstudiantes: (query:string) => Promise<void>;
-    createEstudiante: (data: Partial<Estudiante>) => Promise<void>;
-    updateEstudiante: (id: number, data: Partial<Estudiante>) => Promise<void>;
+    setQuery: (search:string) => void;
     deleteEstudiante: (id: number) => Promise<void>;
     selectEstudiante: (estudiante: Estudiante | null) => void;
+    createEstudiante: (data: Partial<Estudiante>) => Promise<void>;
+    fetchEstudiantes: (page?: string, query?: string) => Promise<void>;
+    updateEstudiante: (id: number, data: Partial<Estudiante>) => Promise<void>;
+    handlePageChange: (type: "first" | "previous" | "next" | "last") => Promise<void>;
+
 }
 
 export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
     estudiantes: [],
     selectedEstudiante: null,
     loading: false,
+    pagination: "",
+    query: "",
     error: null,
+    pageLinks: {
+        first_page_url: "",
+        last_page_url: "",
+        next_page_url: null,
+        prev_page_url: null,
+    },
+    pageNumRefs: {
+        current_page: 1,
+        last_page: 1,
+        per_page: 10,
+        from: 0,
+        to: 0,
+        total: 0,
+        next_page: null,
+    },
 
-    fetchEstudiantes: async () => {
+    fetchEstudiantes: async (page?: string, query?: string) => {
         set({ loading: true, error: null });
         try {
-            const data = await estudiantesService.getAll();
-            set({ estudiantes: data });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response = await estudiantesService.getAll(page, query);
+            const { current_page,
+                last_page,
+                per_page,
+                from,
+                to,
+                total,
+                next_page,
+                first_page_url,
+                last_page_url,
+                next_page_url,
+                prev_page_url } = response;
+            set({
+                pageNumRefs: {
+                    current_page,
+                    last_page,
+                    per_page,
+                    from,
+                    to,
+                    total,
+                    next_page
+                }
+            });
+            set({
+                pageLinks: {
+                    first_page_url,
+                    last_page_url,
+                    next_page_url,
+                    prev_page_url
+                }
+            });
+            set({ estudiantes: response.data });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             set({ error: err.message || "Error al cargar estudiantes" });
         } finally {
             set({ loading: false });
         }
     },
-    searchEstudiantes: async (query) => {
-        set({ loading: true, error: null });
-        try {
-            const data = await estudiantesService.searchAll(query);
-            set({ estudiantes: data });
-            // Deuda
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            set({ error: err.message || "Error al cargar estudiantes" });
-        } finally {
-            set({ loading: false });
+
+    handlePageChange: async (page: string) => {
+        const links = get().pageLinks;
+        console.log(page)
+        console.log(links)
+
+        function urlSplitterPagination(url: string) {
+            const clean = url.split("?")
+            return clean[1];
         }
+
+        switch (page) {
+            case "first":
+                set({ pagination: urlSplitterPagination(links.first_page_url) });
+                break;
+            case "previous":
+                set({ pagination: urlSplitterPagination(links.prev_page_url ?? "") });
+                break;
+            case "next":
+                set({ pagination: urlSplitterPagination(links.next_page_url ?? "") });
+                break;
+            case "last":
+                set({ pagination: urlSplitterPagination(links.last_page_url ?? "") });
+                break;
+
+        }
+
+    },
+
+    setQuery: (search:string) => {
+        set({query: search});
     },
 
     createEstudiante: async (data) => {

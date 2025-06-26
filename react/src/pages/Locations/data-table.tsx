@@ -27,6 +27,11 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { LocationForm } from "./form";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -55,17 +60,24 @@ export function DataTable<TValue, TData extends Sede>({
                 Listado de Sedes
             </h1>
 
-            <Button
-                variant="outline"
-                size="sm"
-                className="hover:bg-primary hover:text-white flex justify-self-end mb-4 cursor-pointer"
-                onClick={() => {
-                    selectSede(null);
-                    setIsModalOpen(true);
-                }}
-            >
-                <Plus />
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="hover:bg-primary hover:text-white flex justify-self-end mb-4 cursor-pointer"
+                        onClick={() => {
+                            selectSede(null);
+                            setIsModalOpen(true);
+                        }}
+                    >
+                        <Plus />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>Crea un nuevo registro</p>
+                </TooltipContent>
+            </Tooltip>
 
             <div className="rounded-md border">
                 {isModalOpen && (

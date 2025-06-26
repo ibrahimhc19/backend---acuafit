@@ -2,15 +2,13 @@ import { Estudiante } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-// import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
 
-// const { pageNumRefs } = useEstudiantesStore();
-export const columns = (indice:number): ColumnDef<Estudiante>[] => [
+export const columns = (indice: number): ColumnDef<Estudiante>[] => [
     {
         accessorKey: "id",
         header: "#",
         cell: ({ row }) => {
-            return row.index + indice;
+            return indice + row.index;
         },
     },
     {
