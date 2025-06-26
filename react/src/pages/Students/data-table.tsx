@@ -182,7 +182,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                                     </p>
                                 </AccordionContent>
                             </AccordionItem>
-                            {selectedRow.representante && (
+                            {selectedRow.acudiente && (
                                 <AccordionItem value="item-2">
                                     <AccordionTrigger className="font-bold text-[16px]">
                                         Detalle del Acudiente
@@ -190,33 +190,33 @@ export function DataTable<TValue, TData extends Estudiante>({
                                     <AccordionContent className="flex flex-col gap-4 text-balance">
                                         <p>
                                             <b>Nombres:</b>{" "}
-                                            {selectedRow?.representante.nombres}{" "}
+                                            {selectedRow?.acudiente.nombres}{" "}
                                             {
-                                                selectedRow?.representante
+                                                selectedRow?.acudiente
                                                     .apellidos
                                             }
                                         </p>
                                         <p>
                                             <b>Documento:</b>{" "}
                                             {
-                                                selectedRow?.representante
+                                                selectedRow?.acudiente
                                                     .tipo_documento
                                             }{" "}
                                             {
-                                                selectedRow?.representante
+                                                selectedRow?.acudiente
                                                     .documento_identidad
                                             }
                                         </p>
                                         <p>
                                             <b>Teléfono:</b>{" "}
                                             {
-                                                selectedRow?.representante
+                                                selectedRow?.acudiente
                                                     .telefono
                                             }
                                         </p>
                                         <p>
                                             <b>Correo:</b>{" "}
-                                            {selectedRow?.representante.email}
+                                            {selectedRow?.acudiente.email}
                                         </p>
                                     </AccordionContent>
                                 </AccordionItem>

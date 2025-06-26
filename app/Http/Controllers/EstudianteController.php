@@ -72,7 +72,7 @@ class EstudianteController extends Controller
             'tipo_documento' => ['required', 'string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
             'edad' => 'required|integer|min:1',
             'documento_identidad' => 'required|string|unique:estudiantes,documento_identidad|max:50',
-            'representante_id' => 'nullable|integer|exists:representantes,id',
+            'acudiente_id' => 'nullable|integer|exists:acudientes,id',
             'sede_id' => 'required|integer|exists:sedes,id',
             'horario_id' => 'required|integer|exists:horarios,id',
             'fecha_inscripcion' => 'required|date_format:d/m/Y',
@@ -101,8 +101,8 @@ class EstudianteController extends Controller
             'documento_identidad.string' => 'El documento de identidad debe ser una cadena de texto.',
             'documento_identidad.unique' => 'Este documento de identidad ya ha sido registrado.',
 
-            'representante_id.integer' => 'El ID del representante debe ser un número entero.',
-            'representante_id.exists' => 'El representante seleccionado no es válido o no existe.',
+            'acudiente_id.integer' => 'El ID del acudiente debe ser un número entero.',
+            'acudiente_id.exists' => 'El acudiente seleccionado no es válido o no existe.',
 
             'sede_id.required' => 'La sede es obligatoria.',
             'sede_id.integer' => 'El ID de la sede debe ser un número entero.',
@@ -187,7 +187,7 @@ class EstudianteController extends Controller
             'tipo_documento' => ['sometimes', 'required', 'string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
             'edad' => 'sometimes|required|integer|min:1',
             'documento_identidad' => ['sometimes', 'required', 'string', Rule::unique('estudiantes', 'documento_identidad')->ignore($estudiante->id)],
-            'representante_id' => 'nullable|integer|exists:representantes,id',
+            'acudiente_id' => 'nullable|integer|exists:acudientes,id',
             'sede_id' => 'sometimes|required|integer|exists:sedes,id',
             'horario_id' => 'sometimes|required|integer|exists:horarios,id',
             'fecha_inscripcion' => 'sometimes|required|date_format:d/m/Y',

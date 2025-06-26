@@ -1,0 +1,1 @@
+const s=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"],e=["Adultos","Hidroaeróbicos","Apnea","Niños","Niños 2-4 años","Niños 5-10 años","Bebés 10-23 meses"],o=["Tarjeta de identidad","Registro civil","Cédula de ciudadanía","Documento extranjero"];export{s as D,e as T,o as a};

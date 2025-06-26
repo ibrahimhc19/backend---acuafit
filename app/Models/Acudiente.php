@@ -9,7 +9,7 @@ class Acudiente extends Model
 {
     use HasFactory;
 
-    protected $table = 'representantes';
+    protected $table = 'acudientes';
     protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'int';
@@ -31,7 +31,7 @@ class Acudiente extends Model
     ];
 
     public function estudiantes(){
-        return $this->hasMany(Estudiante::class, 'representante_id', 'id');
+        return $this->hasMany(Estudiante::class, 'acudiente_id', 'id');
     }
 
 }

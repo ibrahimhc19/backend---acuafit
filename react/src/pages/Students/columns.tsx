@@ -14,9 +14,9 @@ export const columns = (indice: number): ColumnDef<Estudiante>[] => [
     {
         id: "acudiente",
         cell: ({ row }) => {
-            const representanteId = row.original.representante_id;
+            const acudienteId = row.original.acudiente_id;
 
-            return representanteId ? (
+            return acudienteId ? (
                 <Badge
                     className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums"
                     variant="secondary"

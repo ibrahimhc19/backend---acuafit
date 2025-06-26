@@ -28,6 +28,7 @@ import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Horario, Sede } from "@/types";
 import axios from "axios";
+import { TIPOS_DOCUMENTO } from "@/config/constants";
 
 const formSchema = z
     .object({
@@ -224,12 +225,7 @@ export default function RegistrationPage() {
         });
     };
 
-    const tipos_documento = [
-        "Tarjeta de identidad",
-        "Registro civil",
-        "Cédula de ciudadanía",
-        "Documento extranjero",
-    ];
+
 
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
     const [sedes, setSedes] = useState<Sede[]>([]);
@@ -359,7 +355,7 @@ export default function RegistrationPage() {
                                                             }
                                                             className="flex flex-col space-y-1"
                                                         >
-                                                            {tipos_documento.map(
+                                                            {TIPOS_DOCUMENTO.map(
                                                                 (tipo) => (
                                                                     <FormItem
                                                                         key={
@@ -542,7 +538,7 @@ export default function RegistrationPage() {
                                                     defaultValue={field.value}
                                                     className="flex flex-col space-y-1"
                                                 >
-                                                    {tipos_documento.map(
+                                                    {TIPOS_DOCUMENTO.map(
                                                         (tipo) => (
                                                             <FormItem
                                                                 key={tipo}

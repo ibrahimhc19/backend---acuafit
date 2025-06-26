@@ -59,7 +59,7 @@ class Estudiante extends Model
         'tipo_documento',
         'edad',
         'documento_identidad',
-        'representante_id',
+        'acudiente_id',
         'sede_id',
         'horario_id',
         'fecha_inscripcion',
@@ -98,7 +98,7 @@ class Estudiante extends Model
         'autoriza_uso_imagen' => 'boolean',
         'acepta_reglamento' => 'boolean',
         'edad' => 'integer',
-        'representante_id' => 'integer',
+        'acudiente_id' => 'integer',
         'sede_id' => 'integer',
         'horario_id' => 'integer',
     ];
@@ -106,7 +106,7 @@ class Estudiante extends Model
 
     public function acudiente()
     {
-        return $this->belongsTo(Acudiente::class, 'representante_id');
+        return $this->belongsTo(Acudiente::class, 'acudiente_id');
     }
 
     public function sede()

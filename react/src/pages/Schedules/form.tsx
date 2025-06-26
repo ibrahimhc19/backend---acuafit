@@ -13,7 +13,6 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -88,13 +87,6 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
     }, []);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        // defaultValues: selectedHorario || {
-        //     tipo_grupo: "",
-        //     dia_semana: "",
-        //     hora_inicio: "07:00:00",
-        //     hora_fin: "08:00:00",
-        //     sede_id: "",
-        // },
         defaultValues: {
             tipo_grupo: `${selectedHorario?.tipo_grupo ?? ""}`,
             dia_semana: `${selectedHorario?.dia_semana ?? ""}`,
@@ -132,11 +124,10 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
         }
     };
 
-    console.log(selectedHorario);
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
                     name="tipo_grupo"
@@ -161,9 +152,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                     ))}
                                 </SelectContent>
                             </Select>
-                            <FormDescription>
-                                Puedes seleccionar el tipo de grupo.
-                            </FormDescription>
+
                             <FormMessage />
                         </FormItem>
                     )}
@@ -192,9 +181,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                     ))}
                                 </SelectContent>
                             </Select>
-                            <FormDescription>
-                                Puedes seleccionar el día.
-                            </FormDescription>
+
                             <FormMessage />
                         </FormItem>
                     )}
@@ -225,9 +212,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                     ))}
                                 </SelectContent>
                             </Select>
-                            <FormDescription>
-                                Puedes seleccionar la sede.
-                            </FormDescription>
+
                             <FormMessage />
                         </FormItem>
                     )}
@@ -246,9 +231,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                     step="1"
                                 />
                             </FormControl>
-                            <FormDescription>
-                                Selecciona la hora de inicio.
-                            </FormDescription>
+
                             <FormMessage />
                         </FormItem>
                     )}
@@ -267,9 +250,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                     step="1"
                                 />
                             </FormControl>
-                            <FormDescription>
-                                Selecciona la hora de inicio.
-                            </FormDescription>
+
                             <FormMessage />
                         </FormItem>
                     )}
