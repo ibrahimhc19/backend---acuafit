@@ -54,7 +54,11 @@ class EstudianteController extends Controller
                     });
             })
             ->orderBy('nombres', 'asc')
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->appends([
+            'q' => $query,
+            'per_page' => $perPage,
+        ]);
 
         return response()->json($estudiantes);
     }

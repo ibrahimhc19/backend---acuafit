@@ -119,7 +119,7 @@ export default function DashboardLayout() {
                             <div className="flex-1 px-3 bg-white divide-y space-y-1">
                                 <ul className="space-y-2 pb-2">
                                     {links.map((link) => (
-                                        <li key={link.href}>
+                                        <li key={link.href} onClick={toggleSidebar}>
                                             <Link
                                                 to={link.href}
                                                 className={`text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-primary hover:text-muted group ${
