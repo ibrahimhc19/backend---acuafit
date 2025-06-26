@@ -145,8 +145,8 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {TIPOS_GRUPO.map((tipo) => (
-                                        <SelectItem value={tipo}>
+                                    {TIPOS_GRUPO.map((tipo, index) => (
+                                        <SelectItem key={index} value={tipo}>
                                             {tipo}
                                         </SelectItem>
                                     ))}
@@ -174,8 +174,8 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {DIAS_SEMANA.map((dia) => (
-                                        <SelectItem value={dia}>
+                                    {DIAS_SEMANA.map((dia, index) => (
+                                        <SelectItem key={index} value={dia}>
                                             {dia}
                                         </SelectItem>
                                     ))}
@@ -202,9 +202,9 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {sedes.map((s) => (
+                                    {sedes.map((s, index) => (
                                         <SelectItem
-                                            key={s.id}
+                                            key={index}
                                             value={s.id.toString()}
                                         >
                                             {s.nombre}

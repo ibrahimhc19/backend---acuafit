@@ -4,6 +4,7 @@ import * as estudiantesService from "@/services/estudiantes/estudiantesService";
 
 interface EstudiantesStore {
     query: string;
+    per_page: string;
     loading: boolean;
     pagination: string;
     error: string | null;
@@ -12,6 +13,7 @@ interface EstudiantesStore {
     estudiantes: Estudiante[];
     selectedEstudiante: Estudiante | null;
     setQuery: (search:string) => void;
+    setPerPage: (search:string) => void;
     deleteEstudiante: (id: number) => Promise<void>;
     selectEstudiante: (estudiante: Estudiante | null) => void;
     createEstudiante: (data: Partial<Estudiante>) => Promise<void>;
@@ -26,6 +28,7 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
     selectedEstudiante: null,
     loading: false,
     pagination: "",
+    per_page: "",
     query: "",
     error: null,
     pageLinks: {
@@ -117,6 +120,9 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
 
     setQuery: (search:string) => {
         set({query: search});
+    },
+    setPerPage: (pages:string) => {
+        set({per_page: pages});
     },
 
     createEstudiante: async (data) => {
