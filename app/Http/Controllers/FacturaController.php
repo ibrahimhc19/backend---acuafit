@@ -23,12 +23,15 @@ class FacturaController extends Controller
     {
         $validated = $request->validate([
             'estudiante_id' => 'required|exists:estudiantes,id',
+            // Deuda
             'pagado_por' => 'required|in:Estudiante,acudiente',
+            // Deuda
             'tipo_documento_pagador' => 'required|in:CC,TI,CE,Pasaporte',
             'documento_pagador' => 'required|string|max:50',
             'correo_pagador' => 'nullable|email',
             'direccion_pagador' => 'nullable|string|max:255',
             'celular_pagador' => 'nullable|string|max:20',
+            // Deuda
             'concepto' => 'required|in:Mensualidad,Bimestre,Trimestre,Matrícula',
             'categoria_pago' => 'required|in:Pago total,Abono',
             'valor_curso' => 'required|numeric|min:0',
@@ -38,6 +41,7 @@ class FacturaController extends Controller
             'abonos' => 'required|array|min:1',
             'abonos.*.fecha_pago' => 'required|date',
             'abonos.*.monto' => 'required|numeric|min:0',
+            // Deuda
             'abonos.*.metodo_pago' => 'required|in:Efectivo,Transferencia,Tarjeta',
             'abonos.*.numero_referencia_pago' => 'nullable|string|max:100',
         ]);
