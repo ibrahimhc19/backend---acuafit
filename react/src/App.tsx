@@ -12,7 +12,7 @@ const Students = lazy(() => import("./pages/Students/Students.tsx"));
 const Parents = lazy(() => import("./pages/Parents.tsx"));
 const Locations = lazy(() => import("./pages/Locations/Locations.tsx"));
 const Schedules = lazy(() => import("./pages/Schedules/Schedules.tsx"));
-const Payments = lazy(() => import("./pages/Payments.tsx"));
+const Payments = lazy(() => import("./pages/Payments/Payments.tsx"));
 const Accounting = lazy(() => import("./pages/Accounting/Accounting.tsx"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage.tsx"));
 const Registration = lazy(() => import("./pages/Registration.tsx"));
