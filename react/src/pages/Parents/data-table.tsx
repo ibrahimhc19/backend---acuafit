@@ -1,15 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DataTableProps, Estudiante } from "@/types";
 import {
     flexRender,
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import {
     Table,
     TableBody,
@@ -26,7 +21,6 @@ import {
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
-    Plus,
 } from "lucide-react";
 
 import {
@@ -37,7 +31,7 @@ import {
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { SelectRows } from "./select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Dialog,
     DialogClose,
@@ -54,11 +48,13 @@ import {
 } from "@/components/ui/accordion";
 import timeFormatter from "@/helpers/timeFormatter";
 import { FILAS } from "@/config/constants";
-import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
 
 export function DataTable<TValue, TData extends Estudiante>({
     columns,
     data,
+    pageNumRefs,
+    pageLinks,
+    handlePageChange,
 }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
         data,
@@ -66,167 +62,157 @@ export function DataTable<TValue, TData extends Estudiante>({
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
     });
-
+    const [selectedRow, setSelectedRow] = useState<Estudiante | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loading, setLoading] = useState();
+    const [nombres, setNombres] = useState("");
 
-    const {
-        selectEstudiante,
-        selectedEstudiante,
-        pageNumRefs,
-        pageLinks,
-        handlePageChange,
-        query,
-        setQuery,
-    } = useEstudiantesStore();
+
+    useEffect(() => {
+        if (selectedRow) {
+            setNombres(`${selectedRow.nombres} ${selectedRow.apellidos}`);
+        }
+    }, [selectedRow]);
+
+    const [query, setQuery] = useState("");
+    const [results, setResults] = useState<string[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    const handleSearch = async () => {
+        if (!query.trim()) return;
+
+        setLoading(true);
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_APP_API_URL}client/buscar?q=${query}`
+            );
+            const data = await response.json();
+            setResults(data);
+            console.log(results);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>
             <h1 className="scroll-m-20 flex-wrap text-3xl font-semibold text-primary">
                 Listado de Estudiantes
             </h1>
-            <div className="flex w-full max-w-sm justify-between my-4 gap-2">
+            <div className="flex w-full max-w-sm  my-4 gap-2">
                 <Input
                     type="search"
                     placeholder="Buscar"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
-
-                <Tooltip>
-                    <TooltipTrigger>
-                        <Button
-                            type="submit"
-                            variant="outline"
-                            className="hover:bg-primary hover:text-white"
-                            onClick={() => setQuery("")}
-                        >
-                            Limpiar
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Limpia la barra de búsqueda</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="hover:bg-primary hover:text-white flex justify-self-end h-9 cursor-pointer"
-                            onClick={() => {
-                                selectEstudiante(null);
-                                setIsModalOpen(true);
-                            }}
-                        >
-                            <Plus />
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Crea un nuevo registro</p>
-                    </TooltipContent>
-                </Tooltip>
+                <Button
+                    type="submit"
+                    variant="outline"
+                    onClick={handleSearch}
+                    disabled={loading}
+                    className="hover:bg-primary hover:text-white"
+                >
+                    {loading ? "Buscando..." : "Buscar"}
+                </Button>
+                <Button
+                    type="submit"
+                    variant="outline"
+                    className="hover:bg-primary hover:text-white"
+                >
+                    Limpiar
+                </Button>
             </div>
-
-            {isModalOpen && selectedEstudiante && (
+            {isModalOpen && selectedRow && (
                 <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle className="text-2xl text-left">
-                                {/* {nombres} */}
-                            </DialogTitle>
+                            <DialogTitle className="text-2xl text-left">{nombres}</DialogTitle>
                         </DialogHeader>
                         <Accordion type="single" collapsible className="w-full">
                             <AccordionItem value="item-1">
                                 <AccordionTrigger className="font-bold text-[16px]">
                                     Detalles del Estudiante
                                 </AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-1 text-balance">
+                                <AccordionContent className="flex flex-col gap-4 text-balance">
                                     <p>
-                                        <b>Nombres:</b> {/* {nombres} */}
+                                        <b>Nombres:</b> {nombres}
                                     </p>
                                     <p>
-                                        <b>Edad:</b> {selectedEstudiante.edad}
+                                        <b>Edad:</b> {selectedRow.edad}
                                     </p>
                                     <p>
                                         <b>Documento:</b>{" "}
-                                        {selectedEstudiante.tipo_documento}{" "}
-                                        {selectedEstudiante.documento_identidad}
+                                        {selectedRow.tipo_documento}{" "}
+                                        {selectedRow.documento_identidad}
                                     </p>
                                     <p>
-                                        <b>Correo:</b>{" "}
-                                        {selectedEstudiante.correo}
+                                        <b>Correo:</b> {selectedRow.correo}
                                     </p>
                                     <p>
-                                        <b>Teléfono:</b>{" "}
-                                        {selectedEstudiante.telefono}
+                                        <b>Teléfono:</b> {selectedRow.telefono}
                                     </p>
                                     <p>
                                         <b>Dirección:</b>{" "}
-                                        {selectedEstudiante.direccion}
+                                        {selectedRow.direccion}
                                     </p>
                                     <p>
-                                        <b>RUT:</b>{" "}
-                                        {selectedEstudiante.rut ?? "N/A"}
+                                        <b>RUT:</b> {selectedRow.rut ?? "N/A"}
                                     </p>
                                     <p>
                                         <b>Acepta el reglamento:</b>{" "}
-                                        {selectedEstudiante.acepta_reglamento
+                                        {selectedRow.acepta_reglamento
                                             ? "Sí"
                                             : "No"}
                                     </p>
                                     <p>
                                         <b>Autoriza uso de imagen:</b>{" "}
-                                        {selectedEstudiante.autoriza_uso_imagen
+                                        {selectedRow.autoriza_uso_imagen
                                             ? "Sí"
                                             : "No"}
                                     </p>
                                     <p>
                                         <b>Observaciones:</b>{" "}
-                                        {selectedEstudiante.observaciones ??
-                                            "N/A"}
+                                        {selectedRow.observaciones}
                                     </p>
                                 </AccordionContent>
                             </AccordionItem>
-                            {selectedEstudiante.acudiente && (
+                            {selectedRow.acudiente && (
                                 <AccordionItem value="item-2">
                                     <AccordionTrigger className="font-bold text-[16px]">
                                         Detalle del Acudiente
                                     </AccordionTrigger>
-                                    <AccordionContent className="flex flex-col gap-1 text-balance">
+                                    <AccordionContent className="flex flex-col gap-4 text-balance">
                                         <p>
                                             <b>Nombres:</b>{" "}
+                                            {selectedRow?.acudiente.nombres}{" "}
                                             {
-                                                selectedEstudiante?.acudiente
-                                                    .nombres
-                                            }{" "}
-                                            {
-                                                selectedEstudiante?.acudiente
+                                                selectedRow?.acudiente
                                                     .apellidos
                                             }
                                         </p>
                                         <p>
                                             <b>Documento:</b>{" "}
                                             {
-                                                selectedEstudiante?.acudiente
+                                                selectedRow?.acudiente
                                                     .tipo_documento
                                             }{" "}
                                             {
-                                                selectedEstudiante?.acudiente
+                                                selectedRow?.acudiente
                                                     .documento_identidad
                                             }
                                         </p>
                                         <p>
                                             <b>Teléfono:</b>{" "}
                                             {
-                                                selectedEstudiante?.acudiente
+                                                selectedRow?.acudiente
                                                     .telefono
                                             }
                                         </p>
                                         <p>
                                             <b>Correo:</b>{" "}
-                                            {
-                                                selectedEstudiante?.acudiente
-                                                    .email
-                                            }
+                                            {selectedRow?.acudiente.email}
                                         </p>
                                     </AccordionContent>
                                 </AccordionItem>
@@ -235,15 +221,14 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 <AccordionTrigger className="font-bold text-[16px]">
                                     Detalles de la Sede
                                 </AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-1 text-balance">
+                                <AccordionContent className="flex flex-col gap-4 text-balance">
                                     <p>
                                         <b>Nombre:</b>{" "}
-                                        {selectedEstudiante?.sede.nombre}
+                                        {selectedRow?.sede.nombre}
                                     </p>
                                     <p>
                                         <b>Dirección:</b>{" "}
-                                        {selectedEstudiante?.sede.direccion ??
-                                            "N/A"}
+                                        {selectedRow?.sede.direccion}
                                     </p>
                                 </AccordionContent>
                             </AccordionItem>
@@ -251,23 +236,18 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 <AccordionTrigger className="font-bold text-[16px]">
                                     Detalles del Horario
                                 </AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-1 text-balance">
+                                <AccordionContent className="flex flex-col gap-4 text-balance">
                                     <p>
                                         <b>Día de la semana:</b>{" "}
-                                        {selectedEstudiante?.horario.dia_semana}
+                                        {selectedRow?.horario.dia_semana}
                                     </p>
                                     <p>
                                         <b>Hora de inicio:</b>{" "}
-                                        {timeFormatter(
-                                            selectedEstudiante?.horario
-                                                .hora_inicio
-                                        )}
+                                        {timeFormatter(selectedRow?.horario.hora_inicio)}
                                     </p>
                                     <p>
                                         <b>Hora de fin:</b>{" "}
-                                        {timeFormatter(
-                                            selectedEstudiante?.horario.hora_fin
-                                        )}
+                                        {timeFormatter(selectedRow?.horario.hora_fin)}
                                     </p>
                                 </AccordionContent>
                             </AccordionItem>
@@ -315,7 +295,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 <TableRow
                                     key={row.id}
                                     onClick={() => {
-                                        selectEstudiante(row.original);
+                                        setSelectedRow(row.original);
                                         setIsModalOpen(true);
                                     }}
                                     className="hover:text-muted hover:bg-primary cursor-pointer"
@@ -354,36 +334,28 @@ export function DataTable<TValue, TData extends Estudiante>({
                         onValueChange={() => {}}
                         options={FILAS}
                     />
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handlePageChange("first")}
-                                disabled={pageLinks.prev_page_url === null}
-                                className="hover:bg-primary hover:text-white hidden sm:block"
-                            >
-                                <ChevronsLeft />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Primera página</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handlePageChange("previous")}
-                                disabled={pageLinks.prev_page_url === null}
-                                className="hover:bg-primary hover:text-white"
-                            >
-                                <ChevronLeft />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Página anterior</TooltipContent>
-                    </Tooltip>
-
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange("first")}
+                        disabled={
+                            pageLinks.prev_page_url === null ? true : false
+                        }
+                        className="hover:bg-primary hover:text-white hidden sm:block"
+                    >
+                        <ChevronsLeft />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange("previous")}
+                        disabled={
+                            pageLinks.prev_page_url === null ? true : false
+                        }
+                        className="hover:bg-primary hover:text-white"
+                    >
+                        <ChevronLeft />
+                    </Button>
                     <Pagination className="hidden sm:flex mr-1">
                         <PaginationContent>
                             <PaginationItem>
@@ -393,36 +365,28 @@ export function DataTable<TValue, TData extends Estudiante>({
                             </PaginationItem>
                         </PaginationContent>
                     </Pagination>
-
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handlePageChange("next")}
-                                disabled={pageLinks.next_page_url === null}
-                                className="hover:bg-primary hover:text-white"
-                            >
-                                <ChevronRight />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Siguiente página</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handlePageChange("last")}
-                                disabled={pageLinks.next_page_url === null}
-                                className="hover:bg-primary hover:text-white hidden sm:block"
-                            >
-                                <ChevronsRight />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Última página</TooltipContent>
-                    </Tooltip>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange("next")}
+                        disabled={
+                            pageLinks.next_page_url === null ? true : false
+                        }
+                        className="hover:bg-primary hover:text-white"
+                    >
+                        <ChevronRight />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handlePageChange("last")}
+                        disabled={
+                            pageLinks.next_page_url === null ? true : false
+                        }
+                        className="hover:bg-primary hover:text-white hidden sm:block"
+                    >
+                        <ChevronsRight />
+                    </Button>
                 </div>
             </div>
         </>
