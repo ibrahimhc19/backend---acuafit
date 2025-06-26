@@ -2,13 +2,17 @@ import axios from "@/api/axios";
 import { LaravelValidationError, Estudiante } from "@/types";
 import { AxiosError } from "axios";
 
-export const getAll = async (page?: string, query?: string) => {
+export const getAll = async (page?: string, query?: string, per_page: number = 10) => {
     try {
         if (query && query?.trim() !== "") {
-            const res = await axios.get(`client/buscar?q=${query}`);
+            const res = await axios.get(`client/buscar?q=${encodeURIComponent(query)}&per_page=${per_page}`);
             return res.data
         } else {
-            const res = await axios.get(`client/estudiantes${"?" + page}`);
+            const params = new URLSearchParams();
+            if (per_page) params.append("per_page", per_page.toString());
+            if (page) params.append("page", page);
+            const res = await axios.get(`client/estudiantes?${params.toString()}`);
+
             return res.data
         }
 
@@ -19,18 +23,6 @@ export const getAll = async (page?: string, query?: string) => {
         throw { message, validationErrors };
     }
 };
-// export const searchAll = async (query: string) => {
-//     try {
-//         const res = await axios.get(`client/buscar?q=${query}`);
-//         const response = res.data;
-//         return response.data;
-//     } catch (error) {
-//         const axiosError = error as AxiosError<LaravelValidationError>
-//         const message = axiosError.response?.data?.message ?? "Error inesperado";
-//         const validationErrors = axiosError.response?.data?.errors;
-//         throw { message, validationErrors };
-//     }
-// };
 
 export const create = async (data: Partial<Estudiante>) => {
     try {

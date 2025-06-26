@@ -4,7 +4,7 @@ import * as estudiantesService from "@/services/estudiantes/estudiantesService";
 
 interface EstudiantesStore {
     query: string;
-    per_page: string;
+    per_page: number;
     loading: boolean;
     pagination: string;
     error: string | null;
@@ -13,11 +13,11 @@ interface EstudiantesStore {
     estudiantes: Estudiante[];
     selectedEstudiante: Estudiante | null;
     setQuery: (search:string) => void;
-    setPerPage: (search:string) => void;
+    setPerPage: (pages:number) => void;
     deleteEstudiante: (id: number) => Promise<void>;
     selectEstudiante: (estudiante: Estudiante | null) => void;
     createEstudiante: (data: Partial<Estudiante>) => Promise<void>;
-    fetchEstudiantes: (page?: string, query?: string) => Promise<void>;
+    fetchEstudiantes: (page?: string, query?: string, per_page?: number) => Promise<void>;
     updateEstudiante: (id: number, data: Partial<Estudiante>) => Promise<void>;
     handlePageChange: (type: "first" | "previous" | "next" | "last") => Promise<void>;
 
@@ -28,7 +28,7 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
     selectedEstudiante: null,
     loading: false,
     pagination: "",
-    per_page: "",
+    per_page: 10,
     query: "",
     error: null,
     pageLinks: {
@@ -47,10 +47,10 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
         next_page: null,
     },
 
-    fetchEstudiantes: async (page?: string, query?: string) => {
+    fetchEstudiantes: async (page?: string, query?: string, pages?:number) => {
         set({ loading: true, error: null });
         try {
-            const response = await estudiantesService.getAll(page, query);
+            const response = await estudiantesService.getAll(page, query, pages);
             const { current_page,
                 last_page,
                 per_page,
@@ -92,8 +92,6 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
 
     handlePageChange: async (page: string) => {
         const links = get().pageLinks;
-        console.log(page)
-        console.log(links)
 
         function urlSplitterPagination(url: string) {
             const clean = url.split("?")
@@ -121,7 +119,7 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
     setQuery: (search:string) => {
         set({query: search});
     },
-    setPerPage: (pages:string) => {
+    setPerPage: (pages:number) => {
         set({per_page: pages});
     },
 
