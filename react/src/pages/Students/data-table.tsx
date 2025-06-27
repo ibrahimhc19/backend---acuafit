@@ -64,6 +64,9 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 export function DataTable<TValue, TData extends Estudiante>({
     columns,
     data,
@@ -77,7 +80,7 @@ export function DataTable<TValue, TData extends Estudiante>({
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState();
-
+    const navigate = useNavigate();
     const {
         selectEstudiante,
         selectedEstudiante,
@@ -87,6 +90,7 @@ export function DataTable<TValue, TData extends Estudiante>({
         query,
         setQuery,
         setPerPage,
+        deleteEstudiante,
     } = useEstudiantesStore();
 
     return (
@@ -94,8 +98,9 @@ export function DataTable<TValue, TData extends Estudiante>({
             <h1 className="scroll-m-20 flex-wrap text-3xl font-semibold text-primary">
                 Listado de Estudiantes
             </h1>
-            <div className="flex w-full max-w-sm justify-between my-4 gap-2">
-                <Input
+            <div className="flex w-full justify-between my-4 gap-2">
+                <div className="flex gap-2">
+                    <Input
                     type="search"
                     placeholder="Buscar"
                     value={query}
@@ -114,6 +119,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                     </TooltipTrigger>
                     <TooltipContent>Limpia la barra de búsqueda</TooltipContent>
                 </Tooltip>
+                </div>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
@@ -122,7 +128,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                             className="hover:bg-primary hover:text-white flex justify-self-end h-9 cursor-pointer"
                             onClick={() => {
                                 selectEstudiante(null);
-                                setIsModalOpen(true);
+                                navigate("/registro", { replace: true })
                             }}
                         >
                             <Plus />
@@ -284,10 +290,35 @@ export function DataTable<TValue, TData extends Estudiante>({
                             <DialogClose asChild>
                                 <Button variant="outline">Cancelar</Button>
                             </DialogClose>
-                            <Button type="submit">Editar</Button>
+                            <Button
+                            onClick={()=> {
+                                navigate("/registro", { replace: true })
+                            }
+                            }
+                            >Editar</Button>
                             <Button
                                 variant="destructive"
                                 type="submit"
+                                onClick={async () => {
+                                        if (!selectedEstudiante?.id) return;
+
+                                        try {
+                                            await deleteEstudiante(selectedEstudiante.id);
+                                            toast.success(
+                                                "El estudiante fue eliminado correctamente."
+                                            );
+                                            selectEstudiante(null);
+                                            setIsModalOpen(false);
+                                        } catch (e) {
+                                            toast.error(
+                                                "No se pudo eliminar el estudiante. Intenta de nuevo."
+                                            );
+                                            console.error(
+                                                "Error al eliminar",
+                                                e
+                                            );
+                                        }
+                                    }}
                                 disabled
                             >
                                 Eliminar
