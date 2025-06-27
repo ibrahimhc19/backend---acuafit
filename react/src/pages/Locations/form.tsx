@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { ModalState } from "@/types";
+import { useState } from "react";
 
 const formSchema = z.object({
     nombre: z.string().min(2, {
@@ -40,6 +41,8 @@ const formSchema = z.object({
 export function LocationForm({ setIsModalOpen }: ModalState) {
     const { selectSede, selectedSede, createSede, updateSede, deleteSede } =
         useSedesStore();
+        const [isSubmitting, setisSubmitting] = useState(false);
+        const [isDeleting, setIsDeleting] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: selectedSede || {
@@ -48,15 +51,20 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
         },
     });
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        setisSubmitting(true);
         if (selectedSede?.id) {
             try {
                 await updateSede(selectedSede.id, values);
+                // await new Promise((resolve) => setTimeout(resolve, 1500));
                 toast.success("La sede fue actualizada correctamente.");
                 selectSede(null);
                 setIsModalOpen(false);
             } catch (e) {
                 toast.error("No se pudo actualizar la sede. Intenta de nuevo.");
                 console.error("Error al actualizar", e);
+            } finally{
+                setisSubmitting(false)
+                setIsModalOpen(false);
             }
         } else {
             try {
@@ -67,6 +75,9 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
             } catch (e) {
                 toast.error("No se pudo registrar la sede. Intenta de nuevo.");
                 console.error("Error al registrar", e);
+            } finally{
+                setisSubmitting(false)
+                setIsModalOpen(false);
             }
         }
     };
@@ -104,17 +115,17 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
                     <DialogClose asChild>
                         <Button variant="outline">Cancelar</Button>
                     </DialogClose>
-                    <Button type="submit">
-                        {selectedSede ? "Actualizar" : "Agregar"}
+                    <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? "Guardando" : (selectedSede ? "Actualizar" : "Agregar")}
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button
+                            {selectedSede && <Button
                                 variant="destructive"
-                                disabled={!selectedSede}
+                                disabled={ isDeleting ? true: !selectedSede}
                             >
-                                Eliminar
-                            </Button>
+                                {isDeleting ? "Eliminando" : "Eliminar"}
+                            </Button>}
                         </AlertDialogTrigger>
 
                         <AlertDialogContent>
@@ -128,11 +139,11 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                <AlertDialogAction
+                                <AlertDialogCancel >Cancelar</AlertDialogCancel>
+                                <AlertDialogAction disabled={isSubmitting}
                                     onClick={async () => {
                                         if (!selectedSede?.id) return;
-
+                                        setIsDeleting(true);
                                         try {
                                             await deleteSede(selectedSede.id);
                                             toast.success(
@@ -148,10 +159,13 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
                                                 "Error al eliminar",
                                                 e
                                             );
+                                        } finally {
+                                            setIsDeleting(false);
+                                            setIsModalOpen(false);
                                         }
                                     }}
                                 >
-                                    Confirmar
+                                    {isDeleting ? "Eliminando" : "Confirmar"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
