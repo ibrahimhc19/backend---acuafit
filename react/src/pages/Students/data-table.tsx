@@ -357,7 +357,7 @@ export function DataTable<TValue, TData extends Estudiante>({
             <div className="flex flex-row justify-end items-center mb-4 sm:mb-0">
                 <div className="flex items-center justify-end py-4 space-x-1">
                     {/* Deuda */}
-                    <Select onValueChange={(e) => setPerPage(Number(e))}>
+                    <Select defaultValue="10" onValueChange={(e) => setPerPage(Number(e))}>
                     {/* <Select onValueChange={(e) => console.log("Cambio",e)}> */}
                         <SelectTrigger>
                             <SelectValue placeholder="Cantidad" />
