@@ -100,24 +100,24 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
         if (selectedHorario?.id) {
             try {
                 await updateHorario(selectedHorario.id, values);
-                toast.success("La horario fue actualizada correctamente.");
+                toast.success("El horario fue actualizado correctamente.");
                 selectHorario(null);
                 setIsModalOpen(false);
             } catch (e) {
                 toast.error(
-                    "No se pudo actualizar la horario. Intenta de nuevo."
+                    "No se pudo actualizar el horario. Intenta de nuevo."
                 );
                 console.error("Error al actualizar", e);
             }
         } else {
             try {
                 await createHorario(values);
-                toast.success("La horario fue registrada correctamente.");
+                toast.success("El horario fue registrado correctamente.");
                 selectHorario(null);
                 setIsModalOpen(false);
             } catch (e) {
                 toast.error(
-                    "No se pudo registrar la horario. Intenta de nuevo."
+                    "No se pudo registrar el horario. Intenta de nuevo."
                 );
                 console.error("Error al registrar", e);
             }

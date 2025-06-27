@@ -29,6 +29,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Horario, Sede } from "@/types";
 import axios from "axios";
 import { TIPOS_DOCUMENTO } from "@/config/constants";
+import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
 
 const formSchema = z
     .object({
@@ -189,6 +190,8 @@ const formSchema = z
 type FormData = z.infer<typeof formSchema>;
 
 export default function RegistrationPage() {
+    const { selectedEstudiante } = useEstudiantesStore();
+
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -198,7 +201,7 @@ export default function RegistrationPage() {
             correo: "",
             telefono: "",
             direccion: "",
-            edad: "",
+            edad: "", // Number
             rut: "",
             observaciones: "",
             autoriza_uso_imagen: "false",
@@ -225,8 +228,6 @@ export default function RegistrationPage() {
         });
     };
 
-
-
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
     const [sedes, setSedes] = useState<Sede[]>([]);
     const [grupos, setGrupos] = useState<Horario[]>();
@@ -252,6 +253,7 @@ export default function RegistrationPage() {
                 setSedes([]);
             });
     }, []);
+    console.log(selectedEstudiante);
     return (
         <div className="min-h-screen py-10">
             <div className="container mx-auto max-w-2xl px-4">
@@ -259,7 +261,10 @@ export default function RegistrationPage() {
                     <div className="bg-[url(./assets/piscina.jpg)] w-full h-40 rounded-t-lg bg-center bg-cover"></div>
                     <div className="p-6 md:p-8">
                         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2">
-                            Formulario de Inscripción Acuafit{" "}
+                            {/* Formulario de Inscripción Acuafit{" "} */}
+                            {selectedEstudiante
+                                ? "Edición de Registro Acuafit"
+                                : "Formulario de Inscripción Acuafit"}{" "}
                             {new Date().getFullYear()}
                         </h1>
                         {/* <div className="mb-6">
@@ -669,7 +674,10 @@ export default function RegistrationPage() {
                                             <Select
                                                 onValueChange={(value) => {
                                                     field.onChange(value);
-                                                    setGrupos(sedes[parseInt(value)].horarios || []);
+                                                    setGrupos(
+                                                        sedes[parseInt(value)]
+                                                            .horarios || []
+                                                    );
                                                 }}
                                                 defaultValue={field.value}
                                             >
@@ -711,23 +719,38 @@ export default function RegistrationPage() {
                                                     defaultValue={field.value}
                                                     className="flex flex-col space-y-1"
                                                 >
-                                                    {grupos && grupos.map((grupo, index) => (
-                                                        <FormItem
-                                                            key={index}
-                                                            className="flex items-center gap-3"
-                                                        >
-                                                            <FormControl>
-                                                                <RadioGroupItem
-                                                                    value={
-                                                                        grupo.id.toString()
-                                                                    }
-                                                                />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">
-                                                                {grupo.tipo_grupo}, {toCapital(grupo.dia_semana)} de {grupo.hora_inicio} a {grupo.hora_fin}
-                                                            </FormLabel>
-                                                        </FormItem>
-                                                    ))}
+                                                    {grupos &&
+                                                        grupos.map(
+                                                            (grupo, index) => (
+                                                                <FormItem
+                                                                    key={index}
+                                                                    className="flex items-center gap-3"
+                                                                >
+                                                                    <FormControl>
+                                                                        <RadioGroupItem
+                                                                            value={grupo.id.toString()}
+                                                                        />
+                                                                    </FormControl>
+                                                                    <FormLabel className="font-normal">
+                                                                        {
+                                                                            grupo.tipo_grupo
+                                                                        }
+                                                                        ,{" "}
+                                                                        {toCapital(
+                                                                            grupo.dia_semana
+                                                                        )}{" "}
+                                                                        de{" "}
+                                                                        {
+                                                                            grupo.hora_inicio
+                                                                        }{" "}
+                                                                        a{" "}
+                                                                        {
+                                                                            grupo.hora_fin
+                                                                        }
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                            )
+                                                        )}
                                                 </RadioGroup>
                                             </FormControl>
                                             <FormMessage />
