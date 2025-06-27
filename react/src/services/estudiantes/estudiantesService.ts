@@ -2,15 +2,16 @@ import axios from "@/api/axios";
 import { LaravelValidationError, Estudiante } from "@/types";
 import { AxiosError } from "axios";
 
-export const getAll = async (page?: string, query?: string, per_page: number = 10) => {
+export const getAll = async (page?: string, query?: string, per_page?: number) => {
     try {
         if (query && query?.trim() !== "") {
-            const res = await axios.get(`client/buscar?q=${encodeURIComponent(query)}&per_page=${per_page}`);
+            const res = await axios.get(`client/buscar?q=${encodeURIComponent(query)}&per_page=${per_page}${page? `&page=${page}` : ""}`);
             return res.data
         } else {
             const params = new URLSearchParams();
             if (per_page) params.append("per_page", per_page.toString());
             if (page) params.append("page", page);
+
             const res = await axios.get(`client/estudiantes?${params.toString()}`);
 
             return res.data

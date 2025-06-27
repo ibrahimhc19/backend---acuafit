@@ -3,17 +3,17 @@ import { Estudiante, PageLinks, PageNumRefs } from "@/types";
 import * as estudiantesService from "@/services/estudiantes/estudiantesService";
 
 interface EstudiantesStore {
-    query: string;
-    per_page: number;
+    query: string | undefined;
+    per_page: number | undefined;
     loading: boolean;
-    pagination: string;
+    pagination: string | undefined;
     error: string | null;
     pageLinks: PageLinks,
     pageNumRefs: PageNumRefs,
     estudiantes: Estudiante[];
     selectedEstudiante: Estudiante | null;
-    setQuery: (search:string) => void;
-    setPerPage: (pages:number) => void;
+    setQuery: (search?:string) => void;
+    setPerPage: (pages?:number) => void;
     deleteEstudiante: (id: number) => Promise<void>;
     selectEstudiante: (estudiante: Estudiante | null) => void;
     createEstudiante: (data: Partial<Estudiante>) => Promise<void>;
@@ -29,7 +29,7 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
     loading: false,
     pagination: "",
     per_page: 10,
-    query: "",
+    query: undefined,
     error: null,
     pageLinks: {
         first_page_url: "",
@@ -94,8 +94,9 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
         const links = get().pageLinks;
 
         function urlSplitterPagination(url: string) {
-            const clean = url.split("?")
-            return clean[1];
+            const clean = url.split("=")
+            // return clean[1];
+            return clean.length >=4 ? clean[3] : clean[1];
         }
 
         switch (page) {
@@ -107,6 +108,7 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
                 break;
             case "next":
                 set({ pagination: urlSplitterPagination(links.next_page_url ?? "") });
+                console.log(get().pagination)
                 break;
             case "last":
                 set({ pagination: urlSplitterPagination(links.last_page_url ?? "") });
@@ -116,10 +118,10 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
 
     },
 
-    setQuery: (search:string) => {
+    setQuery: (search?:string) => {
         set({query: search});
     },
-    setPerPage: (pages:number) => {
+    setPerPage: (pages?:number) => {
         set({per_page: pages});
     },
 
