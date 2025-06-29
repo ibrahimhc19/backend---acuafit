@@ -26,10 +26,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { Horario, Sede } from "@/types";
-import axios from "axios";
+import { Horario } from "@/types";
 import { TIPOS_DOCUMENTO } from "@/config/constants";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
+import { useSedesStore } from "@/services/sedes/useSedesStore";
+import { useHorariosStore } from "@/services/horarios/useHorariosStore";
 
 const formSchema = z
     .object({
@@ -191,6 +192,10 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function RegistrationPage() {
     const { selectedEstudiante } = useEstudiantesStore();
+    const [requiereAcudiente, setRequiereAcudiente] = useState(false);
+    const { sedes, fetchSedes } = useSedesStore();
+    const { horarios, fetchHorarios } = useHorariosStore();
+    const [grupos, setGrupos] = useState<Horario[]>();
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -228,32 +233,15 @@ export default function RegistrationPage() {
         });
     };
 
-    const [requiereAcudiente, setRequiereAcudiente] = useState(false);
-    const [sedes, setSedes] = useState<Sede[]>([]);
-    const [grupos, setGrupos] = useState<Horario[]>();
-
     useEffect(() => {
-        axios
-            // .get(url)
-            .get("/mock/grupos.json")
-            .then((response) => {
-                const apiResponse = response.data;
-                if (apiResponse) {
-                    setSedes(apiResponse);
-                } else {
-                    console.error(
-                        "La respuesta de la API no tiene el formato esperado:",
-                        apiResponse
-                    );
-                    setSedes([]);
-                }
-            })
-            .catch((error: unknown) => {
-                console.error("Error al obtener los datos:", error);
-                setSedes([]);
-            });
+        fetchSedes();
+        fetchHorarios();
     }, []);
-    console.log(selectedEstudiante);
+
+    console.log("Sedes: ", sedes);
+    console.log("Horarios: ", horarios);
+    console.log("Grupos: ", grupos);
+
     return (
         <div className="min-h-screen py-10">
             <div className="container mx-auto max-w-2xl px-4">
@@ -361,10 +349,10 @@ export default function RegistrationPage() {
                                                             className="flex flex-col space-y-1"
                                                         >
                                                             {TIPOS_DOCUMENTO.map(
-                                                                (tipo) => (
+                                                                (tipo, index) => (
                                                                     <FormItem
                                                                         key={
-                                                                            tipo
+                                                                            index
                                                                         }
                                                                         className="flex items-center gap-3"
                                                                     >
@@ -544,9 +532,9 @@ export default function RegistrationPage() {
                                                     className="flex flex-col space-y-1"
                                                 >
                                                     {TIPOS_DOCUMENTO.map(
-                                                        (tipo) => (
+                                                        (tipo, index) => (
                                                             <FormItem
-                                                                key={tipo}
+                                                                key={index}
                                                                 className="flex items-center gap-3"
                                                             >
                                                                 <FormControl>
@@ -675,8 +663,11 @@ export default function RegistrationPage() {
                                                 onValueChange={(value) => {
                                                     field.onChange(value);
                                                     setGrupos(
-                                                        sedes[parseInt(value)]
-                                                            .horarios || []
+                                                        horarios.filter(
+                                                            (horario) =>
+                                                                horario.sede_id ==
+                                                                value
+                                                        )
                                                     );
                                                 }}
                                                 defaultValue={field.value}
@@ -687,12 +678,12 @@ export default function RegistrationPage() {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    {sedes.map((g, index) => (
+                                                    {sedes.map((sede, index) => (
                                                         <SelectItem
                                                             key={index}
-                                                            value={index.toString()}
+                                                            value={sede.id.toString()}
                                                         >
-                                                            {g.nombre}
+                                                            {sede.nombre}
                                                         </SelectItem>
                                                     ))}
                                                 </SelectContent>
@@ -720,6 +711,7 @@ export default function RegistrationPage() {
                                                     className="flex flex-col space-y-1"
                                                 >
                                                     {grupos &&
+                                                    grupos.length > 0 ? (
                                                         grupos.map(
                                                             (grupo, index) => (
                                                                 <FormItem
@@ -750,7 +742,13 @@ export default function RegistrationPage() {
                                                                     </FormLabel>
                                                                 </FormItem>
                                                             )
-                                                        )}
+                                                        )
+                                                    ) : (
+                                                        <FormLabel>
+                                                            No hay horarios
+                                                            disponibles
+                                                        </FormLabel>
+                                                    )}
                                                 </RadioGroup>
                                             </FormControl>
                                             <FormMessage />
