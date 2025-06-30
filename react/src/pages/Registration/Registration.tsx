@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import toCapital from "@/helpers/toCapital";
-
+import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -26,7 +26,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { Horario } from "@/types";
+import { Estudiante, Horario } from "@/types";
 import { TIPOS_DOCUMENTO } from "@/config/constants";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
 import { useSedesStore } from "@/services/sedes/useSedesStore";
@@ -40,11 +40,9 @@ const formSchema = z
             .min(2, { message: "El apellido es obligatorio." }),
         tipo_documento: z
             .enum(
-                [
-                    "Tarjeta de identidad",
-                    "Registro civil",
-                    "Cédula de ciudadanía",
-                    "Documento extranjero",
+                TIPOS_DOCUMENTO as [
+                    (typeof TIPOS_DOCUMENTO)[number],
+                    ...string[]
                 ],
                 { required_error: "Debe seleccionar un tipo de documento." }
             )
@@ -64,8 +62,9 @@ const formSchema = z
             .min(10, { message: "La dirección es obligatoria." }),
         edad: z.string().min(1, { message: "La edad es obligatoria." }),
         rut: z.string().optional(),
-        sede: z.string({ required_error: "Debe seleccionar una sede." }),
-        grupo: z.string({ required_error: "Debe seleccionar un grupo." }),
+        sede_id: z.string({ required_error: "Debe seleccionar una sede." }),
+        horario_id: z.string({ required_error: "Debe seleccionar una sede." }),
+        // grupo: z.string({ required_error: "Debe seleccionar un grupo." }),
         observaciones: z.string().max(160, {
             message: "Máximo 160 caracteres.",
         }),
@@ -83,11 +82,9 @@ const formSchema = z
                 apellidos: z.string().optional(),
                 tipo_documento: z
                     .enum(
-                        [
-                            "Tarjeta de identidad",
-                            "Registro civil",
-                            "Cédula de ciudadanía",
-                            "Documento extranjero",
+                        TIPOS_DOCUMENTO as [
+                            (typeof TIPOS_DOCUMENTO)[number],
+                            ...string[]
                         ],
                         {
                             required_error:
@@ -95,43 +92,14 @@ const formSchema = z
                         }
                     )
                     .optional(),
-                documento_identidad: z
-                    .string()
-                    .min(5, {
-                        message: "El documento debe tener al menos 5 dígitos.",
-                    })
-                    .optional(),
-                telefono: z
-                    .string()
-                    .min(10, {
-                        message: "El teléfono debe tener al menos 10 dígitos.",
-                    })
-                    .optional(),
-                email: z
-                    .string()
-                    .email({ message: "Formato de correo inválido." })
-                    .optional(),
+                documento_identidad: z.string().optional(),
+                telefono: z.string().optional(),
+                email: z.string().optional(),
                 rut: z.string().optional(),
             })
             .optional(),
     })
     .superRefine((data, ctx) => {
-        if (!data.requiere_acudiente) {
-            if (!data.tipo_documento) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: "Debe seleccionar un tipo de documento.",
-                    path: ["tipo_documento"],
-                });
-            }
-            if (!data.documento_identidad) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: "Debe seleccionar un tipo de documento.",
-                    path: ["documento_identidad"],
-                });
-            }
-        }
         if (data.requiere_acudiente) {
             const acudiente = data.acudiente ?? {};
 
@@ -191,12 +159,13 @@ const formSchema = z
 type FormData = z.infer<typeof formSchema>;
 
 export default function RegistrationPage() {
-    const { selectedEstudiante } = useEstudiantesStore();
+    const [estudiante, setEstudiante] = useState<Estudiante | null>(null);
+    const { selectedEstudiante, getEstudianteById } = useEstudiantesStore();
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
     const { sedes, fetchSedes } = useSedesStore();
     const { horarios, fetchHorarios } = useHorariosStore();
     const [grupos, setGrupos] = useState<Horario[]>();
-
+    const { id } = useParams();
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -206,8 +175,10 @@ export default function RegistrationPage() {
             correo: "",
             telefono: "",
             direccion: "",
-            edad: "", // Number
+            edad: "",
             rut: "",
+            sede_id: "",
+            horario_id: "",
             observaciones: "",
             autoriza_uso_imagen: "false",
             acepta_reglamento: false,
@@ -225,22 +196,90 @@ export default function RegistrationPage() {
     });
 
     const onSubmit = (values: FormData) => {
-        console.log({
-            ...values,
-            documento_identidad: parseInt(values.documento_identidad, 10),
-            edad: parseInt(values.edad, 10),
-            autoriza_uso_imagen: values.autoriza_uso_imagen === "true",
-        });
+        console.log(values);
+    };
+    const tipoDocumentoValido = (
+        value: string | undefined
+    ):
+        | "Tarjeta de identidad"
+        | "Registro civil"
+        | "Cédula de ciudadanía"
+        | "Documento extranjero"
+        | undefined => {
+        const validValues = TIPOS_DOCUMENTO;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return validValues.includes(value ?? "") ? (value as any) : undefined;
+    };
+
+    const validBoolean = (
+        value: string | undefined
+    ): "true" | "false" | undefined => {
+        const bool = ["true", "false"];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return bool.includes(value ?? "") ? (value as any) : undefined;
     };
 
     useEffect(() => {
         fetchSedes();
         fetchHorarios();
-    }, []);
+        console.log("Horarios en el uef: ", horarios);
+        if (!id) return;
 
-    console.log("Sedes: ", sedes);
-    console.log("Horarios: ", horarios);
-    console.log("Grupos: ", grupos);
+        const fetchEstudiante = async () => {
+            try {
+                const est = await getEstudianteById(Number(id));
+                setEstudiante(est);
+                if(estudiante?.sede_id){
+                    setGrupos(
+                    horarios.filter(
+                        (horario) => horario.sede_id.toString() === estudiante?.horario_id.toString()
+                    )
+                );
+                }
+            } catch (error) {
+                console.error("Error al obtener estudiante:", error);
+            }
+        };
+
+        fetchEstudiante();
+    }, [id]);
+
+    useEffect(() => {
+        if (estudiante) {
+            form.reset({
+                nombres: estudiante.nombres ?? "",
+                apellidos: estudiante.apellidos ?? "",
+                tipo_documento: tipoDocumentoValido(estudiante.tipo_documento),
+                documento_identidad: estudiante.documento_identidad ?? "",
+                correo: estudiante.correo ?? "",
+                telefono: estudiante.telefono ?? "",
+                direccion: estudiante.direccion ?? "",
+                edad: estudiante.edad.toString() ?? "",
+                rut: estudiante.rut ?? "",
+                sede_id: estudiante.sede_id.toString(),
+                horario_id: estudiante.horario_id.toString(),
+                observaciones: estudiante.observaciones ?? "",
+                autoriza_uso_imagen: validBoolean(
+                    estudiante.autoriza_uso_imagen?.toString()
+                ),
+                acepta_reglamento: estudiante.acepta_reglamento,
+                requiere_acudiente: Boolean(estudiante.requiere_acudiente),
+
+                acudiente: {
+                    nombres: estudiante.acudiente?.nombres ?? "",
+                    apellidos: estudiante.acudiente?.apellidos ?? "",
+                    tipo_documento: tipoDocumentoValido(
+                        estudiante.acudiente?.tipo_documento
+                    ),
+                    documento_identidad:
+                        estudiante.acudiente?.documento_identidad ?? "",
+                    telefono: estudiante.acudiente?.telefono ?? "",
+                    email: estudiante.acudiente?.email ?? "",
+                    rut: estudiante.acudiente?.rut ?? "",
+                },
+            });
+        }
+    }, [estudiante]);
 
     return (
         <div className="min-h-screen py-10">
@@ -259,7 +298,15 @@ export default function RegistrationPage() {
                         </div> */}
                         <Form {...form}>
                             <form
-                                onSubmit={form.handleSubmit(onSubmit)}
+                                onSubmit={form.handleSubmit(
+                                    onSubmit,
+                                    (errors) => {
+                                        console.log(
+                                            "Errores de validación:",
+                                            errors
+                                        );
+                                    }
+                                )}
                                 className="space-y-6"
                             >
                                 <FormField
@@ -349,7 +396,10 @@ export default function RegistrationPage() {
                                                             className="flex flex-col space-y-1"
                                                         >
                                                             {TIPOS_DOCUMENTO.map(
-                                                                (tipo, index) => (
+                                                                (
+                                                                    tipo,
+                                                                    index
+                                                                ) => (
                                                                     <FormItem
                                                                         key={
                                                                             index
@@ -653,24 +703,24 @@ export default function RegistrationPage() {
                                 {/* Sede */}
                                 <FormField
                                     control={form.control}
-                                    name="sede"
+                                    name="sede_id"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="block text-gray-700 font-medium mb-2">
                                                 Sede de preferencia
                                             </FormLabel>
                                             <Select
+                                                value={field.value}
                                                 onValueChange={(value) => {
                                                     field.onChange(value);
                                                     setGrupos(
                                                         horarios.filter(
                                                             (horario) =>
-                                                                horario.sede_id ==
+                                                                horario.sede_id.toString() ===
                                                                 value
                                                         )
                                                     );
                                                 }}
-                                                defaultValue={field.value}
                                             >
                                                 <FormControl>
                                                     <SelectTrigger>
@@ -678,14 +728,16 @@ export default function RegistrationPage() {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    {sedes.map((sede, index) => (
-                                                        <SelectItem
-                                                            key={index}
-                                                            value={sede.id.toString()}
-                                                        >
-                                                            {sede.nombre}
-                                                        </SelectItem>
-                                                    ))}
+                                                    {sedes.map(
+                                                        (sede, index) => (
+                                                            <SelectItem
+                                                                key={index}
+                                                                value={sede.id.toString()}
+                                                            >
+                                                                {sede.nombre}
+                                                            </SelectItem>
+                                                        )
+                                                    )}
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />
@@ -696,7 +748,7 @@ export default function RegistrationPage() {
                                 {/* Grupo */}
                                 <FormField
                                     control={form.control}
-                                    name="grupo"
+                                    name="horario_id"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="block text-gray-700 font-medium mb-2">
@@ -704,10 +756,10 @@ export default function RegistrationPage() {
                                             </FormLabel>
                                             <FormControl>
                                                 <RadioGroup
+                                                    value={field.value}
                                                     onValueChange={
                                                         field.onChange
                                                     }
-                                                    defaultValue={field.value}
                                                     className="flex flex-col space-y-1"
                                                 >
                                                     {grupos &&

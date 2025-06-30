@@ -31,6 +31,7 @@ export interface Estudiante {
     acudiente: acudiente;
     sede: Sede;
     horario: Horario;
+    requiere_acudiente: boolean;
 }
 
 export interface acudiente {

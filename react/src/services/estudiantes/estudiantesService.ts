@@ -25,6 +25,19 @@ export const getAll = async (page?: string, query?: string, per_page?: number) =
     }
 };
 
+export const getById = async (id: number) => {
+    try {
+        const res = await axios.get(`client/estudiante/${id}`);
+        return res.data;
+    } catch (error) {
+        const axiosError = error as AxiosError<LaravelValidationError>
+        const message = axiosError.response?.data?.message ?? "Error inesperado";
+        const validationErrors = axiosError.response?.data?.errors;
+        throw { message, validationErrors };
+    }
+
+};
+
 export const create = async (data: Partial<Estudiante>) => {
     try {
         const res = await axios.post("client/estudiante", data);
@@ -62,3 +75,4 @@ export const remove = async (id: number) => {
     }
 
 };
+
