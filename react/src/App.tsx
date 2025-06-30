@@ -34,6 +34,7 @@ export default function App() {
                         <Route path="/facturacion" element={<Accounting />} />
                         <Route path="/dashboard" element={<Home />} />
                         <Route path="/registro" element={<Register />} />
+                        <Route path="/registro/:id" element={<Register />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />

@@ -12,9 +12,10 @@ interface EstudiantesStore {
     pageNumRefs: PageNumRefs,
     estudiantes: Estudiante[];
     selectedEstudiante: Estudiante | null;
-    setQuery: (search?:string) => void;
-    setPerPage: (pages?:number) => void;
+    setQuery: (search?: string) => void;
+    setPerPage: (pages?: number) => void;
     deleteEstudiante: (id: number) => Promise<void>;
+    getEstudianteById: (id: number) => Promise<Estudiante>;
     selectEstudiante: (estudiante: Estudiante | null) => void;
     createEstudiante: (data: Partial<Estudiante>) => Promise<void>;
     fetchEstudiantes: (page?: string, query?: string, per_page?: number) => Promise<void>;
@@ -47,7 +48,7 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
         next_page: null,
     },
 
-    fetchEstudiantes: async (page?: string, query?: string, pages?:number) => {
+    fetchEstudiantes: async (page?: string, query?: string, pages?: number) => {
         set({ loading: true, error: null });
         try {
             const response = await estudiantesService.getAll(page, query, pages);
@@ -95,8 +96,7 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
 
         function urlSplitterPagination(url: string) {
             const clean = url.split("=")
-            // return clean[1];
-            return clean.length >=4 ? clean[3] : clean[1];
+            return clean.length >= 4 ? clean[3] : clean[1];
         }
 
         switch (page) {
@@ -118,27 +118,32 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
 
     },
 
-    setQuery: (search?:string) => {
-        set({query: search});
+    setQuery: (search?: string) => {
+        set({ query: search });
     },
-    setPerPage: (pages?:number) => {
-        set({per_page: pages});
+    setPerPage: (pages?: number) => {
+        set({ per_page: pages });
     },
 
     createEstudiante: async (data) => {
         await estudiantesService.create(data);
-        await get().fetchEstudiantes();
+        // await get().fetchEstudiantes();
     },
 
     updateEstudiante: async (id, data) => {
         await estudiantesService.update(id, data);
-        await get().fetchEstudiantes();
+        // await get().fetchEstudiantes();
     },
 
     deleteEstudiante: async (id) => {
         await estudiantesService.remove(id);
-        await get().fetchEstudiantes();
+        // await get().fetchEstudiantes();
     },
+    getEstudianteById: async (id) => {
+        const estudiante = await estudiantesService.getById(id);
+        return estudiante;
+    },
+
 
     selectEstudiante: (estudiante) => {
         set({ selectedEstudiante: estudiante });

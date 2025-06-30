@@ -141,7 +141,10 @@ export function DataTable<TValue, TData extends Estudiante>({
             </div>
 
             {isModalOpen && selectedEstudiante && (
-                <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <Dialog open={isModalOpen} onOpenChange={(open) => {
+                    setIsModalOpen(open);
+                }
+                    }>
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle className="text-2xl text-left">
@@ -155,7 +158,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 </AccordionTrigger>
                                 <AccordionContent className="flex flex-col gap-1 text-balance">
                                     <p>
-                                        <b>Nombres:</b> {/* {nombres} */}
+                                        <b>Nombre completo:</b> {selectedEstudiante.nombres} {selectedEstudiante.apellidos}
                                     </p>
                                     <p>
                                         <b>Edad:</b> {selectedEstudiante.edad}
@@ -292,7 +295,9 @@ export function DataTable<TValue, TData extends Estudiante>({
                             </DialogClose>
                             <Button
                             onClick={()=> {
-                                navigate("/registro", { replace: true })
+                                const id = selectedEstudiante?.id;
+                                selectEstudiante(null);
+                                navigate(`/registro/${id}`, { replace: true });
                             }
                             }
                             >Editar</Button>
