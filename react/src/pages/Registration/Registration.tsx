@@ -68,6 +68,7 @@ const formSchema = z
         observaciones: z.string().max(160, {
             message: "Máximo 160 caracteres.",
         }),
+        fecha_inscripcion: z.string(),
         autoriza_uso_imagen: z.enum(["true", "false"], {
             required_error: "Selecciona una opción",
         }),
@@ -180,6 +181,7 @@ export default function RegistrationPage() {
             sede_id: "",
             horario_id: "",
             observaciones: "",
+            fecha_inscripcion: `${new Date().toISOString().split('T')[0]}`,
             autoriza_uso_imagen: "false",
             acepta_reglamento: false,
             requiere_acudiente: false,
@@ -261,6 +263,7 @@ export default function RegistrationPage() {
                         sede_id: estudiante.sede_id.toString(),
                         horario_id: estudiante.horario_id.toString(),
                         observaciones: estudiante.observaciones ?? "",
+                        fecha_inscripcion: estudiante.fecha_inscripcion ?? "",
                         autoriza_uso_imagen: validBoolean(
                             estudiante.autoriza_uso_imagen?.toString()
                         ),
@@ -288,7 +291,6 @@ export default function RegistrationPage() {
 
         fetchEstudiante();
     }, [id, horarios]);
-
     return (
         <div className="min-h-screen py-10">
             <div className="container mx-auto max-w-2xl px-4">
@@ -533,6 +535,21 @@ export default function RegistrationPage() {
                                         <FormItem>
                                             <FormLabel className="block text-gray-700 font-medium mb-2">
                                                 Nombres
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="fecha_inscripcion"
+                                    render={({ field }) => (
+                                        <FormItem hidden>
+                                            <FormLabel className="block text-gray-700 font-medium mb-2">
+                                                Fecha de inscripción
                                             </FormLabel>
                                             <FormControl>
                                                 <Input {...field} />

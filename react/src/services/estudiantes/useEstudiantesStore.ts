@@ -108,7 +108,6 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
                 break;
             case "next":
                 set({ pagination: urlSplitterPagination(links.next_page_url ?? "") });
-                console.log(get().pagination)
                 break;
             case "last":
                 set({ pagination: urlSplitterPagination(links.last_page_url ?? "") });

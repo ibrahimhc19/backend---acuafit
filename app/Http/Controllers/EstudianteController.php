@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
+use App\Models\Acudiente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -10,13 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class EstudianteController extends Controller
 {
-    /**
-     * Returns a form for student registration.
-     */
-    // public function create()
-    // {
-    //     return view('registrar');
-    // }
 
     /**
      * Display a listing of the resource.
@@ -27,11 +21,7 @@ class EstudianteController extends Controller
         $estudiantes = Estudiante::with(['acudiente', 'sede', 'horario'])->orderBy('nombres', 'asc')->paginate($perPage);
         return response()->json($estudiantes);
     }
-    // public function index()
-    // {
-    //     $estudiantes = Estudiante::with(['acudiente', 'sede', 'horario'])->orderBy('nombres', 'asc')->paginate(10);
-    //     return response()->json($estudiantes);
-    // }
+
 
     public function search(Request $request)
     {
@@ -56,9 +46,9 @@ class EstudianteController extends Controller
             ->orderBy('nombres', 'asc')
             ->paginate($perPage)
             ->appends([
-            'q' => $query,
-            'per_page' => $perPage,
-        ]);
+                'q' => $query,
+                'per_page' => $perPage,
+            ]);
 
         return response()->json($estudiantes);
     }
@@ -76,17 +66,26 @@ class EstudianteController extends Controller
             'tipo_documento' => ['required', 'string', Rule::in(['CC', 'TI', 'CE', 'Pasaporte'])],
             'edad' => 'required|integer|min:1',
             'documento_identidad' => 'required|string|unique:estudiantes,documento_identidad|max:50',
-            'acudiente_id' => 'nullable|integer|exists:acudientes,id',
             'sede_id' => 'required|integer|exists:sedes,id',
             'horario_id' => 'required|integer|exists:horarios,id',
-            'fecha_inscripcion' => 'required|date_format:d/m/Y',
+            'fecha_inscripcion' => 'required|date_format:Y-m-d',
             'correo' => 'nullable|string|email|unique:estudiantes,correo|max:100',
             'direccion' => 'nullable|string|max:255',
             'telefono' => 'nullable|string|max:20',
             'rut' => 'nullable|string|max:100',
             'autoriza_uso_imagen' => 'required|boolean',
             'acepta_reglamento' => 'required|boolean',
-            'observaciones' => 'nullable|string'
+            'observaciones' => 'nullable|string',
+            'requiere_acudiente' => 'required|boolean',
+
+            // Acudiente (campos opcionales)
+            'acudiente.nombres' => 'nullable|string|max:100',
+            'acudiente.apellidos' => 'nullable|string|max:100',
+            'acudiente.tipo_documento' => 'nullable|string',
+            'acudiente.documento_identidad' => 'nullable|string|max:50',
+            'acudiente.telefono' => 'nullable|string|max:20',
+            'acudiente.email' => 'nullable|email|max:100',
+            'acudiente.rut' => 'nullable|string|max:100',
         ], [
             'nombres.required' => 'El campo nombres es obligatorio.',
             'nombres.string' => 'El campo nombres debe ser una cadena de texto.',
@@ -136,6 +135,16 @@ class EstudianteController extends Controller
             'observaciones.string' => 'Las observaciones deben ser una cadena de texto.',
         ]);
 
+        $validator->after(function ($validator) use ($request) {
+            if ($request->boolean('requiere_acudiente')) {
+                $acudiente = $request->input('acudiente', []);
+                if (empty($acudiente['nombres']) || empty($acudiente['documento_identidad'])) {
+                    $validator->errors()->add('acudiente', 'Debe completar los datos del acudiente.');
+                }
+            }
+        });
+
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Errores de validación',
@@ -143,15 +152,28 @@ class EstudianteController extends Controller
             ], 422);
         }
 
-        $dataForCreation = $validator->validated();
+
+        $validated = $validator->validated();
+        $estudianteData = Arr::except($validated, ['acudiente']);
+        $acudienteData = $validated['acudiente'] ?? null;
+
+        DB::beginTransaction();
 
         try {
-            $estudiante = Estudiante::create($dataForCreation);
+            if ($validated['requiere_acudiente'] && $acudienteData && !empty($acudienteData['nombres'])) {
+                $acudiente = Acudiente::create($acudienteData);
+                $estudianteData['acudiente_id'] = $acudiente->id;
+            }
+
+            $estudiante = Estudiante::create($estudianteData);
+            DB::commit();
+
             return response()->json([
                 'message' => 'Estudiante registrado exitosamente',
                 'data' => $estudiante
             ], 201);
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error al registrar el estudiante' . $e->getMessage() . ' StackTrace: ' . $e->getTraceAsString());
             return response()->json([
                 'message' => 'Hubo un error en el servidor al procesar la solicitud. Por favor inténtalo más tarde'
@@ -194,14 +216,24 @@ class EstudianteController extends Controller
             'acudiente_id' => 'nullable|integer|exists:acudientes,id',
             'sede_id' => 'sometimes|required|integer|exists:sedes,id',
             'horario_id' => 'sometimes|required|integer|exists:horarios,id',
-            'fecha_inscripcion' => 'sometimes|required|date_format:d/m/Y',
+            'fecha_inscripcion' => 'sometimes|required|date_format:Y-m-d',
             'correo' => ['nullable', 'string', 'email', 'max:100', Rule::unique('estudiantes', 'correo')->ignore($estudiante->id)],
             'direccion' => 'nullable|string|max:255',
             'telefono' => 'nullable|string|max:20',
             'rut' => 'nullable|string|max:100',
             'autoriza_uso_imagen' => 'sometimes|required|boolean',
             'acepta_reglamento' => 'sometimes|required|boolean',
-            'observaciones' => 'nullable|string'
+            'observaciones' => 'nullable|string',
+            'requiere_acudiente' => 'required|boolean',
+
+            // Acudiente (campos opcionales)
+            'acudiente.nombres' => 'nullable|string|max:100',
+            'acudiente.apellidos' => 'nullable|string|max:100',
+            'acudiente.tipo_documento' => 'nullable|string',
+            'acudiente.documento_identidad' => 'nullable|string|max:50',
+            'acudiente.telefono' => 'nullable|string|max:20',
+            'acudiente.email' => 'nullable|email|max:100',
+            'acudiente.rut' => 'nullable|string|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -210,17 +242,38 @@ class EstudianteController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        $validatedData = $validator->validated();
+        $validated = $validator->validated();
+        $estudianteData = Arr::except($validated, ['acudiente']);
+        $acudienteData = $validated['acudiente'] ?? null;
 
+        DB::beginTransaction();
         try {
-            $estudiante->update($validatedData);
+
+            if ($validated['requiere_acudiente'] && $acudienteData && !empty($acudienteData['nombres'])) {
+
+                if($estudiante->acudiente_id){
+                    $acudiente = Acudiente::findOrFail($estudiante->acudiente_id);
+                    $acudiente->update($acudienteData);
+                } else {
+                    $acudiente = Acudiente::create($acudienteData);
+                    $estudianteData['acudiente_id'] = $acudiente->id;
+                }
+            } else {
+                $estudianteData['acudiente_id'] = null;
+            }
+
+            $estudiante->update($estudianteData);
             $estudiante->refresh();
+
+            DB::commit();
+
             return response()->json([
                 'message' => 'Estudiante actualizado exitosamente',
                 'data' => $estudiante
             ], 200);
 
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error al actualizar el estudiante: ' . $e->getMessage() . ' StackTrace: ' . $e->getTraceAsString());
             return response()->json([
                 'message' => 'Hubo un error al actualizar el estudiante.'

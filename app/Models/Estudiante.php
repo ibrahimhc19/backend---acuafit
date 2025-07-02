@@ -77,7 +77,7 @@ class Estudiante extends Model
         if ($value) {
             try {
 
-                $this->attributes['fecha_inscripcion'] = Carbon::createFromFormat('d/m/Y', $value)->toDateString();
+                $this->attributes['fecha_inscripcion'] = Carbon::createFromFormat('Y-m-d', $value)->toDateString();
             } catch (\Exception $e) {
                 $this->attributes['fecha_inscripcion'] = $value;
                 Log::warning("Falló la conversión de fecha en el mutador para la inscripción del estudiante: " . $value . ". Error: " . $e->getMessage());
