@@ -44,14 +44,14 @@ Route::prefix('client')->group(function () {
 
 // Sedes
     Route::post('/sede', [SedeController::class, 'store'])->middleware('auth:sanctum');
-    Route::get('/sedes', [SedeController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/sedes', [SedeController::class, 'index']);
     Route::get('/sede/{id}', [SedeController::class, 'show'])->middleware('auth:sanctum');
     Route::patch('/sede/{id}', [SedeController::class, 'update'])->middleware('auth:sanctum');
     Route::delete('/sede/{id}', [SedeController::class, 'destroy'])->middleware('auth:sanctum');
 
 // Horarios
     Route::post('/horario', [HorarioController::class, 'store'])->middleware('auth:sanctum');
-    Route::get('/horarios', [HorarioController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/horarios', [HorarioController::class, 'index']);
     Route::get('/horario/{id}', [HorarioController::class, 'show'])->middleware('auth:sanctum');
     Route::patch('/horario/{id}', [HorarioController::class, 'update'])->middleware('auth:sanctum');
     Route::delete('/horario/{id}', [HorarioController::class, 'destroy'])->middleware('auth:sanctum');
