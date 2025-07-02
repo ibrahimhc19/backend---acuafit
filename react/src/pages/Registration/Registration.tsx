@@ -158,11 +158,13 @@ const formSchema = z
     });
 type FormData = z.infer<typeof formSchema>;
 
+
+
 export default function RegistrationPage() {
     const { selectedEstudiante, getEstudianteById } = useEstudiantesStore();
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
-    const { sedes, fetchSedes } = useSedesStore();
-    const { horarios, fetchHorarios } = useHorariosStore();
+    const { fetchSedes, sedes } = useSedesStore();
+    const { fetchHorarios, horarios } = useHorariosStore();
     const [grupos, setGrupos] = useState<Horario[]>();
     const { id } = useParams();
     const form = useForm<FormData>({
@@ -219,19 +221,23 @@ export default function RegistrationPage() {
     };
 
     useEffect(() => {
+        if (horarios.length === 0) {
+            fetchHorarios();
+        }
         fetchSedes();
-        fetchHorarios();
-        console.log("Horarios en el uef: ", horarios);
-        if (!id) return;
+    }, [horarios]);
 
+    useEffect(() => {
+        if (!id) return;
         const fetchEstudiante = async () => {
             try {
+                await fetchSedes();
                 const estudiante = await getEstudianteById(Number(id));
                 if (estudiante?.sede_id) {
                     setGrupos(
                         horarios.filter(
                             (horario) =>
-                                horario.sede_id ===
+                                horario.sede_id.toString() ===
                                 estudiante?.sede_id.toString()
                         )
                     );
@@ -281,7 +287,7 @@ export default function RegistrationPage() {
         };
 
         fetchEstudiante();
-    }, [id]);
+    }, [id, horarios]);
 
     return (
         <div className="min-h-screen py-10">
@@ -392,9 +398,7 @@ export default function RegistrationPage() {
                                                             onValueChange={
                                                                 field.onChange
                                                             }
-                                                            value={
-                                                                field.value
-                                                            }
+                                                            value={field.value ?? ""}
                                                             className="flex flex-col space-y-1"
                                                         >
                                                             {TIPOS_DOCUMENTO.map(
@@ -580,7 +584,7 @@ export default function RegistrationPage() {
                                                     onValueChange={
                                                         field.onChange
                                                     }
-                                                    value={field.value}
+                                                    value={field.value ?? ""}
                                                     className="flex flex-col space-y-1"
                                                 >
                                                     {TIPOS_DOCUMENTO.map(
@@ -719,7 +723,7 @@ export default function RegistrationPage() {
                                                         horarios.filter(
                                                             (horario) =>
                                                                 horario.sede_id.toString() ===
-                                                                value
+                                                                value.toString()
                                                         )
                                                     );
                                                 }}
@@ -758,7 +762,7 @@ export default function RegistrationPage() {
                                             </FormLabel>
                                             <FormControl>
                                                 <RadioGroup
-                                                    value={field.value}
+                                                    value={field.value ?? ""}
                                                     onValueChange={
                                                         field.onChange
                                                     }
@@ -856,7 +860,7 @@ export default function RegistrationPage() {
                                                     onValueChange={
                                                         field.onChange
                                                     }
-                                                    value={field.value}
+                                                    value={field.value ?? ""}
                                                     className="flex flex-row space-x-4"
                                                 >
                                                     <FormItem className="flex items-center gap-3">

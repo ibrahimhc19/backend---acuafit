@@ -12,6 +12,7 @@ export default function StudentsPage() {
 
 
     const { fetchEstudiantes, estudiantes, pagination, pageNumRefs, query, per_page } = useEstudiantesStore();
+    
     useEffect(() => {
         fetchEstudiantes(pagination, query, per_page);
     }, [pagination, query, per_page]);

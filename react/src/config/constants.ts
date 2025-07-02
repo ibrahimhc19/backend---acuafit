@@ -19,11 +19,18 @@ export const TIPOS_GRUPO = [
 ];
 
 export const TIPOS_DOCUMENTO = [
-    "Tarjeta de identidad",
-    "Registro civil",
-    "Cédula de ciudadanía",
-    "Documento extranjero",
+    "TI",
+    "RC",
+    "CC",
+    "DE",
 ];
+
+// export const TIPOS_DOCUMENTO = [
+//     "Tarjeta de identidad",
+//     "Registro civil",
+//     "Cédula de ciudadanía",
+//     "Documento extranjero",
+// ];
 
 export const FILAS = [
     { label: "10", value: 10 },

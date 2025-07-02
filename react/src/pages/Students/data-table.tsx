@@ -79,7 +79,6 @@ export function DataTable<TValue, TData extends Estudiante>({
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loading, setLoading] = useState();
     const navigate = useNavigate();
     const {
         selectEstudiante,
@@ -108,7 +107,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                 />
 
                 <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                         <Button
                             variant="outline"
                             className="hover:bg-primary hover:text-white"
