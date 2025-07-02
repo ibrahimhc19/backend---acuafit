@@ -1,4 +1,5 @@
 import axios from "@/api/axios";
+import { FormDataInscripcion } from "@/pages/Registration/Registration";
 import { LaravelValidationError, Estudiante } from "@/types";
 import { AxiosError } from "axios";
 
@@ -38,7 +39,7 @@ export const getById = async (id: number) => {
 
 };
 
-export const create = async (data: Partial<Estudiante>) => {
+export const create = async (data: Partial<FormDataInscripcion>) => {
     try {
         const res = await axios.post("client/estudiante", data);
         return res.data;

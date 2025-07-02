@@ -28,7 +28,7 @@ Route::prefix('auth')->group(function () {
 
 // Estudiantes
 Route::prefix('client')->group(function () {
-    Route::post('/estudiante', [EstudianteController::class, 'store'])->middleware('auth:sanctum');
+    Route::post('/estudiante', [EstudianteController::class, 'store']);
     Route::get('/estudiantes', [EstudianteController::class, 'index'])->middleware('auth:sanctum');
     Route::get('/buscar', [EstudianteController::class, 'search'])->middleware('auth:sanctum');
     Route::get('/estudiante/{id}', [EstudianteController::class, 'show'])->middleware('auth:sanctum');

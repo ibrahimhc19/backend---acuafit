@@ -79,7 +79,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
         deleteHorario,
     } = useHorariosStore();
 
-    const [isSubmitting, setisSubmitting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
@@ -100,7 +100,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
     });
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        setisSubmitting(true);
+        setIsSubmitting(true);
         if (selectedHorario?.id) {
             try {
                 await updateHorario(selectedHorario.id, values);
@@ -113,7 +113,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                 );
                 console.error("Error al actualizar", e);
             } finally {
-                setisSubmitting(false);
+                setIsSubmitting(false);
                 setIsModalOpen(false);
             }
         } else {
@@ -128,7 +128,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                 );
                 console.error("Error al registrar", e);
             } finally {
-                setisSubmitting(false);
+                setIsSubmitting(false);
                 setIsModalOpen(false);
             }
         }

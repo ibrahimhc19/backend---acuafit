@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Estudiante, PageLinks, PageNumRefs } from "@/types";
 import * as estudiantesService from "@/services/estudiantes/estudiantesService";
+import { FormDataInscripcion } from "@/pages/Registration/Registration";
 
 interface EstudiantesStore {
     query: string | undefined;
@@ -17,7 +18,7 @@ interface EstudiantesStore {
     deleteEstudiante: (id: number) => Promise<void>;
     getEstudianteById: (id: number) => Promise<Estudiante>;
     selectEstudiante: (estudiante: Estudiante | null) => void;
-    createEstudiante: (data: Partial<Estudiante>) => Promise<void>;
+    createEstudiante: (data: Partial<FormDataInscripcion>) => Promise<void>;
     fetchEstudiantes: (page?: string, query?: string, per_page?: number) => Promise<void>;
     updateEstudiante: (id: number, data: Partial<Estudiante>) => Promise<void>;
     handlePageChange: (type: "first" | "previous" | "next" | "last") => Promise<void>;

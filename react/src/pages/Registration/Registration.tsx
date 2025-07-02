@@ -31,6 +31,7 @@ import { TIPOS_DOCUMENTO } from "@/config/constants";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
 import { useSedesStore } from "@/services/sedes/useSedesStore";
 import { useHorariosStore } from "@/services/horarios/useHorariosStore";
+import { toast, Toaster } from "sonner";
 
 const formSchema = z
     .object({
@@ -157,17 +158,19 @@ const formSchema = z
             }
         }
     });
-type FormData = z.infer<typeof formSchema>;
+export type FormDataInscripcion = z.infer<typeof formSchema>;
 
 export default function RegistrationPage() {
-    const { getEstudianteById } = useEstudiantesStore();
+    const { getEstudianteById, createEstudiante } = useEstudiantesStore();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
     const { fetchSedes, sedes } = useSedesStore();
     const { fetchHorarios, horarios } = useHorariosStore();
     const [grupos, setGrupos] = useState<Horario[]>();
     const [estudianteExists, setEstudianteExists] = useState(false);
     const { id } = useParams();
-    const form = useForm<FormData>({
+    const form = useForm<FormDataInscripcion>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             nombres: "",
@@ -197,8 +200,53 @@ export default function RegistrationPage() {
         },
     });
 
-    const onSubmit = (values: FormData) => {
-        console.log(values);
+    const onSubmit = async (values: FormDataInscripcion) => {
+
+        //  setIsSubmitting(true);
+
+         try {
+                await createEstudiante(values);
+                toast.success("El estudiante fue inscrito correctamente.");
+            } catch (e) {
+                toast.error(
+                    "No se pudo inscribir el estudiante. Intenta de nuevo."
+                );
+                console.error("Error al registrar", e);
+            } finally {
+                setIsSubmitting(false);
+            }
+
+        // if (selectedHorario?.id) {
+        //     try {
+        //         await updateEstudiante(selectedHorario.id, values);
+        //         toast.success("El horario fue actualizado correctamente.");
+        //         selectHorario(null);
+        //         setIsModalOpen(false);
+        //     } catch (e) {
+        //         toast.error(
+        //             "No se pudo actualizar el horario. Intenta de nuevo."
+        //         );
+        //         console.error("Error al actualizar", e);
+        //     } finally {
+        //         setIsSubmitting(false);
+        //         setIsModalOpen(false);
+        //     }
+        // } else {
+        //     try {
+        //         await createHorario(values);
+        //         toast.success("El horario fue registrado correctamente.");
+        //         selectHorario(null);
+        //         setIsModalOpen(false);
+        //     } catch (e) {
+        //         toast.error(
+        //             "No se pudo registrar el horario. Intenta de nuevo."
+        //         );
+        //         console.error("Error al registrar", e);
+        //     } finally {
+        //         setIsSubmitting(false);
+        //         setIsModalOpen(false);
+        //     }
+        // }
     };
     const tipoDocumentoValido = (
         value: string | undefined
@@ -293,6 +341,7 @@ export default function RegistrationPage() {
     }, [id, horarios]);
     return (
         <div className="min-h-screen py-10">
+            <Toaster richColors position="top-center"/>
             <div className="container mx-auto max-w-2xl px-4">
                 <div className="bg-white rounded-lg shadow-lg">
                     <div
