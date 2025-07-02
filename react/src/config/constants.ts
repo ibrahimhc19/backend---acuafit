@@ -31,3 +31,43 @@ export const FILAS = [
     { label: "20", value: 20 },
     { label: "30", value: 30 },
 ];
+// export const TIPOS_DOCUMENTO = [
+//     { label: "Tarjeta de identidad", value: "TI" },
+//     { label: "Registro civil", value: "RC" },
+//     { label: "Cédula de ciudadanía", value: "CC" },
+//     { label: "Documento extranjero", value: "DE" },
+// ];
+
+
+export const LINKS = [
+    { name: "Estudiantes", href: "/estudiantes" },
+    { name: "Registro", href: "/registro" },
+    { name: "Sedes", href: "/sedes" },
+    { name: "Horarios", href: "/horarios" },
+    { name: "Pagos", href: "/pagos" },
+    { name: "Facturación", href: "/facturacion" },
+];
+
+// export const LINKS = [
+//   {
+//     name: "Gestión académica",
+//     children: [
+//       { name: "Estudiantes", href: "/estudiantes" },
+//       { name: "Registro", href: "/registro" },
+//     ],
+//   },
+//   {
+//     name: "Operación de clases",
+//     children: [
+//       { name: "Sedes", href: "/sedes" },
+//       { name: "Horarios", href: "/horarios" },
+//     ],
+//   },
+//   {
+//     name: "Facturación",
+//     children: [
+//       { name: "Facturación general", href: "/facturacion" },
+//       { name: "Pagos", href: "/pagos" },
+//     ],
+//   },
+// ];

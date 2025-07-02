@@ -26,7 +26,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { Estudiante, Horario } from "@/types";
+import { Horario } from "@/types";
 import { TIPOS_DOCUMENTO } from "@/config/constants";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
 import { useSedesStore } from "@/services/sedes/useSedesStore";
@@ -159,7 +159,6 @@ const formSchema = z
 type FormData = z.infer<typeof formSchema>;
 
 export default function RegistrationPage() {
-    const [estudiante, setEstudiante] = useState<Estudiante | null>(null);
     const { selectedEstudiante, getEstudianteById } = useEstudiantesStore();
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
     const { sedes, fetchSedes } = useSedesStore();
@@ -227,14 +226,54 @@ export default function RegistrationPage() {
 
         const fetchEstudiante = async () => {
             try {
-                const est = await getEstudianteById(Number(id));
-                setEstudiante(est);
-                if(estudiante?.sede_id){
+                const estudiante = await getEstudianteById(Number(id));
+                if (estudiante?.sede_id) {
                     setGrupos(
-                    horarios.filter(
-                        (horario) => horario.sede_id.toString() === estudiante?.horario_id.toString()
-                    )
-                );
+                        horarios.filter(
+                            (horario) =>
+                                horario.sede_id ===
+                                estudiante?.sede_id.toString()
+                        )
+                    );
+                }
+                if (estudiante) {
+                    form.reset({
+                        nombres: estudiante.nombres ?? "",
+                        apellidos: estudiante.apellidos ?? "",
+                        tipo_documento: tipoDocumentoValido(
+                            estudiante.tipo_documento
+                        ),
+                        documento_identidad:
+                            estudiante.documento_identidad ?? "",
+                        correo: estudiante.correo ?? "",
+                        telefono: estudiante.telefono ?? "",
+                        direccion: estudiante.direccion ?? "",
+                        edad: estudiante.edad.toString() ?? "",
+                        rut: estudiante.rut ?? "",
+                        sede_id: estudiante.sede_id.toString(),
+                        horario_id: estudiante.horario_id.toString(),
+                        observaciones: estudiante.observaciones ?? "",
+                        autoriza_uso_imagen: validBoolean(
+                            estudiante.autoriza_uso_imagen?.toString()
+                        ),
+                        acepta_reglamento: estudiante.acepta_reglamento,
+                        requiere_acudiente: Boolean(
+                            estudiante.requiere_acudiente
+                        ),
+
+                        acudiente: {
+                            nombres: estudiante.acudiente?.nombres ?? "",
+                            apellidos: estudiante.acudiente?.apellidos ?? "",
+                            tipo_documento: tipoDocumentoValido(
+                                estudiante.acudiente?.tipo_documento
+                            ),
+                            documento_identidad:
+                                estudiante.acudiente?.documento_identidad ?? "",
+                            telefono: estudiante.acudiente?.telefono ?? "",
+                            email: estudiante.acudiente?.email ?? "",
+                            rut: estudiante.acudiente?.rut ?? "",
+                        },
+                    });
                 }
             } catch (error) {
                 console.error("Error al obtener estudiante:", error);
@@ -243,43 +282,6 @@ export default function RegistrationPage() {
 
         fetchEstudiante();
     }, [id]);
-
-    useEffect(() => {
-        if (estudiante) {
-            form.reset({
-                nombres: estudiante.nombres ?? "",
-                apellidos: estudiante.apellidos ?? "",
-                tipo_documento: tipoDocumentoValido(estudiante.tipo_documento),
-                documento_identidad: estudiante.documento_identidad ?? "",
-                correo: estudiante.correo ?? "",
-                telefono: estudiante.telefono ?? "",
-                direccion: estudiante.direccion ?? "",
-                edad: estudiante.edad.toString() ?? "",
-                rut: estudiante.rut ?? "",
-                sede_id: estudiante.sede_id.toString(),
-                horario_id: estudiante.horario_id.toString(),
-                observaciones: estudiante.observaciones ?? "",
-                autoriza_uso_imagen: validBoolean(
-                    estudiante.autoriza_uso_imagen?.toString()
-                ),
-                acepta_reglamento: estudiante.acepta_reglamento,
-                requiere_acudiente: Boolean(estudiante.requiere_acudiente),
-
-                acudiente: {
-                    nombres: estudiante.acudiente?.nombres ?? "",
-                    apellidos: estudiante.acudiente?.apellidos ?? "",
-                    tipo_documento: tipoDocumentoValido(
-                        estudiante.acudiente?.tipo_documento
-                    ),
-                    documento_identidad:
-                        estudiante.acudiente?.documento_identidad ?? "",
-                    telefono: estudiante.acudiente?.telefono ?? "",
-                    email: estudiante.acudiente?.email ?? "",
-                    rut: estudiante.acudiente?.rut ?? "",
-                },
-            });
-        }
-    }, [estudiante]);
 
     return (
         <div className="min-h-screen py-10">
@@ -390,7 +392,7 @@ export default function RegistrationPage() {
                                                             onValueChange={
                                                                 field.onChange
                                                             }
-                                                            defaultValue={
+                                                            value={
                                                                 field.value
                                                             }
                                                             className="flex flex-col space-y-1"
@@ -578,7 +580,7 @@ export default function RegistrationPage() {
                                                     onValueChange={
                                                         field.onChange
                                                     }
-                                                    defaultValue={field.value}
+                                                    value={field.value}
                                                     className="flex flex-col space-y-1"
                                                 >
                                                     {TIPOS_DOCUMENTO.map(

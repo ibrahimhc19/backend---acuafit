@@ -33,35 +33,54 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import { DIAS_SEMANA, TIPOS_GRUPO } from "@/config/constants";
 import { useSedesStore } from "@/services/sedes/useSedesStore";
 import { useEffect } from "react";
 
 const formSchema = z.object({
-    factura_id: z.string({
-        required_error: "Factura no válida",
+    estudiante_id: z.string({
+        required_error: "Selecciona un estudiante",
     }),
 
-    fecha_pago: z
+    concepto: z
         .string({
-            required_error: "La fecha de pago es obligatoria",
+            required_error: "Selecciona un concepto",
         })
-        .refine((val) => !isNaN(Date.parse(val)), "Fecha inválida"),
+        .min(1, "El concepto no puede estar vacío"),
 
-    monto_abono: z
+    valor_matricula: z
+        .union([
+            z.string().regex(/^\d+(\.\d{1,2})?$/, "Debe ser un número válido"),
+            z.number(),
+        ])
+        .transform((val) => Number(val) || 0)
+        .optional(),
+
+    monto_total: z
         .union([
             z.string().regex(/^\d+(\.\d{1,2})?$/, "Debe ser un número válido"),
             z.number(),
         ])
         .transform((val) => Number(val))
-        .refine((val) => val > 0, "El monto debe ser mayor que cero"),
+        .refine((val) => val > 0, "El monto total debe ser mayor que cero"),
 
-    medio_pago: z
+    fecha_emision: z
         .string({
-            required_error: "Selecciona un medio de pago",
+            required_error: "La fecha de emisión es obligatoria",
         })
-        .min(1, "Selecciona un medio de pago"),
+        .refine((val) => !isNaN(Date.parse(val)), "Fecha no válida"),
 
-    comprobante: z.string().optional(),
+    fecha_vencimiento: z
+        .string()
+        .optional()
+        .refine(
+            (val) => !val || !isNaN(Date.parse(val)),
+            "Fecha de vencimiento inválida"
+        ),
+
+    sede_id: z.string({
+        required_error: "Selecciona una sede",
+    }),
 
     observaciones: z.string().optional(),
 });
@@ -85,10 +104,9 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            fecha_pago: "",
-            medio_pago: "",
-            monto_abono: 0,
-            comprobante: "",
+            concepto: "",
+            valor_matricula: 0,
+            monto_total: 0,
             observaciones: "",
         },
     });
@@ -126,10 +144,57 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
-                    name="fecha_pago"
+                    name="estudiante_id"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Fecha de pago</FormLabel>
+                            <FormLabel>Estudiante</FormLabel>
+                            {/* Aquí puedes usar un Select o Combobox */}
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="concepto"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Concepto</FormLabel>
+                            {/* Por ejemplo: matrícula, mensualidad, bimestre, trimestre */}
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="valor_matricula"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Valor matrícula</FormLabel>
+                            {/* Input numérico opcional */}
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="monto_total"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Monto total</FormLabel>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="fecha_emision"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Fecha de emisión</FormLabel>
                             {/* Date picker o input tipo date */}
                             <FormMessage />
                         </FormItem>
@@ -138,11 +203,11 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
 
                 <FormField
                     control={form.control}
-                    name="monto_abono"
+                    name="fecha_vencimiento"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Monto abonado</FormLabel>
-                            {/* Input numérico */}
+                            <FormLabel>Fecha de vencimiento</FormLabel>
+                            {/* Date picker o input tipo date */}
                             <FormMessage />
                         </FormItem>
                     )}
@@ -150,23 +215,11 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
 
                 <FormField
                     control={form.control}
-                    name="medio_pago"
+                    name="sede_id"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Medio de pago</FormLabel>
-                            {/* Select: Transferencia, Efectivo, Nequi, Bancolombia, etc. */}
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="comprobante"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Comprobante o referencia</FormLabel>
-                            {/* Input tipo texto */}
+                            <FormLabel>Sede</FormLabel>
+                            {/* Select o Combobox */}
                             <FormMessage />
                         </FormItem>
                     )}

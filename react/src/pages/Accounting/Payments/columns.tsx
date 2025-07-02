@@ -10,50 +10,32 @@ export const columns: ColumnDef<Pago>[] = [
             return row.index + 1;
         },
     },
-    // {
-    //     accessorKey: "tipo_grupo",
-    //     header: "Grupo",
-    //     accessorFn: (row) => {
-    //         return `${row.tipo_grupo}`;
-    //     },
-    // },
+    {
+        accessorKey: "facturacion_id",
+        header: "Factura",
+    },
     {
         accessorKey: "monto",
-        header: "Monto",
+        header: "Monto del pago",
     },
     {
         accessorKey: "fecha_pago",
-        header: "Fecha",
+        header: "Fecha de pago",
     },
     {
         accessorKey: "metodo_pago",
-        header: "Metodo de pago",
+        header: "Número de referencia",
     },
     {
         accessorKey: "numero_referencia_pago",
-        header: "Número de referencia",
+        header: "Medio de pago",
     },
     {
         accessorKey: "soporte_pago",
         header: "Soporte de pago",
     },
     {
-        accessorKey: "estudiante",
-        header: "Estudiante",
+        accessorKey: "observaciones",
+        header: "Observaciones",
     },
-
-    // {
-    //     accessorKey: "hora_inicio",
-    //     header: "Hora de inicio",
-    //     accessorFn: ( row ) => {
-    //         return `${timeFormatter(row.hora_inicio)}`
-    //     }
-    // },
-    // {
-    //     accessorKey: "hora_fin",
-    //     header: "Hora de fin",
-    //     accessorFn: ( row ) => {
-    //         return `${timeFormatter(row.hora_fin)}`
-    //     }
-    // },
 ];

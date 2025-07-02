@@ -52,13 +52,12 @@ export function DataTable<TValue, TData extends Pago>({
     return (
         <>
             <h1 className="scroll-m-20 flex-wrap text-3xl font-semibold text-primary mb-8">
-                Listado de Pagos
+                Listado de Facturas
             </h1>
 
             <Button
                 variant="outline"
                 size="sm"
-                disabled
                 className="hover:bg-primary hover:text-white flex justify-self-end mb-4 cursor-pointer"
                 onClick={() => {
                     selectPago(null);
@@ -75,13 +74,13 @@ export function DataTable<TValue, TData extends Pago>({
                             <DialogHeader>
                                 <DialogTitle>
                                     {selectedPago
-                                        ? "Editar Pago"
-                                        : "Agregar Pago"}
+                                        ? "Editar Factura"
+                                        : "Agregar Factura"}
                                 </DialogTitle>
                                 <DialogDescription>
                                     {selectedPago
-                                        ? "Modifica los datos del pago y haz clic en 'Actualizar' para guardar los cambios."
-                                        : "Completa la información para registrar un nuevo pago en el sistema."}
+                                        ? "Modifica los datos de la factura y haz clic en 'Actualizar' para guardar los cambios."
+                                        : "Completa la información para registrar una nueva factura en el sistema."}
                                 </DialogDescription>
                             </DialogHeader>
                             <ScheduleForm {...datos} />

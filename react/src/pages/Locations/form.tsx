@@ -47,7 +47,7 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
         resolver: zodResolver(formSchema),
         defaultValues: selectedSede || {
             nombre: "",
-            direccion: "-",
+            direccion: "",
         },
     });
     const onSubmit = async (values: z.infer<typeof formSchema>) => {

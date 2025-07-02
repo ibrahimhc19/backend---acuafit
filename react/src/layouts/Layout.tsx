@@ -6,14 +6,15 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Toaster } from "sonner";
 
-const links = [
-    { name: "Estudiantes", href: "/estudiantes" },
-    { name: "Registro", href: "/registro" },
-    { name: "Sedes", href: "/sedes" },
-    { name: "Horarios", href: "/horarios" },
-    { name: "Pagos", href: "/pagos" },
-    { name: "Facturación", href: "/facturacion" },
-];
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "@/components/ui/accordion";
+import { LINKS } from "@/config/constants";
+
+
 
 export default function DashboardLayout() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -118,7 +119,7 @@ export default function DashboardLayout() {
                         <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                             <div className="flex-1 px-3 bg-white divide-y space-y-1">
                                 <ul className="space-y-2 pb-2">
-                                    {links.map((link) => (
+                                    {LINKS.map((link) => (
                                         <li key={link.href}>
                                             <Link
                                                 to={link.href}
@@ -135,6 +136,50 @@ export default function DashboardLayout() {
                                         </li>
                                     ))}
                                 </ul>
+                                {/* {LINKS.map((link, index) => (
+                                    <li key={index} className="text-white">
+                                        {link.children ? (
+                                            <Accordion
+                                                type="single"
+                                                collapsible
+                                            >
+                                                <AccordionItem
+                                                    value={`item-${index}`}
+                                                >
+                                                    <AccordionTrigger className="p-2 hover:bg-primary hover:text-white rounded-lg text-base font-medium text-gray-900">
+                                                        {link.name}
+                                                    </AccordionTrigger>
+                                                    <AccordionContent className="pl-4 flex flex-col gap-1">
+                                                        {link.children.map(
+                                                            (child) => (
+                                                                <Link
+                                                                    key={
+                                                                        child.href
+                                                                    }
+                                                                    to={
+                                                                        child.href
+                                                                    }
+                                                                    className="text-sm text-gray-700"
+                                                                >
+                                                                    {child.name}
+                                                                </Link>
+                                                            )
+                                                        )}
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
+                                        ) : (
+                                            <Link
+                                                to={link.name}
+                                                className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-primary hover:text-muted group"
+                                            >
+                                                <span className="ml-3">
+                                                    {link.name}
+                                                </span>
+                                            </Link>
+                                        )}
+                                    </li>
+                                ))} */}
                                 {apiError && (
                                     <Alert
                                         variant="destructive"

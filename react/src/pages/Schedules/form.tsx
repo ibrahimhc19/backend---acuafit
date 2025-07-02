@@ -35,7 +35,7 @@ import {
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { DIAS_SEMANA, TIPOS_GRUPO } from "@/config/constants";
 import { useSedesStore } from "@/services/sedes/useSedesStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const formSchema = z
     .object({
@@ -79,11 +79,14 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
         deleteHorario,
     } = useHorariosStore();
 
+    const [isSubmitting, setisSubmitting] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     useEffect(() => {
         if (sedes.length === 0) {
             fetchSedes();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -97,6 +100,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
     });
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        setisSubmitting(true);
         if (selectedHorario?.id) {
             try {
                 await updateHorario(selectedHorario.id, values);
@@ -108,6 +112,9 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                     "No se pudo actualizar el horario. Intenta de nuevo."
                 );
                 console.error("Error al actualizar", e);
+            } finally {
+                setisSubmitting(false);
+                setIsModalOpen(false);
             }
         } else {
             try {
@@ -120,10 +127,12 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                     "No se pudo registrar el horario. Intenta de nuevo."
                 );
                 console.error("Error al registrar", e);
+            } finally {
+                setisSubmitting(false);
+                setIsModalOpen(false);
             }
         }
     };
-
 
     return (
         <Form {...form}>
@@ -259,13 +268,24 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                     <DialogClose asChild>
                         <Button variant="outline">Cancelar</Button>
                     </DialogClose>
-                    <Button type="submit">
-                        {selectedHorario ? "Actualizar" : "Agregar"}
+                    <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting
+                            ? "Actualizando"
+                            : selectedHorario
+                            ? "Actualizar"
+                            : "Agregar"}
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             {selectedHorario && (
-                                <Button variant="destructive">Eliminar</Button>
+                                <Button
+                                    variant="destructive"
+                                    disabled={
+                                        isDeleting ? true : !selectedHorario
+                                    }
+                                >
+                                    {isDeleting ? "Eliminando" : "Eliminar"}
+                                </Button>
                             )}
                         </AlertDialogTrigger>
 
@@ -282,9 +302,10 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
                                 <AlertDialogAction
+                                    disabled={isSubmitting}
                                     onClick={async () => {
                                         if (!selectedHorario?.id) return;
-
+                                        setIsDeleting(true);
                                         try {
                                             await deleteHorario(
                                                 selectedHorario.id
@@ -302,10 +323,13 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                                 "Error al eliminar",
                                                 e
                                             );
+                                        } finally {
+                                            setIsDeleting(false);
+                                            setIsModalOpen(false);
                                         }
                                     }}
                                 >
-                                    Confirmar
+                                    {isDeleting ? "Eliminando" : "Confirmar"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
