@@ -158,14 +158,13 @@ const formSchema = z
     });
 type FormData = z.infer<typeof formSchema>;
 
-
-
 export default function RegistrationPage() {
-    const { selectedEstudiante, getEstudianteById } = useEstudiantesStore();
+    const { getEstudianteById } = useEstudiantesStore();
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
     const { fetchSedes, sedes } = useSedesStore();
     const { fetchHorarios, horarios } = useHorariosStore();
     const [grupos, setGrupos] = useState<Horario[]>();
+    const [estudianteExists, setEstudianteExists] = useState(false);
     const { id } = useParams();
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -243,6 +242,9 @@ export default function RegistrationPage() {
                     );
                 }
                 if (estudiante) {
+                    setEstudianteExists(true);
+                    const reqA = estudiante.acudiente_id ? true : false;
+                    setRequiereAcudiente(reqA);
                     form.reset({
                         nombres: estudiante.nombres ?? "",
                         apellidos: estudiante.apellidos ?? "",
@@ -263,9 +265,7 @@ export default function RegistrationPage() {
                             estudiante.autoriza_uso_imagen?.toString()
                         ),
                         acepta_reglamento: estudiante.acepta_reglamento,
-                        requiere_acudiente: Boolean(
-                            estudiante.requiere_acudiente
-                        ),
+                        requiere_acudiente: reqA,
 
                         acudiente: {
                             nombres: estudiante.acudiente?.nombres ?? "",
@@ -293,12 +293,18 @@ export default function RegistrationPage() {
         <div className="min-h-screen py-10">
             <div className="container mx-auto max-w-2xl px-4">
                 <div className="bg-white rounded-lg shadow-lg">
-                    <div className="bg-[url(./assets/piscina.jpg)] w-full h-40 rounded-t-lg bg-center bg-cover"></div>
+                    <div
+                        className={`${
+                            estudianteExists
+                                ? "bg-primary h-10"
+                                : "bg-[url(./assets/piscina.jpg)] h-40"
+                        } w-full rounded-t-lg bg-center bg-cover`}
+                    ></div>
                     <div className="p-6 md:p-8">
                         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2">
                             {/* Formulario de Inscripción Acuafit{" "} */}
-                            {selectedEstudiante
-                                ? "Edición de Registro Acuafit"
+                            {estudianteExists
+                                ? "Edición de Estudiante"
                                 : "Formulario de Inscripción Acuafit"}{" "}
                             {new Date().getFullYear()}
                         </h1>
@@ -324,9 +330,9 @@ export default function RegistrationPage() {
                                         <FormItem className="flex mt-8 flex-row items-center justify-start gap-3 rounded-lg border p-4">
                                             <div className="space-y-1 leading-none">
                                                 <FormLabel>
-                                                    ¿El estudiante es menor de
-                                                    edad y/o requiere datos de
-                                                    acudiente?
+                                                    {requiereAcudiente
+                                                        ? "El estudiante requiere acudiente"
+                                                        : "¿El estudiante es menor de edad y/o requiere datos de acudiente?"}
                                                 </FormLabel>
                                             </div>
                                             <FormControl>
@@ -398,7 +404,10 @@ export default function RegistrationPage() {
                                                             onValueChange={
                                                                 field.onChange
                                                             }
-                                                            value={field.value ?? ""}
+                                                            value={
+                                                                field.value ??
+                                                                ""
+                                                            }
                                                             className="flex flex-col space-y-1"
                                                         >
                                                             {TIPOS_DOCUMENTO.map(
@@ -910,6 +919,9 @@ export default function RegistrationPage() {
                                             <div className="flex items-center space-x-2 mt-4">
                                                 <FormControl>
                                                     <Checkbox
+                                                        disabled={
+                                                            estudianteExists
+                                                        }
                                                         checked={field.value}
                                                         onCheckedChange={
                                                             field.onChange
@@ -928,15 +940,19 @@ export default function RegistrationPage() {
 
                                 <div className="flex flex-col md:flex-row items-center gap-4 mt-8">
                                     <Button type="submit">
-                                        Enviar inscripción
+                                        {estudianteExists
+                                            ? "Actualizar registro"
+                                            : "Enviar inscripción"}
                                     </Button>
-                                    <Button
-                                        type="reset"
-                                        variant="outline"
-                                        onClick={() => form.reset()}
-                                    >
-                                        Limpiar formulario
-                                    </Button>
+                                    {!estudianteExists && (
+                                        <Button
+                                            type="reset"
+                                            variant="outline"
+                                            onClick={() => form.reset()}
+                                        >
+                                            Limpiar formulario
+                                        </Button>
+                                    )}
                                 </div>
                             </form>
                         </Form>
