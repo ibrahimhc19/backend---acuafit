@@ -1,6 +1,6 @@
 import axios from "@/api/axios";
 import { FormDataInscripcion } from "@/pages/Registration/Registration";
-import { LaravelValidationError, Estudiante } from "@/types";
+import { LaravelValidationError } from "@/types";
 import { AxiosError } from "axios";
 
 export const getAll = async (page?: string, query?: string, per_page?: number) => {
@@ -52,7 +52,7 @@ export const create = async (data: Partial<FormDataInscripcion>) => {
     }
 };
 
-export const update = async (id: number, data: Partial<Estudiante>) => {
+export const update = async (id: number, data: Partial<FormDataInscripcion>) => {
     try {
         const res = await axios.patch(`client/estudiante/${id}`, data);
         return res.data;

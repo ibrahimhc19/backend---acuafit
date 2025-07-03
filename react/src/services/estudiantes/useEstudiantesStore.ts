@@ -20,7 +20,7 @@ interface EstudiantesStore {
     selectEstudiante: (estudiante: Estudiante | null) => void;
     createEstudiante: (data: Partial<FormDataInscripcion>) => Promise<void>;
     fetchEstudiantes: (page?: string, query?: string, per_page?: number) => Promise<void>;
-    updateEstudiante: (id: number, data: Partial<Estudiante>) => Promise<void>;
+    updateEstudiante: (id: number, data: Partial<FormDataInscripcion>) => Promise<void>;
     handlePageChange: (type: "first" | "previous" | "next" | "last") => Promise<void>;
 
 }

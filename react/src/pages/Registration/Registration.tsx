@@ -1,9 +1,10 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
 import toCapital from "@/helpers/toCapital";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
     Form,
     FormControl,
@@ -13,6 +14,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+
 import {
     Select,
     SelectContent,
@@ -20,18 +22,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
+
 import { Horario } from "@/types";
+import { Link } from "react-router-dom";
+import { toast, Toaster } from "sonner";
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { TIPOS_DOCUMENTO } from "@/config/constants";
-import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
 import { useSedesStore } from "@/services/sedes/useSedesStore";
 import { useHorariosStore } from "@/services/horarios/useHorariosStore";
-import { toast, Toaster } from "sonner";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
 
 const formSchema = z
     .object({
@@ -155,17 +158,26 @@ const formSchema = z
             }
         }
     });
+
 export type FormDataInscripcion = z.infer<typeof formSchema>;
 
 export default function RegistrationPage() {
-    const { getEstudianteById, createEstudiante } = useEstudiantesStore();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [requiereAcudiente, setRequiereAcudiente] = useState(false);
-    const { fetchSedes, sedes } = useSedesStore();
-    const { fetchHorarios, horarios } = useHorariosStore();
-    const [grupos, setGrupos] = useState<Horario[]>();
-    const [estudianteExists, setEstudianteExists] = useState(false);
+    const {
+        createEstudiante,
+        selectEstudiante,
+        updateEstudiante,
+        getEstudianteById,
+        selectedEstudiante,
+    } = useEstudiantesStore();
+
     const { id } = useParams();
+    const { fetchSedes, sedes } = useSedesStore();
+    const [grupos, setGrupos] = useState<Horario[]>();
+    const { fetchHorarios, horarios } = useHorariosStore();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [estudianteExists, setEstudianteExists] = useState(false);
+    const [requiereAcudiente, setRequiereAcudiente] = useState(false);
+
     const form = useForm<FormDataInscripcion>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -197,51 +209,37 @@ export default function RegistrationPage() {
     });
 
     const onSubmit = async (values: FormDataInscripcion) => {
-         setIsSubmitting(true);
+        setIsSubmitting(true);
 
-        try {
-            await createEstudiante(values);
-            toast.success("El estudiante fue inscrito correctamente.");
-        } catch (e) {
-            toast.error(
-                "No se pudo inscribir el estudiante. Intenta de nuevo."
-            );
-            console.error("Error al registrar", e);
-        } finally {
-            setIsSubmitting(false);
+        if (selectedEstudiante?.id) {
+            try {
+                await updateEstudiante(selectedEstudiante.id, values);
+                toast.success(
+                    "El registro del estudiante fue actualizado correctamente."
+                );
+                selectEstudiante(null);
+            } catch (e) {
+                toast.error(
+                    "No se pudo actualizar el registro del estudiante. Intenta de nuevo."
+                );
+                console.error("Error al actualizar", e);
+            } finally {
+                setIsSubmitting(false);
+            }
+        } else {
+            try {
+                await createEstudiante(values);
+                toast.success("El estudiante fue inscrito correctamente.");
+                selectEstudiante(null);
+            } catch (e) {
+                toast.error(
+                    "No se pudo inscribir el estudiante. Intenta de nuevo."
+                );
+                console.error("Error al registrar", e);
+            } finally {
+                setIsSubmitting(false);
+            }
         }
-
-        // if (selectedHorario?.id) {
-        //     try {
-        //         await updateEstudiante(selectedHorario.id, values);
-        //         toast.success("El horario fue actualizado correctamente.");
-        //         selectHorario(null);
-        //         setIsModalOpen(false);
-        //     } catch (e) {
-        //         toast.error(
-        //             "No se pudo actualizar el horario. Intenta de nuevo."
-        //         );
-        //         console.error("Error al actualizar", e);
-        //     } finally {
-        //         setIsSubmitting(false);
-        //         setIsModalOpen(false);
-        //     }
-        // } else {
-        //     try {
-        //         await createHorario(values);
-        //         toast.success("El horario fue registrado correctamente.");
-        //         selectHorario(null);
-        //         setIsModalOpen(false);
-        //     } catch (e) {
-        //         toast.error(
-        //             "No se pudo registrar el horario. Intenta de nuevo."
-        //         );
-        //         console.error("Error al registrar", e);
-        //     } finally {
-        //         setIsSubmitting(false);
-        //         setIsModalOpen(false);
-        //     }
-        // }
     };
     const tipoDocumentoValido = (
         value: string | undefined
@@ -255,7 +253,6 @@ export default function RegistrationPage() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return validValues.includes(value ?? "") ? (value as any) : undefined;
     };
-
 
     useEffect(() => {
         if (horarios.length === 0) {
@@ -281,6 +278,7 @@ export default function RegistrationPage() {
                 }
                 if (estudiante) {
                     setEstudianteExists(true);
+                    selectEstudiante(estudiante);
                     const reqA = estudiante.acudiente_id ? true : false;
                     setRequiereAcudiente(reqA);
                     form.reset({
@@ -340,7 +338,6 @@ export default function RegistrationPage() {
                     ></div>
                     <div className="p-6 md:p-8">
                         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2">
-                            {/* Formulario de Inscripción Acuafit{" "} */}
                             {estudianteExists
                                 ? "Edición de Estudiante"
                                 : "Formulario de Inscripción Acuafit"}{" "}
@@ -980,7 +977,10 @@ export default function RegistrationPage() {
                                 />
 
                                 <div className="flex flex-col md:flex-row items-center gap-4 mt-8">
-                                    <Button type="submit" disabled={isSubmitting}>
+                                    <Button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                    >
                                         {estudianteExists
                                             ? "Actualizar registro"
                                             : "Enviar inscripción"}
