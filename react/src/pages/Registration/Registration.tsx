@@ -65,14 +65,11 @@ const formSchema = z
         rut: z.string().optional(),
         sede_id: z.string({ required_error: "Debe seleccionar una sede." }),
         horario_id: z.string({ required_error: "Debe seleccionar una sede." }),
-        // grupo: z.string({ required_error: "Debe seleccionar un grupo." }),
         observaciones: z.string().max(160, {
             message: "Máximo 160 caracteres.",
         }),
         fecha_inscripcion: z.string(),
-        autoriza_uso_imagen: z.enum(["true", "false"], {
-            required_error: "Selecciona una opción",
-        }),
+        autoriza_uso_imagen: z.boolean().default(false),
         acepta_reglamento: z.boolean().refine((val) => val === true, {
             message: "Debe aceptar el reglamento.",
         }),
@@ -162,7 +159,6 @@ export type FormDataInscripcion = z.infer<typeof formSchema>;
 
 export default function RegistrationPage() {
     const { getEstudianteById, createEstudiante } = useEstudiantesStore();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
     const { fetchSedes, sedes } = useSedesStore();
@@ -184,8 +180,8 @@ export default function RegistrationPage() {
             sede_id: "",
             horario_id: "",
             observaciones: "",
-            fecha_inscripcion: `${new Date().toISOString().split('T')[0]}`,
-            autoriza_uso_imagen: "false",
+            fecha_inscripcion: `${new Date().toISOString().split("T")[0]}`,
+            autoriza_uso_imagen: false,
             acepta_reglamento: false,
             requiere_acudiente: false,
             acudiente: {
@@ -201,20 +197,19 @@ export default function RegistrationPage() {
     });
 
     const onSubmit = async (values: FormDataInscripcion) => {
+         setIsSubmitting(true);
 
-        //  setIsSubmitting(true);
-
-         try {
-                await createEstudiante(values);
-                toast.success("El estudiante fue inscrito correctamente.");
-            } catch (e) {
-                toast.error(
-                    "No se pudo inscribir el estudiante. Intenta de nuevo."
-                );
-                console.error("Error al registrar", e);
-            } finally {
-                setIsSubmitting(false);
-            }
+        try {
+            await createEstudiante(values);
+            toast.success("El estudiante fue inscrito correctamente.");
+        } catch (e) {
+            toast.error(
+                "No se pudo inscribir el estudiante. Intenta de nuevo."
+            );
+            console.error("Error al registrar", e);
+        } finally {
+            setIsSubmitting(false);
+        }
 
         // if (selectedHorario?.id) {
         //     try {
@@ -261,13 +256,6 @@ export default function RegistrationPage() {
         return validValues.includes(value ?? "") ? (value as any) : undefined;
     };
 
-    const validBoolean = (
-        value: string | undefined
-    ): "true" | "false" | undefined => {
-        const bool = ["true", "false"];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return bool.includes(value ?? "") ? (value as any) : undefined;
-    };
 
     useEffect(() => {
         if (horarios.length === 0) {
@@ -312,9 +300,7 @@ export default function RegistrationPage() {
                         horario_id: estudiante.horario_id.toString(),
                         observaciones: estudiante.observaciones ?? "",
                         fecha_inscripcion: estudiante.fecha_inscripcion ?? "",
-                        autoriza_uso_imagen: validBoolean(
-                            estudiante.autoriza_uso_imagen?.toString()
-                        ),
+                        autoriza_uso_imagen: estudiante.autoriza_uso_imagen,
                         acepta_reglamento: estudiante.acepta_reglamento,
                         requiere_acudiente: reqA,
 
@@ -339,9 +325,10 @@ export default function RegistrationPage() {
 
         fetchEstudiante();
     }, [id, horarios]);
+
     return (
         <div className="min-h-screen py-10">
-            <Toaster richColors position="top-center"/>
+            <Toaster richColors position="top-center" />
             <div className="container mx-auto max-w-2xl px-4">
                 <div className="bg-white rounded-lg shadow-lg">
                     <div
@@ -359,8 +346,7 @@ export default function RegistrationPage() {
                                 : "Formulario de Inscripción Acuafit"}{" "}
                             {new Date().getFullYear()}
                         </h1>
-                        {/* <div className="mb-6">
-                        </div> */}
+
                         <Form {...form}>
                             <form
                                 onSubmit={form.handleSubmit(
@@ -930,33 +916,22 @@ export default function RegistrationPage() {
                                                     imagen.
                                                 </Link>
                                             </p>
-                                            <FormControl>
-                                                <RadioGroup
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
-                                                    value={field.value ?? ""}
-                                                    className="flex flex-row space-x-4"
-                                                >
-                                                    <FormItem className="flex items-center gap-3">
-                                                        <FormControl>
-                                                            <RadioGroupItem value="true" />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal">
-                                                            Sí autorizo
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                    <FormItem className="flex items-center gap-3">
-                                                        <FormControl>
-                                                            <RadioGroupItem value="false" />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal">
-                                                            No autorizo
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                </RadioGroup>
-                                            </FormControl>
-                                            <FormMessage />
+                                            <FormItem className="flex items-center gap-3">
+                                                <FormControl>
+                                                    <Checkbox
+                                                        disabled={
+                                                            estudianteExists
+                                                        }
+                                                        checked={field.value}
+                                                        onCheckedChange={
+                                                            field.onChange
+                                                        }
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    Sí autorizo
+                                                </FormLabel>
+                                            </FormItem>
                                         </FormItem>
                                     )}
                                 />
@@ -1005,7 +980,7 @@ export default function RegistrationPage() {
                                 />
 
                                 <div className="flex flex-col md:flex-row items-center gap-4 mt-8">
-                                    <Button type="submit">
+                                    <Button type="submit" disabled={isSubmitting}>
                                         {estudianteExists
                                             ? "Actualizar registro"
                                             : "Enviar inscripción"}
