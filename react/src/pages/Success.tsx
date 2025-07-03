@@ -3,7 +3,7 @@ import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navigate, useLocation } from "react-router-dom";
 
-const SuccesPage = () => {
+const SuccessPage = () => {
     const location = useLocation();
     const fromInscripcion = location.state?.fromInscripcion;
 
@@ -28,16 +28,16 @@ const SuccesPage = () => {
                     en redes o escribirnos si tienes dudas.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button className="bg-green-500 text-white font-medium hover:bg-green-600 transition">
+                    <Button className="bg-green-500 text-white font-medium hover:bg-green-600 transition cursor-pointer">
                         <a
                             href="https://api.whatsapp.com/send?phone=573157124410&text=%C2%A1Hola!%20me%20encantar%C3%ADa%20conocer%20todos%20los%20detalles%20sobre%20los%20cursos%20%F0%9F%8F%8A%0A%0A"
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="items-center flex"
                         >
                             WhatsApp Acuafit
-                        </a>
-                        <svg
-                            className="h-5 w-5"
+                                                    <svg
+                            className="h-5 w-5 ml-2"
                             fill="currentColor"
                             viewBox="0 0 448 512"
                             aria-hidden="true"
@@ -48,18 +48,20 @@ const SuccesPage = () => {
                                 clipRule="evenodd"
                             />
                         </svg>
+                        </a>
+
                     </Button>
 
-                    <Button className="bg-pink-500 text-white font-medium hover:bg-pink-600 transition">
+                    <Button className="bg-pink-500 text-white font-medium hover:bg-pink-600 transition cursor-pointer">
                         <a
                             href="https://www.instagram.com/acua.fit/"
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="items-center flex"
                         >
                             Instagram Acuafit
-                        </a>
-                        <svg
-                            className="h-5 w-5"
+                            <svg
+                            className="h-5 w-5 ml-2"
                             fill="currentColor"
                             viewBox="0 0 24 24"
                             aria-hidden="true"
@@ -70,6 +72,8 @@ const SuccesPage = () => {
                                 clipRule="evenodd"
                             />
                         </svg>
+                        </a>
+
                     </Button>
                 </div>
             </motion.div>
@@ -77,4 +81,4 @@ const SuccesPage = () => {
     );
 };
 
-export default SuccesPage;
+export default SuccessPage;

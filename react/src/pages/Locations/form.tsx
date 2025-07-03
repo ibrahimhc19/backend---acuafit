@@ -41,8 +41,8 @@ const formSchema = z.object({
 export function LocationForm({ setIsModalOpen }: ModalState) {
     const { selectSede, selectedSede, createSede, updateSede, deleteSede } =
         useSedesStore();
-        const [isSubmitting, setisSubmitting] = useState(false);
-        const [isDeleting, setIsDeleting] = useState(false);
+    const [isSubmitting, setisSubmitting] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: selectedSede || {
@@ -62,8 +62,8 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
             } catch (e) {
                 toast.error("No se pudo actualizar la sede. Intenta de nuevo.");
                 console.error("Error al actualizar", e);
-            } finally{
-                setisSubmitting(false)
+            } finally {
+                setisSubmitting(false);
                 setIsModalOpen(false);
             }
         } else {
@@ -75,8 +75,8 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
             } catch (e) {
                 toast.error("No se pudo registrar la sede. Intenta de nuevo.");
                 console.error("Error al registrar", e);
-            } finally{
-                setisSubmitting(false)
+            } finally {
+                setisSubmitting(false);
                 setIsModalOpen(false);
             }
         }
@@ -116,16 +116,22 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
                         <Button variant="outline">Cancelar</Button>
                     </DialogClose>
                     <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? "Guardando" : (selectedSede ? "Actualizar" : "Agregar")}
+                        {isSubmitting
+                            ? "Guardando"
+                            : selectedSede
+                            ? "Actualizar"
+                            : "Agregar"}
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            {selectedSede && <Button
-                                variant="destructive"
-                                disabled={ isDeleting ? true: !selectedSede}
-                            >
-                                {isDeleting ? "Eliminando" : "Eliminar"}
-                            </Button>}
+                            {selectedSede && (
+                                <Button
+                                    variant="destructive"
+                                    disabled={isDeleting ? true : !selectedSede}
+                                >
+                                    {isDeleting ? "Eliminando" : "Eliminar"}
+                                </Button>
+                            )}
                         </AlertDialogTrigger>
 
                         <AlertDialogContent>
@@ -139,8 +145,10 @@ export function LocationForm({ setIsModalOpen }: ModalState) {
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel >Cancelar</AlertDialogCancel>
-                                <AlertDialogAction disabled={isSubmitting}
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction
+                                    disabled={isSubmitting}
+                                    className="bg-destructive"
                                     onClick={async () => {
                                         if (!selectedSede?.id) return;
                                         setIsDeleting(true);

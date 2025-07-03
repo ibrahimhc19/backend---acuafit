@@ -302,6 +302,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
                                 <AlertDialogAction
+                                    className="bg-destructive"
                                     disabled={isSubmitting}
                                     onClick={async () => {
                                         if (!selectedHorario?.id) return;

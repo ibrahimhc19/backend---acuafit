@@ -34,8 +34,10 @@ import {
     PaginationItem,
     PaginationLink,
 } from "@/components/ui/pagination";
+
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+
 import {
     Dialog,
     DialogClose,
@@ -44,15 +46,18 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+
 import {
     Accordion,
     AccordionItem,
     AccordionTrigger,
     AccordionContent,
 } from "@/components/ui/accordion";
+
 import timeFormatter from "@/helpers/timeFormatter";
 import { FILAS } from "@/config/constants";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
+
 import {
     Select,
     SelectContent,
@@ -65,6 +70,18 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export function DataTable<TValue, TData extends Estudiante>({
     columns,
@@ -130,7 +147,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                             className="hover:bg-primary hover:text-white flex justify-self-end h-9 cursor-pointer"
                             onClick={() => {
                                 selectEstudiante(null);
-                                navigate("/registro", { replace: true });
+                                navigate("/registro/nuevo", { replace: true });
                             }}
                         >
                             <Plus />
@@ -310,7 +327,76 @@ export function DataTable<TValue, TData extends Estudiante>({
                             >
                                 Editar
                             </Button>
-                            <Button
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    {selectedEstudiante && (
+                                        <Button
+                                            variant="destructive"
+                                            disabled={
+                                                isDeleting
+                                                    ? true
+                                                    : !selectedEstudiante
+                                            }
+                                        >
+                                            {isDeleting
+                                                ? "Eliminando"
+                                                : "Eliminar"}
+                                        </Button>
+                                    )}
+                                </AlertDialogTrigger>
+
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            ¿Estás seguro?
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Esta acción eliminará
+                                            permanentemente el estudiante
+                                            seleccionado.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            Cancelar
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction
+                                            className="bg-destructive"
+                                            onClick={async () => {
+                                                if (!selectedEstudiante?.id)
+                                                    return;
+                                                setIsDeleting(true);
+                                                try {
+                                                    await deleteEstudiante(
+                                                        selectedEstudiante.id
+                                                    );
+                                                    toast.success(
+                                                        "El estudiante fue eliminado correctamente."
+                                                    );
+                                                    selectEstudiante(null);
+                                                    setIsModalOpen(false);
+                                                } catch (e) {
+                                                    toast.error(
+                                                        "No se pudo eliminar el estudiante. Intenta de nuevo."
+                                                    );
+                                                    console.error(
+                                                        "Error al eliminar",
+                                                        e
+                                                    );
+                                                } finally {
+                                                    setIsDeleting(false);
+                                                    setIsModalOpen(false);
+                                                }
+                                            }}
+                                        >
+                                            {isDeleting
+                                                ? "Eliminando"
+                                                : "Confirmar"}
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                            {/* <Button
                                 disabled={isDeleting}
                                 variant="destructive"
                                 type="submit"
@@ -337,7 +423,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 }}
                             >
                                 {isDeleting ? "Eliminando" : "Eliminar"}
-                            </Button>
+                            </Button> */}
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

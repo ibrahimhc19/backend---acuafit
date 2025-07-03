@@ -169,7 +169,7 @@ export default function RegistrationPage() {
     } = useEstudiantesStore();
 
     const { id } = useParams();
-    const isPublicView = !id;
+    const { nuevo } = useParams()
     const navigate = useNavigate();
     const isEditing = !!selectedEstudiante?.id;
     const { fetchSedes, sedes } = useSedesStore();
@@ -246,7 +246,7 @@ export default function RegistrationPage() {
 
                 setTimeout(() => {
                     setIsSubmitting(false);
-                    if (isPublicView) {
+                    if (nuevo) {
                         navigate("/inscripcion/exito", { replace: true, state: { fromInscripcion: true } });
                     } else {
                         setIsSubmitting(false);
