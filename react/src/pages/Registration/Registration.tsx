@@ -28,6 +28,7 @@ import { Link } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { TIPOS_DOCUMENTO } from "@/config/constants";
@@ -42,15 +43,10 @@ const formSchema = z
         apellidos: z
             .string()
             .min(2, { message: "El apellido es obligatorio." }),
-        tipo_documento: z
-            .enum(
-                TIPOS_DOCUMENTO as [
-                    (typeof TIPOS_DOCUMENTO)[number],
-                    ...string[]
-                ],
-                { required_error: "Debe seleccionar un tipo de documento." }
-            )
-            .optional(),
+        tipo_documento: z.enum(
+            TIPOS_DOCUMENTO as [(typeof TIPOS_DOCUMENTO)[number], ...string[]],
+            { required_error: "Debe seleccionar un tipo de documento." }
+        ),
         documento_identidad: z
             .string()
             .min(5, { message: "El documento debe tener al menos 5 dígitos." }),
@@ -67,7 +63,9 @@ const formSchema = z
         edad: z.string().min(1, { message: "La edad es obligatoria." }),
         rut: z.string().optional(),
         sede_id: z.string({ required_error: "Debe seleccionar una sede." }),
-        horario_id: z.string({ required_error: "Debe seleccionar una sede." }),
+        horario_id: z
+            .string()
+            .min(1, { message: "Debe seleccionar una sede." }),
         observaciones: z.string().max(160, {
             message: "Máximo 160 caracteres.",
         }),
@@ -171,6 +169,7 @@ export default function RegistrationPage() {
     } = useEstudiantesStore();
 
     const { id } = useParams();
+    const navigate = useNavigate();
     const { fetchSedes, sedes } = useSedesStore();
     const [grupos, setGrupos] = useState<Horario[]>();
     const { fetchHorarios, horarios } = useHorariosStore();
@@ -218,6 +217,7 @@ export default function RegistrationPage() {
                     "El registro del estudiante fue actualizado correctamente."
                 );
                 selectEstudiante(null);
+                navigate("/estudiantes", { replace: true });
             } catch (e) {
                 toast.error(
                     "No se pudo actualizar el registro del estudiante. Intenta de nuevo."
@@ -231,6 +231,13 @@ export default function RegistrationPage() {
                 await createEstudiante(values);
                 toast.success("El estudiante fue inscrito correctamente.");
                 selectEstudiante(null);
+                if (estudianteExists) {
+                    setIsSubmitting(false);
+                    navigate("/estudiantes", { replace: true });
+                } else {
+                    setIsSubmitting(false);
+                    navigate("/inscripcionexitosa", { replace: true });
+                }
             } catch (e) {
                 toast.error(
                     "No se pudo inscribir el estudiante. Intenta de nuevo."
@@ -297,7 +304,8 @@ export default function RegistrationPage() {
                         sede_id: estudiante.sede_id.toString(),
                         horario_id: estudiante.horario_id.toString(),
                         observaciones: estudiante.observaciones ?? "",
-                        fecha_inscripcion: estudiante.fecha_inscripcion.split("T")[0] ?? "",
+                        fecha_inscripcion:
+                            estudiante.fecha_inscripcion.split("T")[0] ?? "",
                         autoriza_uso_imagen: estudiante.autoriza_uso_imagen,
                         acepta_reglamento: estudiante.acepta_reglamento,
                         requiere_acudiente: reqA,
@@ -346,15 +354,7 @@ export default function RegistrationPage() {
 
                         <Form {...form}>
                             <form
-                                onSubmit={form.handleSubmit(
-                                    onSubmit,
-                                    (errors) => {
-                                        console.log(
-                                            "Errores de validación:",
-                                            errors
-                                        );
-                                    }
-                                )}
+                                onSubmit={form.handleSubmit(onSubmit)}
                                 className="space-y-6"
                             >
                                 <FormField
@@ -916,9 +916,6 @@ export default function RegistrationPage() {
                                             <FormItem className="flex items-center gap-3">
                                                 <FormControl>
                                                     <Checkbox
-                                                        disabled={
-                                                            estudianteExists
-                                                        }
                                                         checked={field.value}
                                                         onCheckedChange={
                                                             field.onChange

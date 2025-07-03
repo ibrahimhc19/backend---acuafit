@@ -79,6 +79,7 @@ export function DataTable<TValue, TData extends Estudiante>({
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const {
         selectEstudiante,
@@ -100,24 +101,26 @@ export function DataTable<TValue, TData extends Estudiante>({
             <div className="flex w-full justify-between my-4 gap-2">
                 <div className="flex gap-2">
                     <Input
-                    type="search"
-                    placeholder="Buscar"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                />
+                        type="search"
+                        placeholder="Buscar"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
 
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button
-                            variant="outline"
-                            className="hover:bg-primary hover:text-white"
-                            onClick={() => setQuery("")}
-                        >
-                            Limpiar
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Limpia la barra de búsqueda</TooltipContent>
-                </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="outline"
+                                className="hover:bg-primary hover:text-white"
+                                onClick={() => setQuery("")}
+                            >
+                                Limpiar
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            Limpia la barra de búsqueda
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
                 <Tooltip>
                     <TooltipTrigger asChild>
@@ -127,7 +130,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                             className="hover:bg-primary hover:text-white flex justify-self-end h-9 cursor-pointer"
                             onClick={() => {
                                 selectEstudiante(null);
-                                navigate("/registro", { replace: true })
+                                navigate("/registro", { replace: true });
                             }}
                         >
                             <Plus />
@@ -140,10 +143,12 @@ export function DataTable<TValue, TData extends Estudiante>({
             </div>
 
             {isModalOpen && selectedEstudiante && (
-                <Dialog open={isModalOpen} onOpenChange={(open) => {
-                    setIsModalOpen(open);
-                }
-                    }>
+                <Dialog
+                    open={isModalOpen}
+                    onOpenChange={(open) => {
+                        setIsModalOpen(open);
+                    }}
+                >
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle className="text-2xl text-left">
@@ -157,7 +162,9 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 </AccordionTrigger>
                                 <AccordionContent className="flex flex-col gap-1 text-balance">
                                     <p>
-                                        <b>Nombre completo:</b> {selectedEstudiante.nombres} {selectedEstudiante.apellidos}
+                                        <b>Nombre completo:</b>{" "}
+                                        {selectedEstudiante.nombres}{" "}
+                                        {selectedEstudiante.apellidos}
                                     </p>
                                     <p>
                                         <b>Edad:</b> {selectedEstudiante.edad}
@@ -293,36 +300,38 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 <Button variant="outline">Cancelar</Button>
                             </DialogClose>
                             <Button
-                            onClick={()=> {
-                                const id = selectedEstudiante?.id;
-                                selectEstudiante(null);
-                                navigate(`/registro/${id}`, { replace: true });
-                            }
-                            }
-                            >Editar</Button>
+                                onClick={() => {
+                                    const id = selectedEstudiante?.id;
+                                    selectEstudiante(null);
+                                    navigate(`/registro/${id}`, {
+                                        replace: true,
+                                    });
+                                }}
+                            >
+                                Editar
+                            </Button>
                             <Button
                                 variant="destructive"
                                 type="submit"
                                 onClick={async () => {
-                                        if (!selectedEstudiante?.id) return;
+                                    if (!selectedEstudiante?.id) return;
 
-                                        try {
-                                            await deleteEstudiante(selectedEstudiante.id);
-                                            toast.success(
-                                                "El estudiante fue eliminado correctamente."
-                                            );
-                                            selectEstudiante(null);
-                                            setIsModalOpen(false);
-                                        } catch (e) {
-                                            toast.error(
-                                                "No se pudo eliminar el estudiante. Intenta de nuevo."
-                                            );
-                                            console.error(
-                                                "Error al eliminar",
-                                                e
-                                            );
-                                        }
-                                    }}
+                                    try {
+                                        await deleteEstudiante(
+                                            selectedEstudiante.id
+                                        );
+                                        toast.success(
+                                            "El estudiante fue eliminado correctamente."
+                                        );
+                                        selectEstudiante(null);
+                                        setIsModalOpen(false);
+                                    } catch (e) {
+                                        toast.error(
+                                            "No se pudo eliminar el estudiante. Intenta de nuevo."
+                                        );
+                                        console.error("Error al eliminar", e);
+                                    }
+                                }}
                                 disabled
                             >
                                 Eliminar
@@ -392,7 +401,21 @@ export function DataTable<TValue, TData extends Estudiante>({
             <div className="flex flex-row justify-end items-center mb-4 sm:mb-0">
                 <div className="flex items-center justify-end py-4 space-x-1">
                     {/* Deuda */}
-                    <Select defaultValue="10" onValueChange={(e) => setPerPage(Number(e))}>
+                    <Select
+                    disabled={isLoading}
+                        defaultValue="10"
+                        onValueChange={async (e) => {
+                            setIsLoading(true);
+                            try {
+                                setPerPage(Number(e));
+                            } catch (error) {
+                                console.log(error);
+                                toast.error("Error al cambiar el número de filas por página");
+                            } finally {
+                                setIsLoading(false);
+                            }
+                        }}
+                    >
                         <SelectTrigger>
                             <SelectValue placeholder="Cantidad" />
                         </SelectTrigger>
@@ -400,7 +423,10 @@ export function DataTable<TValue, TData extends Estudiante>({
                             <SelectGroup>
                                 <SelectLabel>Filas</SelectLabel>
                                 {FILAS.map((fila, index) => (
-                                    <SelectItem key={index} value={fila.value.toString()}>
+                                    <SelectItem
+                                        key={index}
+                                        value={fila.value.toString()}
+                                    >
                                         {fila.label}
                                     </SelectItem>
                                 ))}
@@ -412,8 +438,23 @@ export function DataTable<TValue, TData extends Estudiante>({
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handlePageChange("first")}
-                                disabled={pageLinks.prev_page_url === null}
+                                onClick={async () => {
+                                    setIsLoading(true);
+                                    try {
+                                        await handlePageChange("first");
+                                    } catch (error) {
+                                        console.log(error);
+                                        toast.error(
+                                            "Error al cambiar de página"
+                                        );
+                                    } finally {
+                                        setIsLoading(false);
+                                    }
+                                }}
+                                disabled={
+                                    pageLinks.prev_page_url === null ||
+                                    isLoading
+                                }
                                 className="hover:bg-primary hover:text-white hidden sm:block"
                             >
                                 <ChevronsLeft />
@@ -427,8 +468,23 @@ export function DataTable<TValue, TData extends Estudiante>({
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handlePageChange("previous")}
-                                disabled={pageLinks.prev_page_url === null}
+                                onClick={async () => {
+                                    setIsLoading(true);
+                                    try {
+                                        await handlePageChange("previous");
+                                    } catch (error) {
+                                        console.log(error);
+                                        toast.error(
+                                            "Error al cambiar de página"
+                                        );
+                                    } finally {
+                                        setIsLoading(false);
+                                    }
+                                }}
+                                disabled={
+                                    pageLinks.prev_page_url === null ||
+                                    isLoading
+                                }
                                 className="hover:bg-primary hover:text-white"
                             >
                                 <ChevronLeft />
@@ -452,8 +508,23 @@ export function DataTable<TValue, TData extends Estudiante>({
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handlePageChange("next")}
-                                disabled={pageLinks.next_page_url === null}
+                                onClick={async () => {
+                                    setIsLoading(true);
+                                    try {
+                                        await handlePageChange("next");
+                                    } catch (error) {
+                                        console.log(error);
+                                        toast.error(
+                                            "Error al cambiar de página"
+                                        );
+                                    } finally {
+                                        setIsLoading(false);
+                                    }
+                                }}
+                                disabled={
+                                    pageLinks.next_page_url === null ||
+                                    isLoading
+                                }
                                 className="hover:bg-primary hover:text-white"
                             >
                                 <ChevronRight />
@@ -467,8 +538,23 @@ export function DataTable<TValue, TData extends Estudiante>({
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handlePageChange("last")}
-                                disabled={pageLinks.next_page_url === null}
+                                onClick={async () => {
+                                    setIsLoading(true);
+                                    try {
+                                        await handlePageChange("last");
+                                    } catch (error) {
+                                        console.log(error);
+                                        toast.error(
+                                            "Error al cambiar de página"
+                                        );
+                                    } finally {
+                                        setIsLoading(false);
+                                    }
+                                }}
+                                disabled={
+                                    pageLinks.next_page_url === null ||
+                                    isLoading
+                                }
                                 className="hover:bg-primary hover:text-white hidden sm:block"
                             >
                                 <ChevronsRight />
