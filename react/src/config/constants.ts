@@ -48,7 +48,7 @@ export const FILAS = [
 
 export const LINKS = [
     { name: "Estudiantes", href: "/estudiantes" },
-    { name: "Registro", href: "/registro/nuevo" },
+    { name: "Registro", href: "/registro" },
     { name: "Sedes", href: "/sedes" },
     { name: "Horarios", href: "/horarios" },
     { name: "Pagos", href: "/pagos" },

@@ -147,7 +147,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                             className="hover:bg-primary hover:text-white flex justify-self-end h-9 cursor-pointer"
                             onClick={() => {
                                 selectEstudiante(null);
-                                navigate("/registro/nuevo", { replace: true });
+                                navigate("/registro", { replace: true });
                             }}
                         >
                             <Plus />

@@ -169,7 +169,7 @@ export default function RegistrationPage() {
     } = useEstudiantesStore();
 
     const { id } = useParams();
-    const { nuevo } = useParams();
+    const isPublicView = !id
     const navigate = useNavigate();
     const isEditing = !!selectedEstudiante?.id;
     const { fetchSedes, sedes } = useSedesStore();
@@ -246,7 +246,7 @@ export default function RegistrationPage() {
 
                 setTimeout(() => {
                     setIsSubmitting(false);
-                    if (nuevo) {
+                    if (isPublicView) {
                         navigate("/inscripcion/exito", {
                             replace: true,
                             state: { fromInscripcion: true },
@@ -285,7 +285,6 @@ export default function RegistrationPage() {
         }
         fetchSedes();
     }, [horarios]);
-
     useEffect(() => {
         if (!id) return;
         const fetchEstudiante = async () => {

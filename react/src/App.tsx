@@ -35,9 +35,8 @@ export default function App() {
                         <Route path="/pagos" element={<Payments />} />
                         <Route path="/facturacion" element={<Invoices />} />
                         <Route path="/dashboard" element={<Home />} />
-                        {/* <Route path="/registro" element={<Register />} /> */}
+                        <Route path="/registro" element={<Register />} />
                         <Route path="/registro/:id" element={<Register />} />
-                        <Route path="/registro/:nuevo" element={<Register />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
