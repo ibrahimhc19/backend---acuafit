@@ -258,24 +258,12 @@ export default function RegistrationPage() {
                 }, time);
             } catch (error) {
                 const axiosError = error as AxiosError<LaravelValidationError>;
-                const erroresValidacion = axiosError.response?.data.errors;
+                const validationErrors = axiosError.response?.data?.errors;
 
-                if (erroresValidacion) {
-                    const errorMessages = Object.entries(erroresValidacion).map(
-                        ([field, messages]) =>
-                            messages.map((msg) =>
-                                toast.error(
-                                    "No se pudo inscribir el estudiante. Intenta de nuevo.",
-                                    {
-                                        description: `${field}: ${msg}`,
-                                    }
-                                )
-                            )
-                    );
-                    console.log(errorMessages)
-                }
                 toast.error(
-                    "No se pudo inscribir el estudiante. Intenta de nuevo."
+                    "No se pudo inscribir el estudiante. Intenta de nuevo.", {
+                        description: validationErrors?.toString()
+                    }
                 );
                 console.error("Error al registrar", error);
             } finally {

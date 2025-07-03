@@ -104,7 +104,7 @@ class EstudianteController extends Controller
 
             'documento_identidad.required' => 'El documento de identidad es obligatorio.',
             'documento_identidad.string' => 'El documento de identidad debe ser una cadena de texto.',
-            'documento_identidad.unique' => 'Este documento de identidad ya ha sido registrado.',
+            'documento_identidad.unique' => 'Este documento de identidad ya ha sido registrado anteriormente.',
 
             'acudiente_id.integer' => 'El ID del acudiente debe ser un número entero.',
             'acudiente_id.exists' => 'El acudiente seleccionado no es válido o no existe.',

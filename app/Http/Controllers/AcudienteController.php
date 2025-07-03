@@ -48,7 +48,7 @@ class AcudienteController extends Controller
 
             'documento_identidad.required' => 'El documento de identidad es obligatorio.',
             'documento_identidad.string' => 'El documento de identidad debe ser una cadena de texto.',
-            'documento_identidad.unique' => 'Este documento de identidad ya ha sido registrado.',
+            'documento_identidad.unique' => 'Este documento de identidad ya ha sido registrado anteriormente.',
 
             'email.string' => 'El correo debe ser una cadena de texto.',
             'email.email' => 'El formato del correo electrónico no es válido.',
@@ -126,7 +126,7 @@ class AcudienteController extends Controller
 
             'documento_identidad.required' => 'El documento de identidad es obligatorio.',
             'documento_identidad.string' => 'El documento de identidad debe ser una cadena de texto.',
-            'documento_identidad.unique' => 'Este documento de identidad ya ha sido registrado.',
+            'documento_identidad.unique' => 'Este documento de identidad ya ha sido registrado anteriormente.',
 
             'email.string' => 'El correo debe ser una cadena de texto.',
             'email.email' => 'El formato del correo electrónico no es válido.',
