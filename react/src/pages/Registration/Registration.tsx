@@ -158,8 +158,10 @@ const formSchema = z
     });
 
 export type FormDataInscripcion = z.infer<typeof formSchema>;
-
-export default function RegistrationPage() {
+interface IsPublicView {
+    isPublic?: boolean;
+}
+export default function RegistrationPage({ isPublic = true }: IsPublicView) {
     const {
         createEstudiante,
         selectEstudiante,
@@ -169,7 +171,6 @@ export default function RegistrationPage() {
     } = useEstudiantesStore();
 
     const { id } = useParams();
-    const isPublicView = !id
     const navigate = useNavigate();
     const isEditing = !!selectedEstudiante?.id;
     const { fetchSedes, sedes } = useSedesStore();
@@ -224,6 +225,7 @@ export default function RegistrationPage() {
                 );
                 selectEstudiante(null);
                 setTimeout(() => {
+                    setIsSubmitting(false);
                     navigate("/estudiantes", { replace: true });
                 }, time);
             } catch (e) {
@@ -231,8 +233,6 @@ export default function RegistrationPage() {
                     "No se pudo actualizar el registro del estudiante. Intenta de nuevo."
                 );
                 console.error("Error al actualizar", e);
-            } finally {
-                setIsSubmitting(false);
             }
         } else {
             try {
@@ -246,13 +246,16 @@ export default function RegistrationPage() {
 
                 setTimeout(() => {
                     setIsSubmitting(false);
-                    if (isPublicView) {
+                    if (isPublic) {
                         navigate("/inscripcion/exito", {
                             replace: true,
                             state: { fromInscripcion: true },
                         });
                     } else {
-                        setIsSubmitting(false);
+                        setTimeout(() => {
+                            setIsSubmitting(false);
+                            navigate("/estudiantes", { replace: true });
+                        }, time);
                     }
                 }, time);
             } catch (error) {
