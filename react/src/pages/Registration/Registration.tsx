@@ -23,7 +23,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-import { Horario } from "@/types";
+import { Horario, LaravelValidationError } from "@/types";
 import { Link } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { useEffect, useState } from "react";
@@ -36,6 +36,7 @@ import { useSedesStore } from "@/services/sedes/useSedesStore";
 import { useHorariosStore } from "@/services/horarios/useHorariosStore";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
+import { AxiosError } from "axios";
 
 const formSchema = z
     .object({
@@ -169,7 +170,7 @@ export default function RegistrationPage() {
     } = useEstudiantesStore();
 
     const { id } = useParams();
-    const { nuevo } = useParams()
+    const { nuevo } = useParams();
     const navigate = useNavigate();
     const isEditing = !!selectedEstudiante?.id;
     const { fetchSedes, sedes } = useSedesStore();
@@ -247,19 +248,36 @@ export default function RegistrationPage() {
                 setTimeout(() => {
                     setIsSubmitting(false);
                     if (nuevo) {
-                        navigate("/inscripcion/exito", { replace: true, state: { fromInscripcion: true } });
+                        navigate("/inscripcion/exito", {
+                            replace: true,
+                            state: { fromInscripcion: true },
+                        });
                     } else {
                         setIsSubmitting(false);
-                        navigate("/estudiantes",
-                            { replace: true }
-                        );
                     }
                 }, time);
-            } catch (e) {
+            } catch (error) {
+                const axiosError = error as AxiosError<LaravelValidationError>;
+                const erroresValidacion = axiosError.response?.data.errors;
+
+                if (erroresValidacion) {
+                    const errorMessages = Object.entries(erroresValidacion).map(
+                        ([field, messages]) =>
+                            messages.map((msg) =>
+                                toast.error(
+                                    "No se pudo inscribir el estudiante. Intenta de nuevo.",
+                                    {
+                                        description: `${field}: ${msg}`,
+                                    }
+                                )
+                            )
+                    );
+                    console.log(errorMessages)
+                }
                 toast.error(
                     "No se pudo inscribir el estudiante. Intenta de nuevo."
                 );
-                console.error("Error al registrar", e);
+                console.error("Error al registrar", error);
             } finally {
                 setIsSubmitting(false);
             }
@@ -971,9 +989,7 @@ export default function RegistrationPage() {
                                             <div className="flex items-center space-x-2 mt-4">
                                                 <FormControl>
                                                     <Checkbox
-                                                        disabled={
-                                                            isEditing
-                                                        }
+                                                        disabled={isEditing}
                                                         checked={field.value}
                                                         onCheckedChange={
                                                             field.onChange
