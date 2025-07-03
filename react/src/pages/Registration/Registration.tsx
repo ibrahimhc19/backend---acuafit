@@ -211,7 +211,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
 
     const onSubmit = async (values: FormDataInscripcion) => {
         setIsSubmitting(true);
-        const time = 3000;
+        const time = 2000;
 
         if (isEditing) {
             try {
@@ -219,7 +219,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                 toast.success(
                     "El registro del estudiante fue actualizado correctamente.",
                     {
-                        description: "Será redirigido en 3 segundos",
+                        description: "Será redirigido en 2 segundos",
                         duration: time,
                     }
                 );
@@ -238,7 +238,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
             try {
                 await createEstudiante(values);
                 toast.success("El estudiante fue inscrito correctamente.", {
-                    description: "Será redirigido en 3 segundos",
+                    description: "Será redirigido en 2 segundos",
                     duration: time,
                 });
 
@@ -252,10 +252,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                             state: { fromInscripcion: true },
                         });
                     } else {
-                        setTimeout(() => {
-                            setIsSubmitting(false);
-                            navigate("/estudiantes", { replace: true });
-                        }, time);
+                        navigate("/estudiantes", { replace: true });
                     }
                 }, time);
             } catch (error) {
