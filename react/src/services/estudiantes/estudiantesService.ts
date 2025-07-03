@@ -21,7 +21,7 @@ export const getAll = async (page?: string, query?: string, per_page?: number) =
     } catch (error) {
         const axiosError = error as AxiosError<LaravelValidationError>
         const message = axiosError.response?.data?.message ?? "Error inesperado";
-        const validationErrors = axiosError.response?.data?.validationErrors;
+        const validationErrors = axiosError.response?.data?.errors;
         throw { message, validationErrors };
     }
 };
@@ -33,7 +33,7 @@ export const getById = async (id: number) => {
     } catch (error) {
         const axiosError = error as AxiosError<LaravelValidationError>
         const message = axiosError.response?.data?.message ?? "Error inesperado";
-        const validationErrors = axiosError.response?.data?.validationErrors;
+        const validationErrors = axiosError.response?.data?.errors;
         throw { message, validationErrors };
     }
 
@@ -46,7 +46,7 @@ export const create = async (data: Partial<FormDataInscripcion>) => {
     } catch (error) {
         const axiosError = error as AxiosError<LaravelValidationError>
         const message = axiosError.response?.data?.message ?? "Error inesperado";
-        const validationErrors = axiosError.response?.data?.validationErrors;
+        const validationErrors = axiosError.response?.data?.errors;
         throw { message, validationErrors };
 
     }
@@ -59,7 +59,7 @@ export const update = async (id: number, data: Partial<FormDataInscripcion>) => 
     } catch (error) {
         const axiosError = error as AxiosError<LaravelValidationError>
         const message = axiosError.response?.data?.message ?? "Error inesperado";
-        const validationErrors = axiosError.response?.data?.validationErrors;
+        const validationErrors = axiosError.response?.data?.errors;
         throw { message, validationErrors };
     }
 };
@@ -71,7 +71,7 @@ export const remove = async (id: number) => {
     } catch (error) {
         const axiosError = error as AxiosError<LaravelValidationError>
         const message = axiosError.response?.data?.message ?? "Error inesperado";
-        const validationErrors = axiosError.response?.data?.validationErrors;
+        const validationErrors = axiosError.response?.data?.errors;
         throw { message, validationErrors };
     }
 

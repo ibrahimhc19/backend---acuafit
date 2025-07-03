@@ -23,7 +23,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-import { Horario, LaravelValidationError } from "@/types";
+import { Horario } from "@/types";
 import { Link } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { useEffect, useState } from "react";
@@ -36,7 +36,6 @@ import { useSedesStore } from "@/services/sedes/useSedesStore";
 import { useHorariosStore } from "@/services/horarios/useHorariosStore";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
-import { AxiosError } from "axios";
 
 const formSchema = z
     .object({
@@ -257,17 +256,8 @@ export default function RegistrationPage() {
                     }
                 }, time);
             } catch (error) {
-                const e = error as AxiosError<LaravelValidationError>;
-                const message = e.response?.data?.message ?? "Error inesperado";
-                const validationErrors = e.response?.data?.validationErrors;
-
-                console.log("msg", message);
-                console.log("val", validationErrors);
                 toast.error(
-                    "No se pudo inscribir el estudiante. Intenta de nuevo.",
-                    {
-                        description: e.message,
-                    }
+                    "No se pudo inscribir el estudiante. Intenta de nuevo."
                 );
                 console.error("Error al registrar", error);
             } finally {

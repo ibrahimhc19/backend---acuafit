@@ -127,7 +127,7 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
 
     createEstudiante: async (data) => {
         await estudiantesService.create(data);
-        await get().fetchEstudiantes();
+        // await get().fetchEstudiantes();
     },
 
     updateEstudiante: async (id, data) => {
