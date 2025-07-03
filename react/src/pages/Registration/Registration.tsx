@@ -297,7 +297,7 @@ export default function RegistrationPage() {
                         sede_id: estudiante.sede_id.toString(),
                         horario_id: estudiante.horario_id.toString(),
                         observaciones: estudiante.observaciones ?? "",
-                        fecha_inscripcion: estudiante.fecha_inscripcion ?? "",
+                        fecha_inscripcion: estudiante.fecha_inscripcion.split("T")[0] ?? "",
                         autoriza_uso_imagen: estudiante.autoriza_uso_imagen,
                         acepta_reglamento: estudiante.acepta_reglamento,
                         requiere_acudiente: reqA,
