@@ -6,8 +6,8 @@ use App\Models\Acudiente;
 use App\Models\Estudiante;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use App\Http\Controllers\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
