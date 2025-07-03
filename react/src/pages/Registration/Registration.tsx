@@ -170,11 +170,12 @@ export default function RegistrationPage() {
 
     const { id } = useParams();
     const navigate = useNavigate();
+    const isFromPrivateView = !!id;
+    const isEditing = !!selectedEstudiante?.id;
     const { fetchSedes, sedes } = useSedesStore();
     const [grupos, setGrupos] = useState<Horario[]>();
     const { fetchHorarios, horarios } = useHorariosStore();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [estudianteExists, setEstudianteExists] = useState(false);
     const [requiereAcudiente, setRequiereAcudiente] = useState(false);
 
     const form = useForm<FormDataInscripcion>({
@@ -238,15 +239,14 @@ export default function RegistrationPage() {
                 selectEstudiante(null);
 
                 setTimeout(() => {
-                    if (estudianteExists) {
+                    if (isEditing) {
                         setIsSubmitting(false);
                         navigate("/estudiantes", { replace: true });
                     } else {
                         setIsSubmitting(false);
-                        navigate("/inscripcionexitosa", { replace: true });
+                        navigate(isFromPrivateView ? "/estudiantes" : "/inscripcionexitosa", {replace: true})
                     }
                 }, time);
-
             } catch (e) {
                 toast.error(
                     "No se pudo inscribir el estudiante. Intenta de nuevo."
@@ -257,6 +257,7 @@ export default function RegistrationPage() {
             }
         }
     };
+
     const tipoDocumentoValido = (
         value: string | undefined
     ):
@@ -293,7 +294,6 @@ export default function RegistrationPage() {
                     );
                 }
                 if (estudiante) {
-                    setEstudianteExists(true);
                     selectEstudiante(estudiante);
                     const reqA = estudiante.acudiente_id ? true : false;
                     setRequiereAcudiente(reqA);
@@ -332,8 +332,6 @@ export default function RegistrationPage() {
                             rut: estudiante.acudiente?.rut ?? "",
                         },
                     });
-                } else {
-                    setEstudianteExists(false);
                 }
             } catch (error) {
                 console.error("Error al obtener estudiante:", error);
@@ -350,14 +348,14 @@ export default function RegistrationPage() {
                 <div className="bg-white rounded-lg shadow-lg">
                     <div
                         className={`${
-                            estudianteExists
+                            isFromPrivateView
                                 ? "bg-primary h-10"
                                 : "bg-[url(./assets/piscina.jpg)] h-40"
                         } w-full rounded-t-lg bg-center bg-cover`}
                     ></div>
                     <div className="p-6 md:p-8">
                         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2">
-                            {estudianteExists
+                            {isFromPrivateView
                                 ? "Edición de Estudiante"
                                 : "Formulario de Inscripción Acuafit"}{" "}
                             {new Date().getFullYear()}
@@ -966,7 +964,7 @@ export default function RegistrationPage() {
                                                 <FormControl>
                                                     <Checkbox
                                                         disabled={
-                                                            estudianteExists
+                                                            isFromPrivateView
                                                         }
                                                         checked={field.value}
                                                         onCheckedChange={
@@ -989,11 +987,11 @@ export default function RegistrationPage() {
                                         type="submit"
                                         disabled={isSubmitting}
                                     >
-                                        {estudianteExists
+                                        {isFromPrivateView
                                             ? "Actualizar registro"
                                             : "Enviar inscripción"}
                                     </Button>
-                                    {!estudianteExists && (
+                                    {!isFromPrivateView && (
                                         <Button
                                             type="reset"
                                             variant="outline"
