@@ -189,8 +189,10 @@ export interface ProtectedRouteProps {
 
 export interface LaravelValidationError {
     message: string;
-    errors?: Record<string, string[]>;
+    // errors?: Record<string, string[]>;
+    validationErrors?: Record<string, string[]>;
 };
+
 
 
 export interface ModalState {
