@@ -127,17 +127,17 @@ export const useEstudiantesStore = create<EstudiantesStore>((set, get) => ({
 
     createEstudiante: async (data) => {
         await estudiantesService.create(data);
-        // await get().fetchEstudiantes();
+        await get().fetchEstudiantes();
     },
 
     updateEstudiante: async (id, data) => {
         await estudiantesService.update(id, data);
-        // await get().fetchEstudiantes();
+        await get().fetchEstudiantes();
     },
 
     deleteEstudiante: async (id) => {
         await estudiantesService.remove(id);
-        // await get().fetchEstudiantes();
+        await get().fetchEstudiantes();
     },
     getEstudianteById: async (id) => {
         const estudiante = await estudiantesService.getById(id);

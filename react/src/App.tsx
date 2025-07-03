@@ -16,6 +16,7 @@ const Registration = lazy(
 );
 const Register = lazy(() => import("./pages/Registration/Register.tsx"));
 import { ProtectedRoute } from "./components/protectedRoutes.tsx";
+import SuccesPage from "./pages/Succes.tsx";
 
 export default function App() {
     return (
@@ -23,6 +24,7 @@ export default function App() {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/inscripcion" element={<Registration />} />
+                <Route path="/inscripcion/exito" element={<SuccesPage />} />
                 <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route element={<ProtectedRoute />}>
                     <Route element={<Layout />}>

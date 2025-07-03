@@ -169,8 +169,8 @@ export default function RegistrationPage() {
     } = useEstudiantesStore();
 
     const { id } = useParams();
+    const isPublicView = !id;
     const navigate = useNavigate();
-    const isFromPrivateView = !!id;
     const isEditing = !!selectedEstudiante?.id;
     const { fetchSedes, sedes } = useSedesStore();
     const [grupos, setGrupos] = useState<Horario[]>();
@@ -210,15 +210,22 @@ export default function RegistrationPage() {
 
     const onSubmit = async (values: FormDataInscripcion) => {
         setIsSubmitting(true);
+        const time = 3000;
 
-        if (selectedEstudiante?.id) {
+        if (isEditing) {
             try {
                 await updateEstudiante(selectedEstudiante.id, values);
                 toast.success(
-                    "El registro del estudiante fue actualizado correctamente."
+                    "El registro del estudiante fue actualizado correctamente.",
+                    {
+                        description: "Será redirigido en 3 segundos",
+                        duration: time,
+                    }
                 );
                 selectEstudiante(null);
-                navigate("/estudiantes", { replace: true });
+                setTimeout(() => {
+                    navigate("/estudiantes", { replace: true });
+                }, time);
             } catch (e) {
                 toast.error(
                     "No se pudo actualizar el registro del estudiante. Intenta de nuevo."
@@ -228,7 +235,6 @@ export default function RegistrationPage() {
                 setIsSubmitting(false);
             }
         } else {
-            const time = 3000;
             try {
                 await createEstudiante(values);
                 toast.success("El estudiante fue inscrito correctamente.", {
@@ -239,12 +245,14 @@ export default function RegistrationPage() {
                 selectEstudiante(null);
 
                 setTimeout(() => {
-                    if (isEditing) {
-                        setIsSubmitting(false);
-                        navigate("/estudiantes", { replace: true });
+                    setIsSubmitting(false);
+                    if (isPublicView) {
+                        navigate("/inscripcion/exito", { replace: true, state: { fromInscripcion: true } });
                     } else {
                         setIsSubmitting(false);
-                        navigate(isFromPrivateView ? "/estudiantes" : "/inscripcionexitosa", {replace: true})
+                        navigate("/estudiantes",
+                            { replace: true }
+                        );
                     }
                 }, time);
             } catch (e) {
@@ -348,14 +356,14 @@ export default function RegistrationPage() {
                 <div className="bg-white rounded-lg shadow-lg">
                     <div
                         className={`${
-                            isFromPrivateView
+                            isEditing
                                 ? "bg-primary h-10"
                                 : "bg-[url(./assets/piscina.jpg)] h-40"
                         } w-full rounded-t-lg bg-center bg-cover`}
                     ></div>
                     <div className="p-6 md:p-8">
                         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2">
-                            {isFromPrivateView
+                            {isEditing
                                 ? "Edición de Estudiante"
                                 : "Formulario de Inscripción Acuafit"}{" "}
                             {new Date().getFullYear()}
@@ -964,7 +972,7 @@ export default function RegistrationPage() {
                                                 <FormControl>
                                                     <Checkbox
                                                         disabled={
-                                                            isFromPrivateView
+                                                            isEditing
                                                         }
                                                         checked={field.value}
                                                         onCheckedChange={
@@ -987,11 +995,11 @@ export default function RegistrationPage() {
                                         type="submit"
                                         disabled={isSubmitting}
                                     >
-                                        {isFromPrivateView
+                                        {isEditing
                                             ? "Actualizar registro"
                                             : "Enviar inscripción"}
                                     </Button>
-                                    {!isFromPrivateView && (
+                                    {!isEditing && (
                                         <Button
                                             type="reset"
                                             variant="outline"

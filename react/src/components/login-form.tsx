@@ -33,11 +33,6 @@ export default function LoginPage({
 
     const auth = useAuthContext();
 
-    if (!auth) {
-        console.error("useAuthContext must be used within an AuthProvider");
-        return <div>Error: Authentication context not found.</div>;
-    }
-
     const { login, apiError } = auth;
 
     const submit = (data: IFormInput) => {
