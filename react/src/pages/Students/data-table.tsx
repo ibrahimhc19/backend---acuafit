@@ -79,6 +79,7 @@ export function DataTable<TValue, TData extends Estudiante>({
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const {
@@ -311,11 +312,12 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 Editar
                             </Button>
                             <Button
+                                disabled={isDeleting}
                                 variant="destructive"
                                 type="submit"
                                 onClick={async () => {
                                     if (!selectedEstudiante?.id) return;
-
+                                    setIsDeleting(true);
                                     try {
                                         await deleteEstudiante(
                                             selectedEstudiante.id
@@ -330,11 +332,12 @@ export function DataTable<TValue, TData extends Estudiante>({
                                             "No se pudo eliminar el estudiante. Intenta de nuevo."
                                         );
                                         console.error("Error al eliminar", e);
+                                    } finally {
+                                        setIsDeleting(false);
                                     }
                                 }}
-                                disabled
                             >
-                                Eliminar
+                                {isDeleting ? "Eliminando" : "Eliminar"}
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -402,7 +405,7 @@ export function DataTable<TValue, TData extends Estudiante>({
                 <div className="flex items-center justify-end py-4 space-x-1">
                     {/* Deuda */}
                     <Select
-                    disabled={isLoading}
+                        disabled={isLoading}
                         defaultValue="10"
                         onValueChange={async (e) => {
                             setIsLoading(true);
@@ -410,7 +413,9 @@ export function DataTable<TValue, TData extends Estudiante>({
                                 setPerPage(Number(e));
                             } catch (error) {
                                 console.log(error);
-                                toast.error("Error al cambiar el número de filas por página");
+                                toast.error(
+                                    "Error al cambiar el número de filas por página"
+                                );
                             } finally {
                                 setIsLoading(false);
                             }

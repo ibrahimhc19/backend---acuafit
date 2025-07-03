@@ -227,17 +227,26 @@ export default function RegistrationPage() {
                 setIsSubmitting(false);
             }
         } else {
+            const time = 3000;
             try {
                 await createEstudiante(values);
-                toast.success("El estudiante fue inscrito correctamente.");
+                toast.success("El estudiante fue inscrito correctamente.", {
+                    description: "Será redirigido en 3 segundos",
+                    duration: time,
+                });
+
                 selectEstudiante(null);
-                if (estudianteExists) {
-                    setIsSubmitting(false);
-                    navigate("/estudiantes", { replace: true });
-                } else {
-                    setIsSubmitting(false);
-                    navigate("/inscripcionexitosa", { replace: true });
-                }
+
+                setTimeout(() => {
+                    if (estudianteExists) {
+                        setIsSubmitting(false);
+                        navigate("/estudiantes", { replace: true });
+                    } else {
+                        setIsSubmitting(false);
+                        navigate("/inscripcionexitosa", { replace: true });
+                    }
+                }, time);
+
             } catch (e) {
                 toast.error(
                     "No se pudo inscribir el estudiante. Intenta de nuevo."
@@ -323,6 +332,8 @@ export default function RegistrationPage() {
                             rut: estudiante.acudiente?.rut ?? "",
                         },
                     });
+                } else {
+                    setEstudianteExists(false);
                 }
             } catch (error) {
                 console.error("Error al obtener estudiante:", error);
