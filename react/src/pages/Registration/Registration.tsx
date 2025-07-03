@@ -261,13 +261,10 @@ export default function RegistrationPage() {
                 const e = error as AxiosError
 
                 console.log("Msg", e.message)
-                console.log("Val", e.validation)
-                console.log("Resp", e.response)
-                console.log("Code", e.code)
-                console.log("Cause", e.cause)
+                console.log("Msg", e.errors)
                 toast.error(
                     "No se pudo inscribir el estudiante. Intenta de nuevo." , {
-                        description: e.message + " " + e.validation + " " + e.response
+                        description: e.errors?.toString()
                     }
                 );
                 console.error("Error al registrar", error);
