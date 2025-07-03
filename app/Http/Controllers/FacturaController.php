@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Factura;
+use App\Http\Controllers\DB;
 use Illuminate\Http\Request;
 
 class FacturaController extends Controller
