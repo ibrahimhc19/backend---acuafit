@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Estudiante;
 use App\Models\Acudiente;
+use App\Models\Estudiante;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class EstudianteController extends Controller
 {
