@@ -36,6 +36,7 @@ import { useSedesStore } from "@/services/sedes/useSedesStore";
 import { useHorariosStore } from "@/services/horarios/useHorariosStore";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useEstudiantesStore } from "@/services/estudiantes/useEstudiantesStore";
+import timeFormatter from "@/helpers/timeFormatter";
 
 const formSchema = z
     .object({
@@ -865,11 +866,11 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                                                                         )}{" "}
                                                                         de{" "}
                                                                         {
-                                                                            grupo.hora_inicio
+                                                                            timeFormatter(grupo.hora_inicio)
                                                                         }{" "}
                                                                         a{" "}
                                                                         {
-                                                                            grupo.hora_fin
+                                                                            timeFormatter(grupo.hora_fin)
                                                                         }
                                                                     </FormLabel>
                                                                 </FormItem>

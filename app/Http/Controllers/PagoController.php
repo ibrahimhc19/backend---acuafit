@@ -16,7 +16,7 @@ class PagoController extends Controller
      */
     public function index()
     {
-        $pagos = Pago::with(['estudiante' => function ($query) {
+        $pagos = Pago::with(['factura','estudiante' => function ($query) {
             $query->select('id', 'nombres', 'apellidos', 'documento_identidad', 'telefono');
         }])->paginate(15);
         return response()->json($pagos);
@@ -30,7 +30,7 @@ class PagoController extends Controller
         $validator = Validator::make($request->all(), [
             'estudiante_id' => 'required|integer|exists:estudiantes,id',
             'monto' => ['required', 'numeric', 'regex:/^\d{1,8}(\.\d{1,2})?$/', 'min:0.01'],
-            'fecha_pago' => 'required|date_format:d/m/Y',
+            'fecha_pago' => 'required|date_format:Y-m-d',
             // Deuda
             'metodo_pago' => ['required', 'string', Rule::in(['Efectivo', 'Transferencia'])],
             'soporte_pago' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'
@@ -113,7 +113,7 @@ class PagoController extends Controller
         $validator = Validator::make($request->all(), [
             'estudiante_id' => 'sometimes|required|integer|exists:estudiantes,id',
             'monto'         => ['sometimes', 'required', 'numeric', 'regex:/^\d{1,8}(\.\d{1,2})?$/', 'min:0.01'],
-            'fecha_pago'    => 'sometimes|required|date_format:d/m/Y',
+            'fecha_pago'    => 'sometimes|required|date_format:Y-m-d',
             // Deuda
             'metodo_pago'   => ['sometimes', 'required', 'string', Rule::in(['Efectivo', 'Transferencia', 'Tarjeta'])],
             'soporte_pago'  => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',

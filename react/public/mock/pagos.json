@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "facturacion_id": 1,
+    "fecha_pago": "2025-06-02",
+    "monto": 120000,
+    "metodo_pago": "efectivo",
+    "soporte_pago": "📄",
+    "numero_referencia_pago": "REC-001",
+    "observaciones": "Pago completo en caja"
+  },
+  {
+    "id": 2,
+    "facturacion_id": 3,
+    "fecha_pago": "2025-05-18",
+    "soporte_pago": "📄",
+    "monto": 120000,
+    "metodo_pago": "transferencia",
+    "numero_referencia_pago": "TX-98342",
+    "observaciones": "Abono inicial"
+  },
+  {
+    "id": 3,
+    "facturacion_id": 5,
+    "fecha_pago": "2025-04-03",
+    "monto": 360000,
+    "soporte_pago": "📄",
+    "metodo_pago": "transferencia",
+    "numero_referencia_pago": "TX-00218",
+    "observaciones": "Pago trimestral"
+  },
+  {
+    "id": 4,
+    "facturacion_id": 7,
+    "fecha_pago": "2025-06-06",
+    "soporte_pago": "📄",
+    "monto": 60000,
+    "metodo_pago": "efectivo",
+    "numero_referencia_pago": "REC-008",
+    "observaciones": "Pago parcial"
+  },
+  {
+    "id": 5,
+    "facturacion_id": 8,
+    "fecha_pago": "2025-06-01",
+    "monto": 50000,
+    "metodo_pago": "efectivo",
+    "numero_referencia_pago": "REC-009",
+    "soporte_pago": "📄",
+    "observaciones": "Pago matrícula"
+  },
+  {
+    "id": 6,
+    "facturacion_id": 11,
+    "fecha_pago": "2025-05-02",
+    "monto": 240000,
+    "soporte_pago": "📄",
+    "metodo_pago": "transferencia",
+    "numero_referencia_pago": "TX-55301",
+    "observaciones": ""
+  },
+  {
+    "id": 7,
+    "facturacion_id": 12,
+    "fecha_pago": "2025-06-04",
+    "monto": 80000,
+    "soporte_pago": "📄",
+    "metodo_pago": "nequi",
+    "numero_referencia_pago": "NQ-2038",
+    "observaciones": "Pago parcial"
+  },
+  {
+    "id": 8,
+    "facturacion_id": 14,
+    "fecha_pago": "2025-04-18",
+    "monto": 360000,
+    "metodo_pago": "transferencia",
+    "soporte_pago": "📄",
+    "numero_referencia_pago": "TX-77881",
+    "observaciones": "Pago total anticipado"
+  }
+]

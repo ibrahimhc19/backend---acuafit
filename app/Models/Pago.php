@@ -32,7 +32,7 @@ class Pago extends Model
         if ($value) {
             try {
 
-                $this->attributes['fecha_pago'] = Carbon::createFromFormat('d/m/Y', $value)->toDateString();
+                $this->attributes['fecha_pago'] = Carbon::createFromFormat('Y-m-d', $value)->toDateString();
             } catch (\Exception $e) {
                 $this->attributes['fecha_pago'] = $value;
                 Log::warning("Falló la conversión de fecha en el mutador para Pago: " . $value . ". Error: " . $e->getMessage());
@@ -51,6 +51,7 @@ class Pago extends Model
     protected static function boot()
 {
     parent::boot();
+
     static::deleting(function ($pago) {
         if ($pago->soporte_pago) {
             Storage::disk('public')->delete($pago->soporte_pago);
@@ -63,8 +64,8 @@ class Pago extends Model
         return $this->belongsTo(Estudiante::class,"estudiante_id");
     }
 
-    public function facturacion()
+    public function factura()
     {
-        return $this->belongsTo(Factura::class);
+        return $this->belongsTo(Factura::class, "facturacion_id");
     }
 }

@@ -1,8 +1,8 @@
 // import timeFormatter from "@/helpers/timeFormatter";
-import { Pago } from "@/types";
+import { Factura } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<Pago>[] = [
+export const columns: ColumnDef<Factura>[] = [
     {
         accessorKey: "id",
         header: "#",

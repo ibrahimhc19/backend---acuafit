@@ -13,7 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Pago } from "@/types";
+import { Factura } from "@/types";
 import { useState } from "react";
 import {
     Dialog,
@@ -33,7 +33,7 @@ interface DataTableProps<TData, TValue> {
     data: TData[];
 }
 
-export function DataTable<TValue, TData extends Pago>({
+export function DataTable<TValue, TData extends Factura>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
@@ -113,7 +113,7 @@ export function DataTable<TValue, TData extends Pago>({
                                 <TableRow
                                     key={row.id}
                                     onClick={() => {
-                                        selectPago(row.original);
+                                        // selectPago(row.original);
                                         setIsModalOpen(true);
                                     }}
                                     className="hover:text-muted hover:bg-primary cursor-pointer"

@@ -23,11 +23,11 @@ export const columns: ColumnDef<Pago>[] = [
         header: "Fecha de pago",
     },
     {
-        accessorKey: "metodo_pago",
+        accessorKey: "numero_referencia_pago",
         header: "Número de referencia",
     },
     {
-        accessorKey: "numero_referencia_pago",
+        accessorKey: "metodo_pago",
         header: "Medio de pago",
     },
     {
