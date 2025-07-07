@@ -178,7 +178,8 @@ class EstudianteController extends Controller
             DB::rollBack();
             Log::error('Error al registrar el estudiante' . $e->getMessage() . ' StackTrace: ' . $e->getTraceAsString());
             return response()->json([
-                'message' => 'Hubo un error en el servidor al procesar la solicitud. Por favor inténtalo más tarde'
+                'message' => 'Hubo un error en el servidor al procesar la solicitud. Por favor inténtalo más tarde',
+                'errors' => $e->getMessage()
             ], 500);
         }
     }

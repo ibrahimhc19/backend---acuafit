@@ -173,7 +173,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const isEditing = !!selectedEstudiante?.id;
+    const isEditing = !!selectedEstudiante?.id && id;
     const { fetchSedes, sedes } = useSedesStore();
     const [grupos, setGrupos] = useState<Horario[]>();
     const { fetchHorarios, horarios } = useHorariosStore();
@@ -971,7 +971,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                                             <div className="flex items-center space-x-2 mt-4">
                                                 <FormControl>
                                                     <Checkbox
-                                                        disabled={isEditing}
+                                                        // disabled={isEditing}
                                                         checked={field.value}
                                                         onCheckedChange={
                                                             field.onChange

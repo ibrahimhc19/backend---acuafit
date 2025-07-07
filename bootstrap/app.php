@@ -28,6 +28,12 @@ return Application::configure(basePath: dirname(__DIR__))
                 return '/';
             }
         });
+    })->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            'client/estudiante',
+            'client/sedes',
+            'client/horarios',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

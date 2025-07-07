@@ -123,4 +123,9 @@ class Estudiante extends Model
         return $this->hasMany(Pago::class, 'estudiante_id', 'id');
 
     }
+    public function facturas()
+    {
+        return $this->hasMany(Factura::class, 'facturacion_id', 'id');
+
+    }
 }
