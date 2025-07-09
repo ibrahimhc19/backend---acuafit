@@ -19,12 +19,7 @@ export const TIPOS_GRUPO = [
     "Bebés 10-23 meses",
 ];
 
-export const TIPOS_DOCUMENTO = [
-    "TI",
-    "RC",
-    "CC",
-    "DE",
-];
+export const TIPOS_DOCUMENTO = ["TI", "RC", "CC", "DE"];
 
 // export const TIPOS_DOCUMENTO = [
 //     "Tarjeta de identidad",
@@ -47,47 +42,39 @@ export const FILAS = [
 // ];
 
 
-export const LINKS = [
-    { name: "Estudiantes", href: "/estudiantes" },
-    { name: "Registro", href: "/registro" },
-    { name: "Sedes", href: "/sedes" },
-    { name: "Horarios", href: "/horarios" },
-    { name: "Pagos", href: "/pagos" },
-    { name: "Facturación", href: "/facturacion" },
-];
-
 export const CONCEPTOS = [
     { name: "Matrícula", value: "matricula" },
     { name: "Mensualidad", value: "mensualidad" },
     { name: "Bimestre", value: "bimestre" },
-    { name: "Trimestre", value: "trimestre" }
-]
+    { name: "Trimestre", value: "trimestre" },
+];
 
-// export const LINKS = [
-//   {
-//     name: "Gestión académica",
-//     children: [
-//       { name: "Estudiantes", href: "/estudiantes" },
-//       { name: "Registro", href: "/registro" },
-//     ],
-//   },
-//   {
-//     name: "Operación de clases",
-//     children: [
-//       { name: "Sedes", href: "/sedes" },
-//       { name: "Horarios", href: "/horarios" },
-//       { name: "Asistencias", href: "/asistencias" },
-//     ],
-//   },
-//   {
-//     name: "Contabilidad",
-//   icon: <FileText className="h-5 w-5" />,
-//   role: "contadora",
-//     children: [
-//       { name: "Listado de facturas", href: "/facturas" },
-//       { name: "Inscripción de facturas", href: "/facturas/inscripcion" },
-//       { name: "Listado de pagos", href: "/pagos" },
-//       { name: "Inscripción de pagos", href: "/pagos/inscripcion" },
-//     ],
-//   },
-// ];
+export const LINKS = [
+    {
+        name: "Gestión académica",
+        children: [
+            { name: "Asistencias", href: "/asistencias" },
+            { name: "Estudiantes", href: "/estudiantes" },
+            { name: "Registro", href: "/registro" },
+        ],
+    },
+    {
+        name: "Operación de clases",
+        children: [
+            { name: "Grupos", href: "/grupos" },
+            { name: "Horarios", href: "/horarios" },
+            { name: "Sedes", href: "/sedes" },
+        ],
+    },
+    {
+        name: "Contabilidad",
+        // icon: <FileText className="h-5 w-5 text-primary group-hover:text-white" />,
+        role: "contadora",
+        children: [
+            { name: "Listado de facturas", href: "/facturas" },
+            { name: "Inscripción de facturas", href: "/facturas/inscripcion" },
+            { name: "Listado de pagos", href: "/pagos" },
+            { name: "Inscripción de pagos", href: "/pagos/inscripcion" },
+        ],
+    },
+];

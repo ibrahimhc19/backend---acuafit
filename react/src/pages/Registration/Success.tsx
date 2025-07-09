@@ -3,7 +3,7 @@ import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navigate, useLocation } from "react-router-dom";
 
-const SuccessPage = () => {
+const Success = () => {
     const location = useLocation();
     const fromInscripcion = location.state?.fromInscripcion;
 
@@ -81,4 +81,4 @@ const SuccessPage = () => {
     );
 };
 
-export default SuccessPage;
+export default Success;

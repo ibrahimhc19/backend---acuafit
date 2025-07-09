@@ -94,31 +94,32 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
     });
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        if (selectedHorario?.id) {
-            try {
-                await updateHorario(selectedHorario.id, values);
-                toast.success("El horario fue actualizado correctamente.");
-                selectHorario(null);
-                setIsModalOpen(false);
-            } catch (e) {
-                toast.error(
-                    "No se pudo actualizar el horario. Intenta de nuevo."
-                );
-                console.error("Error al actualizar", e);
-            }
-        } else {
-            try {
-                await createHorario(values);
-                toast.success("El horario fue registrado correctamente.");
-                selectHorario(null);
-                setIsModalOpen(false);
-            } catch (e) {
-                toast.error(
-                    "No se pudo registrar el horario. Intenta de nuevo."
-                );
-                console.error("Error al registrar", e);
-            }
-        }
+        console.log(values);
+        // if (selectedHorario?.id) {
+        //     try {
+        //         await updateHorario(selectedHorario.id, values);
+        //         toast.success("El horario fue actualizado correctamente.");
+        //         selectHorario(null);
+        //         setIsModalOpen(false);
+        //     } catch (e) {
+        //         toast.error(
+        //             "No se pudo actualizar el horario. Intenta de nuevo."
+        //         );
+        //         console.error("Error al actualizar", e);
+        //     }
+        // } else {
+        //     try {
+        //         await createHorario(values);
+        //         toast.success("El horario fue registrado correctamente.");
+        //         selectHorario(null);
+        //         setIsModalOpen(false);
+        //     } catch (e) {
+        //         toast.error(
+        //             "No se pudo registrar el horario. Intenta de nuevo."
+        //         );
+        //         console.error("Error al registrar", e);
+        //     }
+        // }
     };
 
     return (

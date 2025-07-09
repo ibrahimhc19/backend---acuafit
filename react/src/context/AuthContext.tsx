@@ -26,9 +26,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
     };
 
-    // useEffect(() => {
-    //     getUser();
-    // }, []);
+
     useEffect(() => {
         const excludedPaths = [
             "/login",

@@ -1,4 +1,3 @@
-// import timeFormatter from "@/helpers/timeFormatter";
 import { Pago } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 

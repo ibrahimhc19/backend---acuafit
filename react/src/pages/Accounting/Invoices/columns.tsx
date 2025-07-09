@@ -1,4 +1,3 @@
-// import timeFormatter from "@/helpers/timeFormatter";
 import { Factura } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 
