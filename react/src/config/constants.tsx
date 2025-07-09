@@ -1,3 +1,4 @@
+// import { FileText } from "lucide-react";
 export const DIAS_SEMANA = [
     "Lunes",
     "Martes",
@@ -55,6 +56,13 @@ export const LINKS = [
     { name: "Facturación", href: "/facturacion" },
 ];
 
+export const CONCEPTOS = [
+    { name: "Matrícula", value: "matricula" },
+    { name: "Mensualidad", value: "mensualidad" },
+    { name: "Bimestre", value: "bimestre" },
+    { name: "Trimestre", value: "trimestre" }
+]
+
 // export const LINKS = [
 //   {
 //     name: "Gestión académica",
@@ -68,13 +76,18 @@ export const LINKS = [
 //     children: [
 //       { name: "Sedes", href: "/sedes" },
 //       { name: "Horarios", href: "/horarios" },
+//       { name: "Asistencias", href: "/asistencias" },
 //     ],
 //   },
 //   {
-//     name: "Facturación",
+//     name: "Contabilidad",
+//   icon: <FileText className="h-5 w-5" />,
+//   role: "contadora",
 //     children: [
-//       { name: "Facturación general", href: "/facturacion" },
-//       { name: "Pagos", href: "/pagos" },
+//       { name: "Listado de facturas", href: "/facturas" },
+//       { name: "Inscripción de facturas", href: "/facturas/inscripcion" },
+//       { name: "Listado de pagos", href: "/pagos" },
+//       { name: "Inscripción de pagos", href: "/pagos/inscripcion" },
 //     ],
 //   },
 // ];
