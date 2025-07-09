@@ -185,11 +185,11 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
         defaultValues: {
             nombres: "",
             apellidos: "",
-            documento_identidad: "",
+            documento_identidad: undefined,
             correo: "",
             telefono: "",
             direccion: "",
-            edad: "",
+            edad: undefined,
             rut: "",
             sede_id: "",
             horario_id: "",
@@ -202,7 +202,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                 nombres: "",
                 apellidos: "",
                 tipo_documento: undefined,
-                documento_identidad: "",
+                documento_identidad: undefined,
                 telefono: "",
                 email: "",
                 rut: "",
@@ -507,6 +507,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                                                     <FormControl>
                                                         <Input
                                                             type="number"
+                                                            min={0}
                                                             {...field}
                                                         />
                                                     </FormControl>
@@ -637,6 +638,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                                             <FormControl>
                                                 <Input
                                                     type="number"
+                                                    min={0}
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -700,6 +702,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                                             <FormControl>
                                                 <Input
                                                     type="number"
+                                                    min={0}
                                                     {...field}
                                                 />
                                             </FormControl>
