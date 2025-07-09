@@ -18,15 +18,14 @@ import { useState } from "react";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
+    // DialogDescription,
     DialogHeader,
-    DialogTitle,
+    // DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-import { usePagosStore } from "@/services/pagos/usePagosStore";
+// import { usePagosStore } from "@/services/pagos/usePagosStore";
 import { Plus } from "lucide-react";
-import { ScheduleForm } from "./form";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -44,7 +43,7 @@ export function DataTable<TValue, TData extends Factura>({
         manualPagination: true,
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { selectedPago, selectPago } = usePagosStore();
+    // const { selectedPago, selectPago } = usePagosStore();
 
     const datos = {
         setIsModalOpen,
@@ -59,10 +58,10 @@ export function DataTable<TValue, TData extends Factura>({
                 variant="outline"
                 size="sm"
                 className="hover:bg-primary hover:text-white flex justify-self-end mb-4 cursor-pointer"
-                onClick={() => {
-                    selectPago(null);
-                    setIsModalOpen(true);
-                }}
+                // onClick={() => {
+                //     selectPago(null);
+                //     setIsModalOpen(true);
+                // }}
             >
                 <Plus />
             </Button>
@@ -72,7 +71,7 @@ export function DataTable<TValue, TData extends Factura>({
                     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>
+                                {/* <DialogTitle>
                                     {selectedPago
                                         ? "Editar Factura"
                                         : "Agregar Factura"}
@@ -81,9 +80,8 @@ export function DataTable<TValue, TData extends Factura>({
                                     {selectedPago
                                         ? "Modifica los datos de la factura y haz clic en 'Actualizar' para guardar los cambios."
                                         : "Completa la información para registrar una nueva factura en el sistema."}
-                                </DialogDescription>
+                                </DialogDescription> */}
                             </DialogHeader>
-                            <ScheduleForm {...datos} />
                         </DialogContent>
                     </Dialog>
                 )}

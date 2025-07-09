@@ -21,10 +21,10 @@ import { Groups } from "./pages/Groups/Groups.tsx";
 const Schedules = lazy(() => import("./pages/Schedules/Schedules.tsx"));
 const Locations = lazy(() => import("./pages/Locations/Locations.tsx"));
 
-const Invoices = lazy(() => import("./pages/Accounting/Invoices/Invoices.tsx"));
-import InvoiceRegistration from "./pages/Accounting/Invoices/register/InvoiceRegistration.tsx";
-const Payments = lazy(() => import("./pages/Accounting/Payments/Payments.tsx"));
-import PaymentRegistration from "./pages/Accounting/Payments/register/PaymentRegistration.tsx";
+const Invoices = lazy(() => import("./pages/Accounting/Invoices/InvoicesList/Invoices.tsx"));
+import InvoiceRegistration from "./pages/Accounting/Invoices/InvoiceRegistration/InvoiceRegistration.tsx";
+const Payments = lazy(() => import("./pages/Accounting/Payments/PaymentsList/Payments.tsx"));
+import PaymentRegistration from "./pages/Accounting/Payments/PaymentRegistration/PaymentRegistration.tsx";
 
 import { ProtectedRoute } from "./components/protectedRoutes.tsx";
 

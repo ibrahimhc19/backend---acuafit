@@ -1,24 +1,23 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+// import {
+//     Select,
+//     SelectContent,
+//     SelectItem,
+//     SelectTrigger,
+//     SelectValue,
+// } from "@/components/ui/select";
 import {
     Form,
-    FormControl,
+    // FormControl,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { ModalState } from "@/types";
 import { toast } from "sonner";
 import { useHorariosStore } from "@/services/horarios/useHorariosStore";
 import {
@@ -33,7 +32,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import { DIAS_SEMANA, TIPOS_GRUPO } from "@/config/constants";
+// import { DIAS_SEMANA, TIPOS_GRUPO } from "@/config/constants";
 import { useSedesStore } from "@/services/sedes/useSedesStore";
 import { useEffect } from "react";
 
@@ -85,7 +84,7 @@ const formSchema = z.object({
     observaciones: z.string().optional(),
 });
 
-export function ScheduleForm({ setIsModalOpen }: ModalState) {
+export function InvoiceForm() {
     const { sedes, fetchSedes } = useSedesStore();
     const {
         selectHorario,
@@ -96,7 +95,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
     } = useHorariosStore();
 
     useEffect(() => {
-        if (sedes.length === 0) {
+        if (!sedes || sedes.length === 0) {
             fetchSedes();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -117,7 +116,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                 await updateHorario(selectedHorario.id, values);
                 toast.success("El horario fue actualizado correctamente.");
                 selectHorario(null);
-                setIsModalOpen(false);
+                // setIsModalOpen(false);
             } catch (e) {
                 toast.error(
                     "No se pudo actualizar el horario. Intenta de nuevo."
@@ -129,7 +128,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                 await createHorario(values);
                 toast.success("El horario fue registrado correctamente.");
                 selectHorario(null);
-                setIsModalOpen(false);
+                // setIsModalOpen(false);
             } catch (e) {
                 toast.error(
                     "No se pudo registrar el horario. Intenta de nuevo."
@@ -238,9 +237,9 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                 />
 
                 <DialogFooter>
-                    <DialogClose asChild>
+                    {/* <DialogClose asChild>
                         <Button variant="outline">Cancelar</Button>
-                    </DialogClose>
+                    </DialogClose> */}
                     <Button type="submit">
                         {selectedHorario ? "Actualizar" : "Agregar"}
                     </Button>
@@ -275,7 +274,7 @@ export function ScheduleForm({ setIsModalOpen }: ModalState) {
                                                 "La sede fue eliminada correctamente."
                                             );
                                             selectHorario(null);
-                                            setIsModalOpen(false);
+                                            // setIsModalOpen(false);
                                         } catch (e) {
                                             toast.error(
                                                 "No se pudo eliminar la sede. Intenta de nuevo."
