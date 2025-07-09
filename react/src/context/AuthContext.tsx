@@ -26,9 +26,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
     };
 
+    // useEffect(() => {
+    //     getUser();
+    // }, []);
     useEffect(() => {
-        getUser();
-    }, []);
+        const excludedPaths = [
+            "/login",
+            "/inscripcion",
+            "/inscripcion/exito",
+        ];
+        if (!excludedPaths.includes(location.pathname)) {
+            getUser();
+        } else {
+            setLoading(false);
+        }
+    }, [location.pathname]);
 
     const login = async (data: IFormInput) => {
         setApiError(null);
