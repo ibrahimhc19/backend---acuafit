@@ -281,7 +281,7 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
     };
 
     useEffect(() => {
-        if (horarios.length === 0) {
+        if (!horarios || horarios.length === 0) {
             fetchHorarios();
         }
         fetchSedes();
@@ -812,15 +812,21 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    {sedes.map(
-                                                        (sede, index) => (
-                                                            <SelectItem
-                                                                key={index}
-                                                                value={sede.id.toString()}
-                                                            >
-                                                                {sede.nombre}
-                                                            </SelectItem>
+                                                    {sedes ? (
+                                                        sedes.map(
+                                                            (sede, index) => (
+                                                                <SelectItem
+                                                                    key={index}
+                                                                    value={sede.id.toString()}
+                                                                >
+                                                                    {
+                                                                        sede.nombre
+                                                                    }
+                                                                </SelectItem>
+                                                            )
                                                         )
+                                                    ) : (
+                                                        <p className="text-xs ml-2 text-destructive">Error al cargar las sedes</p>
                                                     )}
                                                 </SelectContent>
                                             </Select>
@@ -868,22 +874,22 @@ export default function RegistrationPage({ isPublic = true }: IsPublicView) {
                                                                             grupo.dia_semana
                                                                         )}{" "}
                                                                         de{" "}
-                                                                        {
-                                                                            timeFormatter(grupo.hora_inicio)
-                                                                        }{" "}
+                                                                        {timeFormatter(
+                                                                            grupo.hora_inicio
+                                                                        )}{" "}
                                                                         a{" "}
-                                                                        {
-                                                                            timeFormatter(grupo.hora_fin)
-                                                                        }
+                                                                        {timeFormatter(
+                                                                            grupo.hora_fin
+                                                                        )}
                                                                     </FormLabel>
                                                                 </FormItem>
                                                             )
                                                         )
                                                     ) : (
-                                                        <FormLabel>
+                                                        <p className="text-sm">
                                                             No hay horarios
-                                                            disponibles
-                                                        </FormLabel>
+                                                            disponibles o no ha seleccionado una sede.
+                                                        </p>
                                                     )}
                                                 </RadioGroup>
                                             </FormControl>
