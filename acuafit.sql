@@ -505,7 +505,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `google_id`, `avatar_url`, `email_ve
 --
 ALTER TABLE `acudientes`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `documento_identidad` (`documento_identidad`);
+  ADD UNIQUE KEY `acudiente_documento_identidad` (`documento_identidad`);
 
 --
 -- Indices de la tabla `cache`
@@ -524,18 +524,18 @@ ALTER TABLE `cache_locks`
 --
 ALTER TABLE `estudiantes`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `documento_identidad` (`documento_identidad`),
-  ADD KEY `sede_id` (`sede_id`),
-  ADD KEY `horario_id` (`horario_id`),
-  ADD KEY `acudiente_id` (`acudiente_id`) USING BTREE;
+  ADD UNIQUE KEY `estudiante_documento_identidad` (`documento_identidad`),
+  ADD KEY `estudiante_sede_id` (`sede_id`),
+  ADD KEY `estudiante_horario_id` (`horario_id`),
+  ADD KEY `estudiante_acudiente_id` (`acudiente_id`) USING BTREE;
 
 --
 -- Indices de la tabla `facturaciones`
 --
 ALTER TABLE `facturaciones`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `estudiante_id` (`estudiante_id`),
-  ADD KEY `sede_id` (`sede_id`);
+  ADD KEY `factura_estudiante_id` (`estudiante_id`),
+  ADD KEY `factura_sede_id` (`sede_id`);
 
 --
 -- Indices de la tabla `failed_jobs`
@@ -589,7 +589,7 @@ ALTER TABLE `model_has_roles`
 --
 ALTER TABLE `pagos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `estudiante_id` (`estudiante_id`),
+  ADD KEY `pagos_estudiante_id` (`estudiante_id`),
   ADD KEY `fk_pagos_facturacion` (`facturacion_id`);
 
 --
